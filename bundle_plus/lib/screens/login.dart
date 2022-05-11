@@ -38,12 +38,20 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail),
+          prefixIcon: Icon(Icons.mail, color: Colors.pinkAccent,),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Email",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.pinkAccent,
+              width: 1.5,
+            ),
+          ),
+        ),
+          
     );
 
     final passwordInput = TextFormField(
@@ -64,12 +72,19 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key),
+          prefixIcon: Icon(Icons.vpn_key, color: Colors.pinkAccent,),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
           hintText: "Password",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-          )),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.pinkAccent,
+              width: 1.5,
+            ),
+          ),  
+        ),
     );
 
     final loginButton = Material(
