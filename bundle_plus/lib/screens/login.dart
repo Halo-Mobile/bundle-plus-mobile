@@ -1,5 +1,6 @@
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/registration.dart';
+import 'package:bundle_plus/screens/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -129,9 +130,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     emailInput,
                     SizedBox(height: 25),
                     passwordInput,
-                    SizedBox(height: 35),
+                    Row(
+                      children: [
+                        Expanded(child: Container(),),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ResetPassword()));
+                           },
+                          child: const Text(
+                            "Forgot your password?",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                            
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5),
                     loginButton,
-                    SizedBox(height: 15),
+                    SizedBox(height: 15,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
