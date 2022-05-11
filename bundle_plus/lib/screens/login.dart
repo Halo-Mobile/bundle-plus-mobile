@@ -39,20 +39,22 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.mail, color: Colors.pinkAccent,),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Email",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.pinkAccent,
-              width: 1.5,
-            ),
+        prefixIcon: Icon(
+          Icons.mail,
+          color: Colors.pinkAccent,
+        ),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Email",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.pinkAccent,
+            width: 1.5,
           ),
         ),
-          
+      ),
     );
 
     final passwordInput = TextFormField(
@@ -73,19 +75,22 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-          prefixIcon: Icon(Icons.vpn_key, color: Colors.pinkAccent,),
-          contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Password",
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.pinkAccent,
-              width: 1.5,
-            ),
-          ),  
+        prefixIcon: Icon(
+          Icons.vpn_key,
+          color: Colors.pinkAccent,
         ),
+        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        hintText: "Password",
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.pinkAccent,
+            width: 1.5,
+          ),
+        ),
+      ),
     );
 
     final loginButton = Material(
@@ -96,7 +101,9 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          logIn(emailController.text, passwordController.text);
+          // logIn(emailController.text, passwordController.text);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
         },
         child: Text(
           "Login",
@@ -132,29 +139,31 @@ class _LoginScreenState extends State<LoginScreen> {
                     passwordInput,
                     Row(
                       children: [
-                        Expanded(child: Container(),),
+                        Expanded(
+                          child: Container(),
+                        ),
                         TextButton(
                           onPressed: () {
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ResetPassword()));
-                           },
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ResetPassword()));
+                          },
                           child: const Text(
                             "Forgot your password?",
                             style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
                             ),
-                            
                           ),
                         ),
                       ],
                     ),
                     SizedBox(height: 5),
                     loginButton,
-                    SizedBox(height: 15,),
+                    SizedBox(
+                      height: 15,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
