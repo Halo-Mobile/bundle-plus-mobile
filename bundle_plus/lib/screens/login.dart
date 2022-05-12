@@ -39,16 +39,16 @@ class _LoginScreenState extends State<LoginScreen> {
       },
       textInputAction: TextInputAction.next,
       decoration: InputDecoration(
-        prefixIcon: Icon(
+        prefixIcon: const Icon(
           Icons.mail,
           color: Colors.pinkAccent,
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Email",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.pinkAccent,
             width: 1.5,
@@ -75,16 +75,16 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: true,
       textInputAction: TextInputAction.done,
       decoration: InputDecoration(
-        prefixIcon: Icon(
+        prefixIcon: const Icon(
           Icons.vpn_key,
           color: Colors.pinkAccent,
         ),
-        contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: "Password",
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.pinkAccent,
             width: 1.5,
@@ -98,14 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
       borderRadius: BorderRadius.circular(30),
       color: Colors.pinkAccent,
       child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
           // logIn(emailController.text, passwordController.text);
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+              context, MaterialPageRoute(builder: (context) => const HomeScreen()));
         },
-        child: Text(
+        child: const Text(
           "Login",
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -133,9 +133,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       child:
                           Image.asset("assets/logo.png", fit: BoxFit.contain),
                     ),
-                    SizedBox(height: 45),
+                    const Text(
+                      'Bundle+',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.pinkAccent,
+                      ),
+                      ),
+                    const SizedBox(height: 45),
                     emailInput,
-                    SizedBox(height: 25),
+                    const SizedBox(height: 25),
                     passwordInput,
                     Row(
                       children: [
@@ -147,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ResetPassword()));
+                                    builder: (context) => const ResetPassword()));
                           },
                           child: const Text(
                             "Forgot your password?",
@@ -159,24 +167,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 5),
+                    const SizedBox(height: 5),
                     loginButton,
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text("Don't have an account?"),
+                        const Text("Don't have an account?"),
                         GestureDetector(
                           onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        RegistrationScreen()));
+                                        const RegistrationScreen()));
                           },
-                          child: Text(
+                          child: const Text(
                             " SignUp",
                             style: TextStyle(
                               color: Colors.pinkAccent,
@@ -204,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
           .then((uid) => {
                 Fluttertoast.showToast(msg: "Login Sucessful!"),
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomeScreen()))
+                    MaterialPageRoute(builder: (context) => const HomeScreen()))
               })
           .catchError((e) {
         Fluttertoast.showToast(msg: e!.message);

@@ -1,7 +1,4 @@
-import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/login.dart';
-import 'package:bundle_plus/screens/registration.dart';
-import 'package:bundle_plus/screens/reset_password.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,8 +11,10 @@ class ResetPassword extends StatefulWidget {
 }
 
 class _ResetPasswordState extends State<ResetPassword> {
+  late String errorMessage;
+
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = new TextEditingController();
+  final TextEditingController emailController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
   @override
@@ -25,14 +24,14 @@ class _ResetPasswordState extends State<ResetPassword> {
       borderRadius: BorderRadius.circular(30),
       color: Colors.pinkAccent,
       child: MaterialButton(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          _auth.sendPasswordResetEmail(email: emailController.text);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => LoginScreen()));
+          resetPassword(emailController.text);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const LoginScreen()));
         },
-        child: Text(
+        child: const Text(
           "Reset Password",
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -80,7 +79,7 @@ class _ResetPasswordState extends State<ResetPassword> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset Password'),
+        title: const Text('Reset Password'),
         backgroundColor: Colors.pinkAccent,
         centerTitle: true,
       ),
@@ -96,11 +95,11 @@ class _ResetPasswordState extends State<ResetPassword> {
                 // mainAxisAlignment: MainAxisAlignment.center,
                 // crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   emailInput,
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   resetPass,
@@ -112,5 +111,16 @@ class _ResetPasswordState extends State<ResetPassword> {
         ),
       ),
     );
+  }
+
+  Future<bool> resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      // Fluttertoast.showToast(msg: e.toString());
+      return false;
+    }
   }
 }
