@@ -129,7 +129,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   maxRadius: 70,
-                  backgroundImage: AssetImage("assets/eleceed.jpg"),
+                  backgroundImage: NetworkImage("https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
                 ),
               ],
             ),

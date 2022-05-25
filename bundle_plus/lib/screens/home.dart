@@ -19,12 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Card(
       child: Container(
         height: 250,
-        width: 180,
+        width: 150,
         child: Column(
           children: <Widget>[
             Container(
               height: 190,
-              width: 160,
+              width: 170,
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage("assets/$image"),
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategoryProduct(String icon) {
     int icon2 = int.parse(icon);
     return CircleAvatar(
-      maxRadius: 43,
+      maxRadius: 35,
       backgroundColor: Colors.pinkAccent,
       child: IconButton(
           icon: Icon(IconData(icon2, fontFamily: 'MaterialIcons'),

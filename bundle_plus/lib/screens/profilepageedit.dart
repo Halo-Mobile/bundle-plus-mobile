@@ -161,7 +161,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
   
   @override
   Widget build(BuildContext context) {
-
+    
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
@@ -224,7 +224,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                       CircleAvatar(
                         backgroundColor: Colors.white,
                         maxRadius: 70,
-                        backgroundImage: AssetImage("assets/eleceed.jpg"),
+                        backgroundImage:  NetworkImage("https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
                       ),
                     ],
                   ),
@@ -318,9 +318,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
   Future selectFile() async{
     final result = await FilePicker.platform.pickFiles();
 
-    if (result == null) {
-      return;
-    }
+    if (result == null) return;
 
     setState(() {
       newDP = result.files.first;
@@ -329,8 +327,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
 
   Future uploadFile() async{
 
+    if(newDP == null) return;
+
     try {
-  final path = 'https://console.firebase.google.com/project/bundleplus-91f36/storage/bundleplus-91f36.appspot.com/files/profiles/${newDP!.name}';
+  final path = 'profiles/${newDP!.name}';
   final file = File(newDP!.path!);
   
   final ref = FirebaseStorage.instance.ref().child(path);
@@ -346,7 +346,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     // calling our user model
     // sending these values
 
-    // uploadFile();
+    uploadFile();
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
