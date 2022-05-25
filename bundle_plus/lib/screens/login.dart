@@ -1,6 +1,8 @@
+import 'package:bundle_plus/screens/admin/admin_home_view.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/registration.dart';
 import 'package:bundle_plus/screens/reset_password_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -16,7 +18,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
+  final usernameController = TextEditingController();
   final _auth = FirebaseAuth.instance;
+
+  var userEmail;
 
   @override
   Widget build(BuildContext context) {
@@ -101,9 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
         onPressed: () {
-          // logIn(emailController.text, passwordController.text);
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
+          logIn(emailController.text, passwordController.text);
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => const HomeScreen()));
         },
         child: const Text(
           "Login",
@@ -205,18 +210,46 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  // TODO: improve admin checking logic for efficiency
   void logIn(String email, String password) async {
     if (_formKey.currentState!.validate()) {
-      await _auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((uid) => {
-                Fluttertoast.showToast(msg: "Login Sucessful!"),
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const HomeScreen()))
-              })
-          .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
-      });
+      try {
+        await _auth
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((result) {
+          FirebaseFirestore.instance
+              .collection("users")
+              .get()
+              .then((QuerySnapshot querySnapshot) {
+            querySnapshot.docs.forEach((doc) {
+              // print(doc["email"]);
+              if (email == "admin@bundleplus.com") {
+                Fluttertoast.showToast(msg: "Login Sucessful!");
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const AdminHomeScreen()));
+              } else {
+                // print('non admin');
+                Fluttertoast.showToast(msg: "Login Sucessful!");
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const HomeScreen()));
+              }
+            });
+          });
+        });
+      } catch (e) {
+        // DONE : Proper Error Handling
+        print(e.toString());
+        Fluttertoast.showToast(msg: e.toString());
+      }
+
+      // .then((uid) => {
+      // Fluttertoast.showToast(msg: "Login Sucessful!"),
+      // Navigator.of(context).pushReplacement(
+      //     MaterialPageRoute(builder: (context) => const HomeScreen()))
+      //     })
+      //     .catchError((e) {
+      // Fluttertoast.showToast(msg: e!.message);
+      // });
     }
   }
 }
