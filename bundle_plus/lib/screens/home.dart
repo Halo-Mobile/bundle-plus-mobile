@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../model/user_model.dart';
 import '../model/user_profile.dart';
+import 'package:bundle_plus/screens/sell_item.dart';
+import '../model/item_model.dart';
 import 'login.dart';
 import 'package:bundle_plus/screens/profilepage.dart';
 
@@ -85,7 +87,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _key,
       endDrawerEnableOpenDragGesture: false,
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.pinkAccent,
+              ),
+              child: Text('Bundle+'),
+            ),
+            ListTile(
+              title: const Text('Sell Item'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SellItems()));
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         title: const Text(
           "Bundle+",
