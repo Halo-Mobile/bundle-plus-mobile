@@ -1,5 +1,5 @@
 import 'package:bundle_plus/screens/base_view.dart';
-import 'package:bundle_plus/template/template_viewmodel.dart';
+import 'package:bundle_plus/mvvm_template/template_viewmodel.dart';
 import 'package:bundle_plus/viewmodel/admin_verify_user_viewmodel.dart';
 import 'package:flutter/material.dart';
 

@@ -1,4 +1,5 @@
 import 'package:bundle_plus/screens/home.dart';
+import 'package:bundle_plus/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_plus/screens/profilepageedit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -127,7 +128,12 @@ class _ProfilePageState extends State<ProfilePage>{
           IconButton(icon: Icon(Icons.arrow_back_rounded, color: Colors.black,), onPressed: (){
             Navigator.push(
               context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+          },),
+          actions: [
+          IconButton(icon: Icon(Icons.close, color: Colors.black,), onPressed: (){
+            _showMyDialog();
           },)
+        ],
       ),
       body: Container(
         height: double.infinity,
@@ -198,6 +204,47 @@ class _ProfilePageState extends State<ProfilePage>{
           ],
         ),
       ),
+    );
+  }
+
+  deleteAccount(BuildContext context) async{
+    await user?.delete();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Account'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('If you delete your account, you will no longer be able to sign up using the same email.\n'),
+                Text('Would you like to proceed to delete your account?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                print('Confirmed');
+                deleteAccount(context);
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

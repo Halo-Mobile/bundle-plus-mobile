@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_plus/screens/profilepage.dart';
@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../model/user_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfilePageEdit extends StatefulWidget {
   const ProfilePageEdit({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class ProfilePageEdit extends StatefulWidget {
 class _ProfilePageEditState extends State<ProfilePageEdit>{
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+  PlatformFile? newDP;
 
   final firstNameEditingController = new TextEditingController();
   final secondNameEditingController = new TextEditingController();
@@ -183,6 +185,36 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
           children: [
             Stack(
               children: [
+                // if(newDP == null)
+                //   Expanded(child: Container(
+                //   height: 140,
+                //   width: double.infinity,
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       CircleAvatar(
+                //         backgroundColor: Colors.white,
+                //         maxRadius: 70,
+                //         backgroundImage: AssetImage("assets/eleceed.jpg"),
+                //       ),
+                //     ],
+                //   ),
+                // ),),
+                // if(newDP != null)
+                // Expanded(child: Container(
+                //   height: 140,
+                //   width: double.infinity,
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.end,
+                //     children: [
+                //       CircleAvatar(
+                //         backgroundColor: Colors.white,
+                //         maxRadius: 70,
+                //         backgroundImage: Image.file(newDP!.path!),
+                //       ),
+                //     ],
+                //   ),
+                // ),),
                 Container(
                   height: 140,
                   width: double.infinity,
@@ -198,15 +230,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 220.0, top: 90),
-                  child: Card(
-                    // shape: RoundedRectangleBorder(
-                    //   borderRadius: BorderRadius.circular(20),
-                    // ),
+                  padding: const EdgeInsets.only(left: 210.0, top: 90),
                     child: ElevatedButton(
-                      // backgroundColor: Colors.transparent,
                     child: Icon(Icons.edit, color: Colors.black,),
-                    onPressed: uploadFile,
+                    onPressed: selectFile,
                     style: ElevatedButton.styleFrom(
                       primary: Colors.white,
                       shape: RoundedRectangleBorder(
@@ -214,7 +241,6 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                     ),
                     ),
                     ),
-                  ),
                 ),
               ],
             ),
@@ -289,14 +315,38 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     );
   }
 
-  Future uploadFile() async{
+  Future selectFile() async{
     final result = await FilePicker.platform.pickFiles();
+
+    if (result == null) {
+      return;
+    }
+
+    setState(() {
+      newDP = result.files.first;
+    });
+  }
+
+  Future uploadFile() async{
+
+    try {
+  final path = 'https://console.firebase.google.com/project/bundleplus-91f36/storage/bundleplus-91f36.appspot.com/files/profiles/${newDP!.name}';
+  final file = File(newDP!.path!);
+  
+  final ref = FirebaseStorage.instance.ref().child(path);
+  await ref.putFile(file);
+} on Exception catch (e) {
+  print(e);
+}
+
   }
 
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
     // sending these values
+
+    // uploadFile();
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
