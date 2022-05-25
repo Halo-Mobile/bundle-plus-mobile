@@ -21,8 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
-  var userEmail;
-
   @override
   Widget build(BuildContext context) {
     final emailInput = TextFormField(
@@ -222,13 +220,13 @@ class _LoginScreenState extends State<LoginScreen> {
               .get()
               .then((QuerySnapshot querySnapshot) {
             querySnapshot.docs.forEach((doc) {
-              // print(doc["email"]);
+              print(doc["email"]);
               if (email == "admin@bundleplus.com") {
                 Fluttertoast.showToast(msg: "Login Sucessful!");
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const AdminHomeScreen()));
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => AdminHomeScreen()));
               } else {
-                // print('non admin');
+                print('non admin');
                 Fluttertoast.showToast(msg: "Login Sucessful!");
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const HomeScreen()));

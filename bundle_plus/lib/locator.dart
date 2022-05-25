@@ -1,8 +1,10 @@
+import 'package:bundle_plus/viewmodel/admin_home_viewmodel.dart';
 import 'package:get_it/get_it.dart';
 import 'package:bundle_plus/viewmodel/reset_password_viewmodel.dart';
 
 GetIt locator = GetIt.instance;
 
+// Add Viewmodel to the singleton
 Future<void> setUpLocator() async {
   // Services
   // locator.registerSingleton<LocalStorageService>(
@@ -14,6 +16,7 @@ Future<void> setUpLocator() async {
   // // Viewmodel
   locator
       .registerFactory<ResetPasswordViewModel>(() => ResetPasswordViewModel());
+  locator.registerFactory<AdminHomeViewModel>(() => AdminHomeViewModel());
 
   // locator.registerFactory<StartUpViewModel>(() => StartUpViewModel());
   // locator.registerFactory<LoginViewModel>(() => LoginViewModel());
