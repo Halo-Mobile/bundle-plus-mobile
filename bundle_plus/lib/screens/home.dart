@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../model/user_model.dart';
+import '../model/user_profile.dart';
 import 'login.dart';
+import 'package:bundle_plus/screens/profilepage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -71,12 +73,42 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     logout(context);
                   }),
+                  Material(
+                    elevation: 5,
+                    borderRadius: BorderRadius.circular(30),
+                    color: Colors.pinkAccent,
+                    child: MaterialButton(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                      minWidth: 200.0,
+                      onPressed: () {
+                        Navigator.push(
+                            context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+                      },
+                      child: const Text(
+                        "Edit Profile",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  )
             ],
           ),
         ),
       ),
     );
   }
+
+  // checkProfileData(){
+  //   FirebaseAuth.instance
+  //   .authStateChanges()
+  //   .listen((User? user) {
+  //     if (user != null) {
+  //       print(user.uid);
+  //     }
+  //   });
+  // }
+  
 
   // the logout function
   Future<void> logout(BuildContext context) async {
