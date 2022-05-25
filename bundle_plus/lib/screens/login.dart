@@ -215,23 +215,18 @@ class _LoginScreenState extends State<LoginScreen> {
         await _auth
             .signInWithEmailAndPassword(email: email, password: password)
             .then((result) {
-          FirebaseFirestore.instance
-              .collection("users")
-              .get()
-              .then((QuerySnapshot querySnapshot) {
-            querySnapshot.docs.forEach((doc) {
-              print(doc["email"]);
-              if (email == "admin@bundleplus.com") {
-                Fluttertoast.showToast(msg: "Login Sucessful!");
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => AdminHomeScreen()));
-              } else {
-                print('non admin');
-                Fluttertoast.showToast(msg: "Login Sucessful!");
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const HomeScreen()));
-              }
-            });
+          FirebaseFirestore.instance.collection("users").get().then((value) {
+            // print(doc["email"]);
+            if (email == "admin@bundleplus.com") {
+              Fluttertoast.showToast(msg: "Login Sucessful!");
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => AdminHomeScreen()));
+            } else {
+              print('non admin');
+              Fluttertoast.showToast(msg: "Login Sucessful!");
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+            }
           });
         });
       } catch (e) {
