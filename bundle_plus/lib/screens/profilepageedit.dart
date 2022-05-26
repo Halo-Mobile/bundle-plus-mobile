@@ -20,6 +20,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   PlatformFile? newDP;
+  PlatformFile? matricPic;
 
   final firstNameEditingController = new TextEditingController();
   final secondNameEditingController = new TextEditingController();
@@ -185,36 +186,6 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
           children: [
             Stack(
               children: [
-                // if(newDP == null)
-                //   Expanded(child: Container(
-                //   height: 140,
-                //   width: double.infinity,
-                //   child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.end,
-                //     children: [
-                //       CircleAvatar(
-                //         backgroundColor: Colors.white,
-                //         maxRadius: 70,
-                //         backgroundImage: AssetImage("assets/eleceed.jpg"),
-                //       ),
-                //     ],
-                //   ),
-                // ),),
-                // if(newDP != null)
-                // Expanded(child: Container(
-                //   height: 140,
-                //   width: double.infinity,
-                //   child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.end,
-                //     children: [
-                //       CircleAvatar(
-                //         backgroundColor: Colors.white,
-                //         maxRadius: 70,
-                //         backgroundImage: Image.file(newDP!.path!),
-                //       ),
-                //     ],
-                //   ),
-                // ),),
                 Container(
                   height: 140,
                   width: double.infinity,
@@ -241,6 +212,14 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                     ),
                     ),
                     ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 115.0, top:140),
+                  child: ActionChip(
+                    label: Text("Verify Account"),
+                    onPressed: () {
+                      uploadMatric();
+                  }),
                 ),
               ],
             ),
@@ -279,35 +258,6 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                 ],
               ),
               ),
-              // child: Column(
-              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //   children: [
-              //     Container(
-              //       height: 350,
-              //       color: Colors.red,
-              //       child: Column(
-              //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //         children: [
-              //           _firstname(
-              //             name: "${loggedInUser.firstName}",
-              //           ),
-              //           _lastname(
-              //             name: "${loggedInUser.secondName}",
-              //           ),
-              //           _email(
-              //             name: "${loggedInUser.email}",
-              //           ),
-              //           _phonenum(
-              //             name: "01921212",
-              //           ),
-              //           _matricCard(
-              //             name: "A19121",
-              //           ),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
             ),
           ],
         ),
@@ -330,15 +280,38 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     if(newDP == null) return;
 
     try {
-  final path = 'profiles/${newDP!.name}';
+  final path = 'profiles/${loggedInUser.uid}/${newDP!.name}';
   final file = File(newDP!.path!);
   
   final ref = FirebaseStorage.instance.ref().child(path);
   await ref.putFile(file);
-} on Exception catch (e) {
-  print(e);
-}
+  } on Exception catch (e) {
+    print(e);
+  }
+  }
 
+  Future uploadMatric() async {
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result == null) return;
+
+    setState(() {
+      matricPic = result.files.first;
+    });
+  }
+
+  Future saveMatric() async{
+    if(matricPic == null) return;
+
+    try {
+    final path = 'userVerifications/${loggedInUser.uid}/${matricPic!.name}';
+    final file = File(matricPic!.path!);
+    
+    final ref = FirebaseStorage.instance.ref().child(path);
+    await ref.putFile(file);
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   postDetailsToFirestore() async {
@@ -347,6 +320,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     // sending these values
 
     uploadFile();
+    saveMatric();
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 

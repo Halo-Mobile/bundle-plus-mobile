@@ -1,5 +1,6 @@
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/login.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_plus/screens/profilepageedit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -134,6 +135,19 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
+          //  Padding(
+          //         padding: const EdgeInsets.only(left: 210.0, top: 90),
+          //           child: ElevatedButton(
+          //           child: Icon(Icons.verified, color: Colors.red,),
+          //           onPressed: selectFile,
+          //           style: ElevatedButton.styleFrom(
+          //             primary: Colors.white,
+          //             shape: RoundedRectangleBorder(
+          //             borderRadius: BorderRadius.circular(20),
+          //           ),
+          //           ),
+          //           ),
+          //       ),
         ],
       ),
       Container(
@@ -207,6 +221,16 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+  }
+
+    Future selectFile() async{
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result == null) return;
+
+    setState(() {
+      // newDP = result.files.first;
+    });
   }
 
   deleteAccount(BuildContext context) async{
