@@ -1,22 +1,30 @@
-class UserProfile {
-  String? uid;
-  String? phoneNum;
+import 'dart:ffi';
 
-  UserProfile({this.uid, this.phoneNum});
+class UserProfile {
+  String? upid;
+  String? phoneNum;
+  String? matricCard;
+  bool? profilePic;
+
+  UserProfile({this.upid, this.phoneNum, this.matricCard, this.profilePic});
 
   // get data from server
   factory UserProfile.fromMap(map) {
     return UserProfile(
-      uid: map['uid'],
+      upid: map['upid'],
       phoneNum: map['phoneNum'],
+      matricCard: map['matricCard'],
+      profilePic: map['profilePic'],
     );
   }
 
   // send data to server
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
+      'upid': upid,
       'phoneNum': phoneNum,
+      'matricCard': matricCard,
+      'profilePic': profilePic,
     };
   }
 }

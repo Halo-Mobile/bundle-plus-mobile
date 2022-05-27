@@ -9,6 +9,8 @@ import '../model/user_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../model/user_profile.dart';
+
 class ProfilePageEdit extends StatefulWidget {
   const ProfilePageEdit({Key? key}) : super(key: key);
 
@@ -19,6 +21,7 @@ class ProfilePageEdit extends StatefulWidget {
 class _ProfilePageEditState extends State<ProfilePageEdit>{
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+  UserProfile userprofile = UserProfile();
   PlatformFile? newDP;
   PlatformFile? matricPic;
 
@@ -37,6 +40,16 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
         .get()
         .then((value) {
       this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+
+    userprofile.upid = user!.uid;
+    FirebaseFirestore.instance
+        .collection("users_profile")
+        .doc(userprofile.upid)
+        .get()
+        .then((value) {
+      this.userprofile = UserProfile.fromMap(value.data());
       setState(() {});
     });
   }
@@ -139,7 +152,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
         )
       ),
       onSaved: (value){
-
+        phoneNumEditingController.text = value!;
       },
     );
   }
@@ -155,7 +168,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
         )
       ),
       onSaved: (value){
-
+        matricCardEditingController.text = value!;
       },
     );
   }
@@ -247,10 +260,10 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                           name: "${loggedInUser.email}",
                         ),
                         _phonenum(
-                          name: "01921212",
+                          name: "${userprofile.phoneNum}",
                         ),
                         _matricCard(
-                          name: "A19121",
+                          name: "${userprofile.matricCard}",
                         ),
                       ],
                     ),
@@ -280,7 +293,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     if(newDP == null) return;
 
     try {
-  final path = 'profiles/${loggedInUser.uid}/${newDP!.name}';
+  final path = 'profiles/${loggedInUser.uid}/profilepic.${newDP!.extension}';
   final file = File(newDP!.path!);
   
   final ref = FirebaseStorage.instance.ref().child(path);
@@ -325,10 +338,12 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
 
     UserModel userModel = UserModel();
+    UserProfile _userprofile = UserProfile();
 
     // writing all the values
     userModel.email = loggedInUser.email;
     userModel.uid = loggedInUser.uid;
+    _userprofile.upid = userprofile.upid;
 
     if (firstNameEditingController.text != "") {
        userModel.firstName = firstNameEditingController.text;
@@ -348,12 +363,29 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
       userModel.email = loggedInUser.email;
     }
 
+    if (phoneNumEditingController.text != "") {
+       _userprofile.phoneNum = phoneNumEditingController.text;
+    }else{
+      _userprofile.phoneNum = userprofile.phoneNum;
+    }
+
+    if (matricCardEditingController.text != "") {
+       _userprofile.matricCard = matricCardEditingController.text;
+    }else{
+      _userprofile.matricCard = userprofile.matricCard;
+    }
+
     await user?.updateEmail("${userModel.email}");
 
     await firebaseFirestore
         .collection("users")
         .doc(loggedInUser.uid)
         .update(userModel.toMap());
+
+    await firebaseFirestore
+        .collection("users_profile")
+        .doc(userprofile.upid)
+        .update(_userprofile.toMap());
     Fluttertoast.showToast(msg: "Profile edited successfully :) ");
 
     Navigator.pushAndRemoveUntil(

@@ -1,3 +1,4 @@
+import 'package:bundle_plus/model/user_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/user_model.dart';
 import 'home.dart';
@@ -331,16 +332,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     UserModel userModel = UserModel();
 
+    //create new profile object to save default value
+    UserProfile newProfile = UserProfile(); 
+
     // writing all the values
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
 
+    //assign default value to profile object
+    newProfile.upid = user.uid;
+    newProfile.phoneNum = "0197379794";
+    newProfile.matricCard = "A193123";
+    newProfile.profilePic = false;
+
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
+
+    await firebaseFirestore
+        .collection("users_profile")
+        .doc(user.uid)
+        .set(newProfile.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
 
     Navigator.pushAndRemoveUntil(

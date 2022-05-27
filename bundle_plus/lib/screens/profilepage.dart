@@ -68,32 +68,17 @@ class _ProfilePageState extends State<ProfilePage> {
       this.loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
+
+    userprofile.upid = user!.uid;
+    FirebaseFirestore.instance
+        .collection("users_profile")
+        .doc(userprofile.upid)
+        .get()
+        .then((value) {
+      this.userprofile = UserProfile.fromMap(value.data());
+      setState(() {});
+    });
   }
-
-  //   createNewData() async{
-  //   // userprofile.uid = user!.uid;
-  //   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //   super.initState();
-  //   FirebaseFirestore.instance
-  //       .collection("users_profile")
-  //       .doc(user!.uid)
-  //       .get()
-  //       .then((value) {
-  //     this.userprofile = UserProfile.fromMap(value.data());
-  //     setState(() {});
-  //   });
-
-  //   if (userprofile.uid == null) {
-  //     userprofile.uid == loggedInUser.uid;
-  //     userprofile.phoneNum == "";
-
-  //     await firebaseFirestore
-  //       .collection("users_profile")
-  //       .doc(userprofile.uid)
-  //       .update(userprofile.toMap());
-
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -175,11 +160,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     startText: "Email",
                   ),
                   _buildSingleContainer(
-                    endText: "0192121",
+                    endText: "${userprofile.phoneNum}",
                     startText: "Phone Number",
                   ),
                   _buildSingleContainer(
-                    endText: "A19121",
+                    endText: "${userprofile.matricCard}",
                     startText: "Matric Card",
                   ),
                 ],
