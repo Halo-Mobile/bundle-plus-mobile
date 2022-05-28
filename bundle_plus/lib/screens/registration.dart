@@ -1,4 +1,5 @@
 import 'package:bundle_plus/model/user_profile.dart';
+import 'package:bundle_plus/screens/registration_verify_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/user_model.dart';
 import 'home.dart';
@@ -333,13 +334,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     UserModel userModel = UserModel();
 
     //create new profile object to save default value
-    UserProfile newProfile = UserProfile(); 
+    UserProfile newProfile = UserProfile();
 
     // writing all the values
     userModel.email = user!.email;
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
+    userModel.isVerified = false;
 
     //assign default value to profile object
     newProfile.upid = user.uid;
@@ -360,7 +362,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     Navigator.pushAndRemoveUntil(
         (context),
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const RegistrationVerifyView()),
         (route) => false);
   }
 }
