@@ -3,8 +3,10 @@ class UserModel {
   String? email;
   String? firstName;
   String? secondName;
+  bool? isVerified;
 
-  UserModel({this.uid, this.email, this.firstName, this.secondName});
+  UserModel(
+      {this.uid, this.email, this.firstName, this.secondName, this.isVerified});
 
   // get data from server
   factory UserModel.fromMap(map) {
