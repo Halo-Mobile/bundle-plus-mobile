@@ -345,7 +345,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     newProfile.upid = user.uid;
     newProfile.phoneNum = "0197379794";
     newProfile.matricCard = "A193123";
-    newProfile.profilePic = false;
+    newProfile.profilePic = 1;
 
     await firebaseFirestore
         .collection("users")

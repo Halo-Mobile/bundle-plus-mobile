@@ -1,6 +1,9 @@
+// import 'dart:html';
+
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/login.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:bundle_plus/screens/profilepageedit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -56,6 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   UserProfile userprofile = UserProfile();
+  var _ref;
 
   @override
   void initState() {
@@ -79,6 +83,27 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {});
     });
   }
+
+  // @override
+  // getPic() async{
+    // final pic = FirebaseStorage.instance.ref().child("profiles").child("eleceed.jpg");
+    // ref = await pic.getDownloadURL();
+
+    // ref = await FirebaseStorage.instance
+    //           .ref("profiles")
+    //           .child("avatar.png")
+    //           .getDownloadURL();
+
+    // final storageRef = FirebaseStorage.instance.ref();
+    // Reference? imageRef = storageRef.child("profiles");
+    // final _path = imageRef.child("avatar.png");
+    // ref = _path.fullPath;
+
+    // ref = "profiles/${loggedInUser.uid}/profile.jpg";
+
+  //   ref = "profiles/eleceed.jpg";
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +173,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildSingleContainer(
+                    // endText: "${loggedInUser.firstName}",
                     endText: "${loggedInUser.firstName}",
                     startText: "First Name",
                   ),

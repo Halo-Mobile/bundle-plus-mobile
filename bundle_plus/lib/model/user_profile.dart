@@ -4,7 +4,7 @@ class UserProfile {
   String? upid;
   String? phoneNum;
   String? matricCard;
-  bool? profilePic;
+  int? profilePic;
 
   UserProfile({this.upid, this.phoneNum, this.matricCard, this.profilePic});
 

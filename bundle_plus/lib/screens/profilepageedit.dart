@@ -179,7 +179,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.close, color: Colors.black,), onPressed: (){
+        leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black,), onPressed: (){
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => const ProfilePage()));
         },),
@@ -191,30 +191,33 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
         ],
       ),
       body: Container(
-        height: double.infinity,
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Stack(
               children: [
-                Container(
-                  height: 140,
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        maxRadius: 70,
-                        backgroundImage:  NetworkImage("https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
-                      ),
-                    ],
+                Padding(
+                  padding: const EdgeInsets.all(50.0),
+                  child: Container(
+                    height: 140,
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: Colors.white,
+                          maxRadius: 70,
+                          backgroundImage:  NetworkImage("https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 210.0, top: 90),
+                  padding: const EdgeInsets.only(left: 210.0, top: 130),
                     child: ElevatedButton(
                     child: Icon(Icons.edit, color: Colors.black,),
                     onPressed: selectFile,
@@ -227,7 +230,7 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
                     ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 115.0, top:140),
+                  padding: const EdgeInsets.only(left: 115.0, top:180),
                   child: ActionChip(
                     label: Text("Verify Account"),
                     onPressed: () {
@@ -275,6 +278,91 @@ class _ProfilePageEditState extends State<ProfilePageEdit>{
           ],
         ),
       ),
+        ),
+        // height: double.infinity,
+        // width: double.infinity,
+        // padding: EdgeInsets.symmetric(horizontal: 20.0),
+      //   child: Column(
+      //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //     children: [
+      //       Stack(
+      //         children: [
+      //           Container(
+      //             height: 140,
+      //             width: double.infinity,
+      //             child: Column(
+      //               mainAxisAlignment: MainAxisAlignment.end,
+      //               children: [
+      //                 CircleAvatar(
+      //                   backgroundColor: Colors.white,
+      //                   maxRadius: 70,
+      //                   backgroundImage:  NetworkImage("https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //           Padding(
+      //             padding: const EdgeInsets.only(left: 210.0, top: 90),
+      //               child: ElevatedButton(
+      //               child: Icon(Icons.edit, color: Colors.black,),
+      //               onPressed: selectFile,
+      //               style: ElevatedButton.styleFrom(
+      //                 primary: Colors.white,
+      //                 shape: RoundedRectangleBorder(
+      //                 borderRadius: BorderRadius.circular(20),
+      //               ),
+      //               ),
+      //               ),
+      //           ),
+      //           Padding(
+      //             padding: const EdgeInsets.only(left: 115.0, top:140),
+      //             child: ActionChip(
+      //               label: Text("Verify Account"),
+      //               onPressed: () {
+      //                 uploadMatric();
+      //             }),
+      //           ),
+      //         ],
+      //       ),
+      //     Container(
+      //         height: 350,
+      //         // color: Colors.blue,
+      //         width: double.infinity,
+      //         child: SingleChildScrollView(
+      //           child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //           children: [
+      //             Container(
+      //               height: 350,
+      //               // color: Colors.red,
+      //               child: Column(
+      //                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //                 children: [
+      //                   _firstname(
+      //                     name: "${loggedInUser.firstName}",
+      //                   ),
+      //                   _lastname(
+      //                     name: "${loggedInUser.secondName}",
+      //                   ),
+      //                   _email(
+      //                     name: "${loggedInUser.email}",
+      //                   ),
+      //                   _phonenum(
+      //                     name: "${userprofile.phoneNum}",
+      //                   ),
+      //                   _matricCard(
+      //                     name: "${userprofile.matricCard}",
+      //                   ),
+      //                 ],
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
