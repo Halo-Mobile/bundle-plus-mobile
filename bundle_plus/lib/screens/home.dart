@@ -1,3 +1,5 @@
+import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:bundle_plus/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:bundle_plus/screens/sell_item.dart';
 import '../model/item_model.dart';
 import 'login.dart';
 import 'package:bundle_plus/screens/profilepage.dart';
+import 'package:carousel_pro/carousel_pro.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,47 +19,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget _buildFeaturedProduct({String? name, double? price, String? image}) {
-    String price2 = price!.toStringAsFixed(2);
-    return Card(
-      child: Container(
-        height: 250,
-        width: 150,
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 190,
-              width: 170,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/$image"),
-                ),
-              ),
-            ),
-            Text(
-              "RM $price2",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                  color: Colors.black),
-            ),
-            Text(
-              name!,
-              style: TextStyle(
-                  // fontWeight: FontWeight.bold,
-                  fontSize: 17,
-                  color: Colors.black),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildCategoryProduct(String icon) {
     int icon2 = int.parse(icon);
     return CircleAvatar(
-      maxRadius: 35,
+      maxRadius: 40,
       backgroundColor: Colors.pinkAccent,
       child: IconButton(
           icon: Icon(IconData(icon2, fontFamily: 'MaterialIcons'),
@@ -100,10 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ListTile(
               title: const Text('Sell Item'),
               onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SellItems()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const SellItems()));
               },
             ),
           ],
@@ -127,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.notifications_none, color: Colors.pinkAccent),
+              icon: Icon(Icons.search, color: Colors.pinkAccent),
               onPressed: () {}),
           IconButton(
               icon:
@@ -208,19 +172,107 @@ class _HomeScreenState extends State<HomeScreen> {
             Column(
               children: <Widget>[
                 Container(
-                  height: 120,
+                  // height: 120,
                   width: double.infinity,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextFormField(
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
-                          hintText: "Seach",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Container(
+                                height: 240,
+                                child: Carousel(
+                                  autoplay: true,
+                                  showIndicator: false,
+                                  images: [
+                                    AssetImage('assets/acer.jfif'),
+                                    AssetImage('assets/ipx.jpg'),
+                                    AssetImage('assets/windbreaker.jpg'),
+                                    AssetImage('assets/sidemirror.jpg'),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 50,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      "Categories",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height: 60,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    _buildCategoryProduct("0xe3dd"),
+                                    _buildCategoryProduct("0xe367"),
+                                    _buildCategoryProduct("0xe25a"),
+                                    _buildCategoryProduct("0xe5f3"),
+                                    _buildCategoryProduct("0xe5ef"),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    "Featured",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (ctx) => ListProduct(
+                                            name: "Featured",
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      "View more",
+                                      style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  SingleProduct(
+                                      image: "acer.jfif",
+                                      price: 3500,
+                                      name: "ACER Predator Helios 300"),
+                                  SingleProduct(
+                                      image: "ipx.jpg",
+                                      price: 1500,
+                                      name: "iPhone X"),
+                                ],
+                              ),
+                            ],
                           ),
-                        ),
+                        ],
                       ),
                       Container(
                         height: 50,
@@ -231,124 +283,57 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  "Featured",
+                                  "New Arrival",
                                   style: TextStyle(
                                       fontSize: 17,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text(
-                                  "See all",
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (ctx) => ListProduct(
+                                          name: "New Arrival",
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    "View more",
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 )
                               ],
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                            _buildFeaturedProduct(
-                                image: "acer.jfif",
-                                price: 3500,
-                                name: "ACER Predator Helios 300"),
-                            _buildFeaturedProduct(
-                                image: "ipx.jpg",
-                                price: 1500,
-                                name: "iPhone X"),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    SingleProduct(
+                                        image: "dilo.jpg",
+                                        price: 15,
+                                        name: "Digital Logic"),
+                                    SingleProduct(
+                                        image: "oop.jpg",
+                                        price: 20.5,
+                                        name: "OOP using JAVA"),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 70,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        "Categories",
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "See all",
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      _buildCategoryProduct("0xe3dd"),
-                      _buildCategoryProduct("0xe367"),
-                      _buildCategoryProduct("0xe25a"),
-                      _buildCategoryProduct("0xe5f3"),
-                      _buildCategoryProduct("0xe5ef"),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 50,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Text(
-                            "New Arrival",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            "See all",
-                            style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              _buildFeaturedProduct(
-                                  image: "dilo.jpg",
-                                  price: 15,
-                                  name: "Digital Logic"),
-                              _buildFeaturedProduct(
-                                  image: "oop.jpg",
-                                  price: 20.5,
-                                  name: "OOP using JAVA"),
-                            ],
-                          ),
-                        ],
                       ),
                     ],
                   ),

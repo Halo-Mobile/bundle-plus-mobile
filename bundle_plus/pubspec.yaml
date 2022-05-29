@@ -42,6 +42,7 @@ dependencies:
   provider: ^6.0.3
   file_picker: ^4.5.1
   firebase_storage: ^10.2.16
+  carousel_pro: ^1.0.0
 
 dev_dependencies:
   flutter_test:
