@@ -48,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  bool homeColor = true;
+  bool sellColor = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,18 +59,71 @@ class _HomeScreenState extends State<HomeScreen> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.pinkAccent,
+          children: <Widget>[
+            // const DrawerHeader(
+            //   decoration: BoxDecoration(
+            //     color: Colors.pinkAccent,
+            //   ),
+            //   child: Text('Bundle+'),
+            // ),
+            UserAccountsDrawerHeader(
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
               ),
-              child: Text('Bundle+'),
+              accountName:
+                  Text("${loggedInUser.firstName} ${loggedInUser.secondName}"),
+              accountEmail: Text("${loggedInUser.email}"),
             ),
             ListTile(
-              title: const Text('Sell Item'),
+              selected: homeColor,
+              enabled: true,
+              leading: Icon(Icons.home),
+              title: Text(
+                'Home',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const SellItems()));
+                setState(() {
+                  homeColor = true;
+                  sellColor = false;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              selected: sellColor,
+              leading: Icon(Icons.sell),
+              title: Text(
+                'Sell Item',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  homeColor = false;
+                  sellColor = true;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SellItems(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout_outlined),
+              title: Text(
+                'Log Out',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                logout(context);
               },
             ),
           ],
@@ -356,10 +412,9 @@ class _HomeScreenState extends State<HomeScreen> {
   //   });
   // }
 
-  // the logout function
-  // Future<void> logout(BuildContext context) async {
-  //   await FirebaseAuth.instance.signOut();
-  //   Navigator.of(context).pushReplacement(
-  //       MaterialPageRoute(builder: (context) => LoginScreen()));
-  // }
+  Future<void> logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginScreen()));
+  }
 }

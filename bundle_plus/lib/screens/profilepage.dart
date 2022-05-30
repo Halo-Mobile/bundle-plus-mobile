@@ -86,20 +86,20 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // @override
   // getPic() async{
-    // final pic = FirebaseStorage.instance.ref().child("profiles").child("eleceed.jpg");
-    // ref = await pic.getDownloadURL();
+  // final pic = FirebaseStorage.instance.ref().child("profiles").child("eleceed.jpg");
+  // ref = await pic.getDownloadURL();
 
-    // ref = await FirebaseStorage.instance
-    //           .ref("profiles")
-    //           .child("avatar.png")
-    //           .getDownloadURL();
+  // ref = await FirebaseStorage.instance
+  //           .ref("profiles")
+  //           .child("avatar.png")
+  //           .getDownloadURL();
 
-    // final storageRef = FirebaseStorage.instance.ref();
-    // Reference? imageRef = storageRef.child("profiles");
-    // final _path = imageRef.child("avatar.png");
-    // ref = _path.fullPath;
+  // final storageRef = FirebaseStorage.instance.ref();
+  // Reference? imageRef = storageRef.child("profiles");
+  // final _path = imageRef.child("avatar.png");
+  // ref = _path.fullPath;
 
-    // ref = "profiles/${loggedInUser.uid}/profile.jpg";
+  // ref = "profiles/${loggedInUser.uid}/profile.jpg";
 
   //   ref = "profiles/eleceed.jpg";
   //   setState(() {});
@@ -140,7 +140,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 CircleAvatar(
                   backgroundColor: Colors.white,
                   maxRadius: 70,
-                  backgroundImage: NetworkImage("https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
+                  backgroundImage: NetworkImage(
+                      "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
                 ),
               ],
             ),
@@ -200,26 +201,37 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
       editButton,
-      ActionChip(
-          label: Text("Logout"),
-          onPressed: () {
-            logout(context);
-          }),
+      // ActionChip(
+      //     label: Text("Logout"),
+      //     onPressed: () {
+      //       logout(context);
+      //     }),
     ];
     return Scaffold(
       backgroundColor: Color(0xfff8f8f8),
       appBar: AppBar(
         title: const Text('Profile'),
         backgroundColor: Colors.white,
-        leading:
-          IconButton(icon: Icon(Icons.arrow_back_rounded, color: Colors.black,), onPressed: (){
-            Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-          },),
-          actions: [
-          IconButton(icon: Icon(Icons.close, color: Colors.black,), onPressed: (){
-            _showMyDialog();
-          },)
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.close,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              _showMyDialog();
+            },
+          )
         ],
       ),
       body: Container(
@@ -234,7 +246,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-    Future selectFile() async{
+  Future selectFile() async {
     final result = await FilePicker.platform.pickFiles();
 
     if (result == null) return;
@@ -244,7 +256,7 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  deleteAccount(BuildContext context) async{
+  deleteAccount(BuildContext context) async {
     await user?.delete();
     Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => LoginScreen()));
@@ -260,7 +272,8 @@ class _ProfilePageState extends State<ProfilePage> {
           content: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text('If you delete your account, you will no longer be able to sign up using the same email.\n'),
+                Text(
+                    'If you delete your account, you will no longer be able to sign up using the same email.\n'),
                 Text('Would you like to proceed to delete your account?'),
               ],
             ),
@@ -285,8 +298,3 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 }
-  Future<void> logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => LoginScreen()));
-  }
