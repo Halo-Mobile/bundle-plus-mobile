@@ -1,3 +1,4 @@
+import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 

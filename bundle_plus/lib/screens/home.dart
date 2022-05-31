@@ -1,3 +1,4 @@
+import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:bundle_plus/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -316,14 +317,38 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
-                                  SingleProduct(
-                                      image: "acer.jfif",
-                                      price: 3500,
-                                      name: "ACER Predator Helios 300"),
-                                  SingleProduct(
-                                      image: "ipx.jpg",
-                                      price: 1500,
-                                      name: "iPhone X"),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (ctx) => DetailScreen(
+                                              image: "assets/acer.jfif",
+                                              price: 3500,
+                                              name: "ACER Predator Helios 300"),
+                                        ),
+                                      );
+                                    },
+                                    child: SingleProduct(
+                                        image: "acer.jfif",
+                                        price: 3500,
+                                        name: "ACER Predator Helios 300"),
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                          builder: (ctx) => DetailScreen(
+                                              image: "assets/ipx.jpg",
+                                              price: 1500,
+                                              name: "iPhone X"),
+                                        ),
+                                      );
+                                    },
+                                    child: SingleProduct(
+                                        image: "ipx.jpg",
+                                        price: 1500,
+                                        name: "iPhone X"),
+                                  ),
                                 ],
                               ),
                             ],
@@ -376,14 +401,38 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: <Widget>[
                                 Row(
                                   children: <Widget>[
-                                    SingleProduct(
-                                        image: "dilo.jpg",
-                                        price: 15,
-                                        name: "Digital Logic"),
-                                    SingleProduct(
-                                        image: "oop.jpg",
-                                        price: 20.5,
-                                        name: "OOP using JAVA"),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (ctx) => DetailScreen(
+                                                image: "assets/dilo.jpg",
+                                                price: 15,
+                                                name: "Digital Logic"),
+                                          ),
+                                        );
+                                      },
+                                      child: SingleProduct(
+                                          image: "dilo.jpg",
+                                          price: 15,
+                                          name: "Digital Logic"),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (ctx) => DetailScreen(
+                                                image: "assets/oop.jpg",
+                                                price: 20.5,
+                                                name: "OOP using JAVA"),
+                                          ),
+                                        );
+                                      },
+                                      child: SingleProduct(
+                                          image: "oop.jpg",
+                                          price: 20.5,
+                                          name: "OOP using JAVA"),
+                                    ),
                                   ],
                                 ),
                               ],
