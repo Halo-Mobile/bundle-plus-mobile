@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../model/user_model.dart';
 import '../model/item_model.dart';
 import 'home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +29,19 @@ class _SellItemState extends State<SellItems> {
   final categoryEditingController = new TextEditingController();
   final priceEditingController = new TextEditingController();
 
+  List<DropdownMenuItem<String>> get dropdownItems {
+    List<DropdownMenuItem<String>> menuItems = [
+      DropdownMenuItem(child: Text("Category"), value: "Category"),
+      DropdownMenuItem(child: Text("Electronics"), value: "Electronics"),
+      DropdownMenuItem(child: Text("Canada"), value: "Canada"),
+      DropdownMenuItem(child: Text("Brazil"), value: "Brazil"),
+      DropdownMenuItem(child: Text("England"), value: "England"),
+    ];
+    return menuItems;
+  }
+
+  String selectedValue = "Category";
+
   @override
   Widget build(BuildContext context) {
     //name field
@@ -35,12 +51,8 @@ class _SellItemState extends State<SellItems> {
         controller: nameEditingController,
         keyboardType: TextInputType.name,
         validator: (value) {
-          RegExp regex = RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
             return ("Name cannot be Empty");
-          }
-          if (!regex.hasMatch(value)) {
-            return ("Enter Valid name(Min. 3 Character)");
           }
           return null;
         },
@@ -64,19 +76,15 @@ class _SellItemState extends State<SellItems> {
           ),
         ));
 
-        //description field
+    //description field
     final descriptionField = TextFormField(
         autofocus: false,
         cursorColor: Colors.pinkAccent,
         controller: descriptionEditingController,
         keyboardType: TextInputType.name,
         validator: (value) {
-          RegExp regex = RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
-            return ("Name cannot be Empty");
-          }
-          if (!regex.hasMatch(value)) {
-            return ("Enter Valid name(Min. 3 Character)");
+            return ("Description cannot be Empty");
           }
           return null;
         },
@@ -100,33 +108,14 @@ class _SellItemState extends State<SellItems> {
           ),
         ));
 
-        //category field
-    final categoryField = TextFormField(
-        autofocus: false,
-        cursorColor: Colors.pinkAccent,
-        controller: categoryEditingController,
-        keyboardType: TextInputType.name,
-        validator: (value) {
-          RegExp regex = RegExp(r'^.{3,}$');
-          if (value!.isEmpty) {
-            return ("Name cannot be Empty");
-          }
-          if (!regex.hasMatch(value)) {
-            return ("Enter Valid name(Min. 3 Character)");
-          }
-          return null;
-        },
-        onSaved: (value) {
-          categoryEditingController.text = value!;
-        },
-        textInputAction: TextInputAction.next,
+    //category field
+
+    final categoryField = DropdownButtonFormField(
         decoration: InputDecoration(
           prefixIcon: const Icon(
             Icons.category,
             color: Colors.pinkAccent,
           ),
-          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Category",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -134,21 +123,69 @@ class _SellItemState extends State<SellItems> {
             borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
             borderRadius: BorderRadius.circular(10),
           ),
-        ));
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+        ),
+        value: selectedValue,
+        validator: (value) {
+          if (value=="Category") {
+            return ("Select an Category");
+          }
+          return null;
+        },
+        onSaved: (String? newValue) {
+          categoryEditingController.text = newValue!;
+        },
+        onChanged: (String? newValue) {
+          setState(() {
+            selectedValue = newValue!;
+          });
+        },
+        items: dropdownItems);
 
-        //price field
+    // final categoryField = TextFormField(
+    //     autofocus: false,
+    //     cursorColor: Colors.pinkAccent,
+    //     controller: categoryEditingController,
+    //     keyboardType: TextInputType.name,
+    //     validator: (value) {
+    //       RegExp regex = RegExp(r'^.{3,}$');
+    //       if (value!.isEmpty) {
+    //         return ("Name cannot be Empty");
+    //       }
+    //       if (!regex.hasMatch(value)) {
+    //         return ("Enter Valid name(Min. 3 Character)");
+    //       }
+    //       return null;
+    //     },
+    //     onSaved: (value) {
+    //       categoryEditingController.text = value!;
+    //     },
+    //     textInputAction: TextInputAction.next,
+    //     decoration: InputDecoration(
+    //       prefixIcon: const Icon(
+    //         Icons.category,
+    //         color: Colors.pinkAccent,
+    //       ),
+    //       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+    //       hintText: "Category",
+    //       border: OutlineInputBorder(
+    //         borderRadius: BorderRadius.circular(10),
+    //       ),
+    //       focusedBorder: OutlineInputBorder(
+    //         borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
+    //         borderRadius: BorderRadius.circular(10),
+    //       ),
+    //     ));
+
+    //price field
     final priceField = TextFormField(
         autofocus: false,
         cursorColor: Colors.pinkAccent,
         controller: priceEditingController,
         keyboardType: TextInputType.name,
         validator: (value) {
-          RegExp regex = RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
-            return ("Name cannot be Empty");
-          }
-          if (!regex.hasMatch(value)) {
-            return ("Enter Valid name(Min. 3 Character)");
+            return ("Price cannot be Empty");
           }
           return null;
         },
@@ -173,37 +210,38 @@ class _SellItemState extends State<SellItems> {
         ));
 
     //signup button
-    // final signUpButton = Material(
-    //   elevation: 5,
-    //   borderRadius: BorderRadius.circular(30),
-    //   color: Colors.pinkAccent,
-    //   child: MaterialButton(
-    //       padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-    //       minWidth: MediaQuery.of(context).size.width,
-    //       onPressed: () {
-    //         signUp(categoryEditingController.text, passwordEditingController.text);
-    //       },
-    //       child: const Text(
-    //         "SignUp",
-    //         textAlign: TextAlign.center,
-    //         style: TextStyle(
-    //             fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-    //       )),
-    // );
+    final addItemButton = Material(
+      elevation: 5,
+      borderRadius: BorderRadius.circular(30),
+      color: Colors.pinkAccent,
+      child: MaterialButton(
+          padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+          minWidth: MediaQuery.of(context).size.width,
+          onPressed: () {
+            postDetailsToFirestore();
+          },
+          child: const Text(
+            "Add Item",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+          )),
+    );
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.close, color: Colors.black,), onPressed: (){
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const HomeScreen()));
-        },),
+        leading: IconButton(
+          icon: Icon(
+            Icons.close,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const HomeScreen()));
+          },
+        ),
         backgroundColor: Colors.white,
-        actions: [
-          IconButton(icon: Icon(Icons.check, color: Colors.black,), onPressed: (){
-            postDetailsToFirestore();
-          },)
-        ],
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -226,6 +264,8 @@ class _SellItemState extends State<SellItems> {
                     const SizedBox(height: 20),
                     priceField,
                     const SizedBox(height: 20),
+                    addItemButton,
+                    const SizedBox(height: 15),
                   ],
                 ),
               ),
@@ -236,60 +276,25 @@ class _SellItemState extends State<SellItems> {
     );
   }
 
-  // void signUp(String email, String password) async {
-  //   if (_formKey.currentState!.validate()) {
-  //     try {
-  //       await _auth
-  //           .createUserWithEmailAndPassword(email: email, password: password)
-  //           .then((value) => {postDetailsToFirestore()})
-  //           .catchError((e) {
-  //         Fluttertoast.showToast(msg: e!.message);
-  //       });
-  //     } on FirebaseAuthException catch (error) {
-  //       switch (error.code) {
-  //         case "invalid-email":
-  //           errorMessage = "Your email address appears to be malformed.";
-  //           break;
-  //         case "wrong-password":
-  //           errorMessage = "Your password is wrong.";
-  //           break;
-  //         case "user-not-found":
-  //           errorMessage = "User with this email doesn't exist.";
-  //           break;
-  //         case "user-disabled":
-  //           errorMessage = "User with this email has been disabled.";
-  //           break;
-  //         case "too-many-requests":
-  //           errorMessage = "Too many requests";
-  //           break;
-  //         case "operation-not-allowed":
-  //           errorMessage = "Signing in with Email and Password is not enabled.";
-  //           break;
-  //         default:
-  //           errorMessage = "An undefined Error happened.";
-  //       }
-  //       Fluttertoast.showToast(msg: errorMessage!);
-  //       print(error.code);
-  //     }
-  //   }
-  // }
-
   postDetailsToFirestore() async {
     // calling our firestore
     // calling our user model
     // sedning these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = _auth.currentUser;
 
+    UserModel userModel = UserModel();
     ItemModel itemModel = ItemModel();
 
     // writing all the values
+    userModel.email = user!.email;
+    itemModel.iid = user.uid;
     itemModel.name = nameEditingController.text;
     itemModel.description = descriptionEditingController.text;
     itemModel.category = categoryEditingController.text;
     itemModel.price = priceEditingController.text as double?;
 
-    var user;
     await firebaseFirestore
         .collection("items")
         .doc(user.uid)

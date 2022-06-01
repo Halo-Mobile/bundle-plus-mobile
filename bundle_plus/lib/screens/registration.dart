@@ -216,7 +216,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             signUp(emailEditingController.text, passwordEditingController.text);
           },
           child: const Text(
-            "SignUp",
+            "Sign Up",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
