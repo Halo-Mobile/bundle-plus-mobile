@@ -31,7 +31,7 @@ class _SellItemState extends State<SellItems> {
 
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Category"), value: "Category"),
+      DropdownMenuItem(child: Text("Category"), value: ""),
       DropdownMenuItem(child: Text("Books"), value: "Books"),
       DropdownMenuItem(child: Text("Electronics"), value: "Electronics"),
       DropdownMenuItem(child: Text("Foods"), value: "Foods"),
@@ -128,7 +128,7 @@ class _SellItemState extends State<SellItems> {
         ),
         value: selectedValue,
         validator: (value) {
-          if (value=="Category") {
+          if (value=="") {
             return ("Select an Category");
           }
           return null;
