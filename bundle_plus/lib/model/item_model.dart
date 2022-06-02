@@ -3,7 +3,7 @@ class ItemModel {
   String? name;
   String? description;
   String? category;
-  double? price;
+   String? price;
 
   ItemModel({this.iid, this.name, this.description, this.category, this.price});
 

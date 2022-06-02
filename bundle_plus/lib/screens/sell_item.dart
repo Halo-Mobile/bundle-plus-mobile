@@ -137,7 +137,7 @@ class _SellItemState extends State<SellItems> {
         },
         onChanged: (String? newValue) {
           setState(() {
-            selectedValue = newValue!;
+            categoryEditingController.text = newValue!;
           });
         },
         items: dropdownItems);
@@ -282,23 +282,18 @@ class _SellItemState extends State<SellItems> {
     // sedning these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
-
-    UserModel userModel = UserModel();
+    final docItem = FirebaseFirestore.instance.collection('items').doc();
+    
     ItemModel itemModel = ItemModel();
 
     // writing all the values
-    userModel.email = user!.email;
-    itemModel.iid = user.uid;
+    itemModel.iid = docItem.id;
     itemModel.name = nameEditingController.text;
     itemModel.description = descriptionEditingController.text;
     itemModel.category = categoryEditingController.text;
-    itemModel.price = priceEditingController.text as double?;
+    itemModel.price = priceEditingController.text;
 
-    await firebaseFirestore
-        .collection("items")
-        .doc(user.uid)
-        .set(itemModel.toMap());
+    await docItem.set(itemModel.toMap());
     Fluttertoast.showToast(msg: "Item added successfully :) ");
 
     Navigator.pushAndRemoveUntil(
