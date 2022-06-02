@@ -32,10 +32,11 @@ class _SellItemState extends State<SellItems> {
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
       DropdownMenuItem(child: Text("Category"), value: "Category"),
+      DropdownMenuItem(child: Text("Books"), value: "Books"),
       DropdownMenuItem(child: Text("Electronics"), value: "Electronics"),
-      DropdownMenuItem(child: Text("Canada"), value: "Canada"),
-      DropdownMenuItem(child: Text("Brazil"), value: "Brazil"),
-      DropdownMenuItem(child: Text("England"), value: "England"),
+      DropdownMenuItem(child: Text("Foods"), value: "Foods"),
+      DropdownMenuItem(child: Text("Sports"), value: "Sports"),
+      DropdownMenuItem(child: Text("Accesories"), value: "Accesories"),
     ];
     return menuItems;
   }
