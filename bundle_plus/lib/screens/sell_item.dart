@@ -1,10 +1,8 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../model/user_model.dart';
 import '../model/item_model.dart';
 import 'home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -41,7 +39,7 @@ class _SellItemState extends State<SellItems> {
     return menuItems;
   }
 
-  String selectedValue = "Category";
+  String selectedValue = "";
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +126,7 @@ class _SellItemState extends State<SellItems> {
         ),
         value: selectedValue,
         validator: (value) {
-          if (value=="") {
+          if (value == "") {
             return ("Select an Category");
           }
           return null;
@@ -256,6 +254,27 @@ class _SellItemState extends State<SellItems> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
+                    ElevatedButton(
+                      onPressed: () async {
+                        final results = await FilePicker.platform.pickFiles(
+                          allowMultiple: false,
+                          type: FileType.custom,
+                          allowedExtensions: ['jpg', 'png'],
+                        );
+
+                        if (results == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('No image selected'),
+                            ),
+                          );
+                          return null;
+                        }
+                        final path = results.files.single.path!;
+                        final fileName = results.files.single.name;
+                      },
+                      child: const Text("Upload Image"),
+                    ),
                     const SizedBox(height: 45),
                     nameField,
                     const SizedBox(height: 20),
@@ -284,7 +303,7 @@ class _SellItemState extends State<SellItems> {
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     final docItem = FirebaseFirestore.instance.collection('items').doc();
-    
+
     ItemModel itemModel = ItemModel();
 
     // writing all the values
