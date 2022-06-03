@@ -3,9 +3,11 @@ class ItemModel {
   String? name;
   String? description;
   String? category;
-   String? price;
+  String? condition;
+  String? used;
+  String? price;
 
-  ItemModel({this.iid, this.name, this.description, this.category, this.price});
+  ItemModel({this.iid, this.name, this.description, this.category, this.condition, this.used, this.price});
 
   // get data from server
   factory ItemModel.fromMap(map) {
@@ -14,6 +16,8 @@ class ItemModel {
       name: map['name'],
       description: map['description'],
       category: map['category'],
+      condition: map['condition'],
+      used: map['used'],
       price: map['price'],
     );
   }
@@ -25,6 +29,8 @@ class ItemModel {
       'name': name,
       'description': description,
       'category': category,
+      'condition': condition,
+      'used': used,
       'price': price,
     };
   }
