@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/item_model.dart';
 import 'home.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../model/storage_service.dart';
 
 class SellItems extends StatefulWidget {
   const SellItems({Key? key}) : super(key: key);
@@ -25,7 +27,10 @@ class _SellItemState extends State<SellItems> {
   final nameEditingController = new TextEditingController();
   final descriptionEditingController = new TextEditingController();
   final categoryEditingController = new TextEditingController();
+  final conditionEditingController = new TextEditingController();
+  final usedEditingController = new TextEditingController();
   final priceEditingController = new TextEditingController();
+  final imgEditingController = new TextEditingController();
 
   List<DropdownMenuItem<String>> get dropdownItems {
     List<DropdownMenuItem<String>> menuItems = [
@@ -43,7 +48,9 @@ class _SellItemState extends State<SellItems> {
 
   @override
   Widget build(BuildContext context) {
+    final Storage storage = Storage();
     //name field
+
     final nameField = TextFormField(
         autofocus: false,
         cursorColor: Colors.pinkAccent,
@@ -141,40 +148,73 @@ class _SellItemState extends State<SellItems> {
         },
         items: dropdownItems);
 
-    // final categoryField = TextFormField(
-    //     autofocus: false,
-    //     cursorColor: Colors.pinkAccent,
-    //     controller: categoryEditingController,
-    //     keyboardType: TextInputType.name,
-    //     validator: (value) {
-    //       RegExp regex = RegExp(r'^.{3,}$');
-    //       if (value!.isEmpty) {
-    //         return ("Name cannot be Empty");
-    //       }
-    //       if (!regex.hasMatch(value)) {
-    //         return ("Enter Valid name(Min. 3 Character)");
-    //       }
-    //       return null;
-    //     },
-    //     onSaved: (value) {
-    //       categoryEditingController.text = value!;
-    //     },
-    //     textInputAction: TextInputAction.next,
-    //     decoration: InputDecoration(
-    //       prefixIcon: const Icon(
-    //         Icons.category,
-    //         color: Colors.pinkAccent,
-    //       ),
-    //       contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-    //       hintText: "Category",
-    //       border: OutlineInputBorder(
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
-    //       focusedBorder: OutlineInputBorder(
-    //         borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
-    //         borderRadius: BorderRadius.circular(10),
-    //       ),
-    //     ));
+    //condition field
+    final conditionField = TextFormField(
+        autofocus: false,
+        cursorColor: Colors.pinkAccent,
+        controller: conditionEditingController,
+        keyboardType: TextInputType.name,
+        validator: (value) {
+          RegExp regex = RegExp("[1-5]");
+          if (value!.isEmpty) {
+            return ("Condition cannot be Empty");
+          }
+          if (!regex.hasMatch(value)) {
+            return ("Enter numbers between 1-5");
+          }
+          return null;
+        },
+        onSaved: (value) {
+          conditionEditingController.text = value!;
+        },
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(
+            Icons.question_mark,
+            color: Colors.pinkAccent,
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+          hintText: "Condition (per 10)",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ));
+
+        //used for field
+    final usedField = TextFormField(
+        autofocus: false,
+        cursorColor: Colors.pinkAccent,
+        controller: usedEditingController,
+        keyboardType: TextInputType.name,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return ("Used period cannot be Empty");
+          }
+          return null;
+        },
+        onSaved: (value) {
+          usedEditingController.text = value!;
+        },
+        textInputAction: TextInputAction.done,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(
+            Icons.query_builder,
+            color: Colors.pinkAccent,
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+          hintText: "Used period",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.pinkAccent, width: 2.0),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ));
 
     //price field
     final priceField = TextFormField(
@@ -259,7 +299,7 @@ class _SellItemState extends State<SellItems> {
                         final results = await FilePicker.platform.pickFiles(
                           allowMultiple: false,
                           type: FileType.custom,
-                          allowedExtensions: ['jpg', 'png'],
+                          allowedExtensions: ['jpg', 'png', 'jfif'],
                         );
 
                         if (results == null) {
@@ -272,6 +312,8 @@ class _SellItemState extends State<SellItems> {
                         }
                         final path = results.files.single.path!;
                         final fileName = results.files.single.name;
+
+                        storage.uploadFile(path, fileName).then((value)=>print('Done'));
                       },
                       child: const Text("Upload Image"),
                     ),
@@ -281,6 +323,10 @@ class _SellItemState extends State<SellItems> {
                     descriptionField,
                     const SizedBox(height: 20),
                     categoryField,
+                    const SizedBox(height: 20),
+                    conditionField,
+                    const SizedBox(height: 20),
+                    usedField,
                     const SizedBox(height: 20),
                     priceField,
                     const SizedBox(height: 20),
@@ -311,6 +357,8 @@ class _SellItemState extends State<SellItems> {
     itemModel.name = nameEditingController.text;
     itemModel.description = descriptionEditingController.text;
     itemModel.category = categoryEditingController.text;
+    itemModel.condition = conditionEditingController.text;
+    itemModel.used = usedEditingController.text;
     itemModel.price = priceEditingController.text;
 
     await docItem.set(itemModel.toMap());

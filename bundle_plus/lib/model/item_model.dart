@@ -25,10 +25,10 @@ class ItemModel {
       name: map['name'],
       description: map['description'],
       category: map['category'],
-      price: map['price'],
-      image: map['image'],
       condition: map['condition'],
       used: map['used'],
+      price: map['price'],
+      image: map['image'],
     );
   }
 
@@ -39,10 +39,10 @@ class ItemModel {
       'name': name,
       'description': description,
       'category': category,
-      'price': price,
-      'image': image,
       'condition': condition,
       'used': used,
+      'price': price,
+      'image': image,
     };
   }
 }
