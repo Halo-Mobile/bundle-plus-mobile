@@ -2,9 +2,12 @@ import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/widgets/singleproduct.dart';
 import 'package:flutter/material.dart';
 
+import 'detailscreen.dart';
+
 class ListProduct extends StatelessWidget {
   final String name;
-  ListProduct({required this.name});
+  final AsyncSnapshot snapShot;
+  ListProduct({required this.name, required this.snapShot});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +55,9 @@ class ListProduct extends StatelessWidget {
                           Text(
                             name,
                             style: TextStyle(
-                                fontSize: 17, fontWeight: FontWeight.bold),
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.pinkAccent),
                           ),
                         ],
                       ),
@@ -64,41 +69,36 @@ class ListProduct extends StatelessWidget {
                 ),
                 Container(
                   height: 850,
-                  child: GridView.count(
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.78,
-                    crossAxisCount: 2,
-                    children: <Widget>[
-                      SingleProduct(
-                          image: "acer.jfif",
-                          price: 3500,
-                          name: "ACER Predator Helios 300"),
-                      SingleProduct(
-                          image: "ipx.jpg", price: 1500, name: "iPhone X"),
-                      SingleProduct(
-                          image: "dilo.jpg", price: 15, name: "Digital Logic"),
-                      SingleProduct(
-                          image: "oop.jpg",
-                          price: 20.5,
-                          name: "OOP using JAVA"),
-                      SingleProduct(
-                          image: "windbreaker.jpg",
-                          price: 100,
-                          name: "VTG ADIDAS WINDBREAKER"),
-                      SingleProduct(
-                          image: "backpack.jpg",
-                          price: 355,
-                          name: "Coach Backpack (F 59321)"),
-                      SingleProduct(
-                          image: "harddisck.jpg",
-                          price: 150,
-                          name:
-                              "HGST 1TB sata 2.5 inch laptop hard disk external case"),
-                      SingleProduct(
-                          image: "sidemirror.jpg",
-                          price: 30,
-                          name: "Side Mirror SYM 125i SPORT RIDER"),
-                    ],
+                  child: GridView.builder(
+                    itemCount: snapShot.data.docs.length,
+                    itemBuilder: (ctx, index) => GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (ctx) => DetailScreen(
+                                image:
+                                    "assets/${snapShot.data.docs[index]["image"]}",
+                                name: snapShot.data.docs[index]["name"],
+                                price: snapShot.data.docs[index]["price"],
+                                description: snapShot.data.docs[index]
+                                    ["description"],
+                                condition: snapShot.data.docs[index]
+                                    ["condition"],
+                                used: snapShot.data.docs[index]["used"]),
+                          ),
+                        );
+                      },
+                      child: SingleProduct(
+                        name: snapShot.data.docs[index]["name"],
+                        price: snapShot.data.docs[index]["price"],
+                        image: snapShot.data.docs[index]["image"],
+                      ),
+                    ),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 0.7,
+                        crossAxisSpacing: 10,
+                        mainAxisSpacing: 10),
                   ),
                 )
               ],

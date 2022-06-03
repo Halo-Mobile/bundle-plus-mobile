@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
 class SingleProduct extends StatelessWidget {
-  final String image;
-  final double price;
-  final String name;
+  final String? image;
+  final String? price;
+  final String? name;
   SingleProduct({
-    required this.image,
-    required this.name,
-    required this.price,
+    this.image,
+    this.name,
+    this.price,
   });
 
   @override
   Widget build(BuildContext context) {
-    String price2 = price.toStringAsFixed(2);
+    // String? price2 = price.toStringAsFixed(2);
     return Card(
       child: Container(
-        height: 270,
-        width: 150,
+        height: 290,
+        width: 210,
         child: Column(
           children: <Widget>[
             Container(
@@ -32,19 +32,22 @@ class SingleProduct extends StatelessWidget {
               ),
             ),
             Text(
-              "RM ${price2.toString()}",
+              name!,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 17,
                   color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 10,
             ),
             Text(
-              name,
+              "RM $price",
               style: TextStyle(
-                  // fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.bold,
                   fontSize: 17,
-                  color: Colors.black),
-              textAlign: TextAlign.center,
+                  color: Colors.pinkAccent),
             ),
           ],
         ),
