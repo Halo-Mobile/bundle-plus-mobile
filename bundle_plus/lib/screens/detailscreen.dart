@@ -163,7 +163,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "${widget.condition}",
+                              "${widget.condition}/10",
                               style: TextStyle(
                                 fontSize: 16,
                               ),
