@@ -3,10 +3,19 @@ import 'package:flutter/material.dart';
 import 'home.dart';
 
 class DetailScreen extends StatefulWidget {
-  final String image;
-  final String name;
-  final double price;
-  DetailScreen({required this.image, required this.name, required this.price});
+  final String? image;
+  final String? name;
+  final String? price;
+  final String? description;
+  final String? condition;
+  final String? used;
+  DetailScreen(
+      {this.image,
+      this.name,
+      this.price,
+      this.description,
+      this.condition,
+      this.used});
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
@@ -72,7 +81,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               // fit: BoxFit.fill,
-                              image: AssetImage(widget.image),
+                              image: AssetImage("${widget.image}"),
                             ),
                           ),
                         ),
@@ -94,7 +103,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  widget.name,
+                                  "${widget.name}",
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -105,7 +114,7 @@ class _DetailScreenState extends State<DetailScreen> {
                                   ),
                                 ),
                                 Text(
-                                  "RM ${widget.price.toStringAsFixed(2)}",
+                                  "RM ${widget.price}",
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
@@ -128,7 +137,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy.",
+                              "${widget.description}",
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -154,7 +163,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "8/10",
+                              "${widget.condition}",
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -181,7 +190,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "2 years 4 months",
+                              "${widget.used}",
                               style: TextStyle(
                                 fontSize: 16,
                               ),

@@ -1,6 +1,7 @@
 import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,7 +26,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.pink,
       ),
-      home: LoginScreen(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return HomeScreen();
+          } else {
+            return LoginScreen();
+          }
+        },
+      ),
     );
   }
 }
