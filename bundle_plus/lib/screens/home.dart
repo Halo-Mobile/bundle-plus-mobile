@@ -366,14 +366,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           autoplay: true,
                                                           showIndicator: false,
                                                           images: [
-                                                            AssetImage(
-                                                                'assets/acer.jfif'),
-                                                            AssetImage(
-                                                                'assets/ipx.jpg'),
-                                                            AssetImage(
-                                                                'assets/windbreaker.jpg'),
-                                                            AssetImage(
-                                                                'assets/sidemirror.jpg'),
+                                                            NetworkImage(
+                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Facer.jfif?alt=media&token=bd5ae6c9-f58c-4a29-b86c-759bb7cecd79'),
+                                                            NetworkImage(
+                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fipx.jpg?alt=media&token=39ca6020-bb26-472f-8fbb-3cb4c299ebd4'),
+                                                            NetworkImage(
+                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fwindbreaker.jpg?alt=media&token=2288d3c6-765b-4d4e-9ddd-b55ba79341dd'),
+                                                            NetworkImage(
+                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fsidemirror.jpg?alt=media&token=e539f588-2ab6-4759-9ece-fa20d1489721'),
                                                           ],
                                                         ),
                                                       ),
@@ -503,7 +503,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   builder: (ctx) =>
                                                                       DetailScreen(
                                                                     image:
-                                                                        "assets/${featured1.image}",
+                                                                        "${featured1.image}",
                                                                     price: featured1
                                                                         .price,
                                                                     name: featured1
@@ -537,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   builder: (ctx) =>
                                                                       DetailScreen(
                                                                     image:
-                                                                        "assets/${featured2.image}",
+                                                                        "${featured2.image}",
                                                                     price: featured2
                                                                         .price,
                                                                     name: featured2
@@ -619,7 +619,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         (ctx) =>
                                                                             DetailScreen(
                                                                       image:
-                                                                          "assets/${new1.image}",
+                                                                          "${new1.image}",
                                                                       price: new1
                                                                           .price,
                                                                       name: new1
@@ -652,7 +652,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         (ctx) =>
                                                                             DetailScreen(
                                                                       image:
-                                                                          "assets/${new2.image}",
+                                                                          "${new2.image}",
                                                                       price: new2
                                                                           .price,
                                                                       name: new2

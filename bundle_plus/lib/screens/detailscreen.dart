@@ -81,7 +81,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               // fit: BoxFit.fill,
-                              image: AssetImage("${widget.image}"),
+                              image: NetworkImage("${widget.image}"),
                             ),
                           ),
                         ),
@@ -119,6 +119,9 @@ class _DetailScreenState extends State<DetailScreen> {
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.pinkAccent),
+                                ),
+                                SizedBox(
+                                  height: 10,
                                 ),
                                 Text(
                                   "Description",

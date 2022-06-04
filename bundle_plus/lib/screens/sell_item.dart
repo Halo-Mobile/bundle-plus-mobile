@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/item_model.dart';
 import 'home.dart';
@@ -38,8 +37,8 @@ class _SellItemState extends State<SellItems> {
       DropdownMenuItem(child: Text("Books"), value: "Books"),
       DropdownMenuItem(child: Text("Electronics"), value: "Electronics"),
       DropdownMenuItem(child: Text("Foods"), value: "Foods"),
-      DropdownMenuItem(child: Text("Sports"), value: "Sports"),
-      DropdownMenuItem(child: Text("Accesories"), value: "Accesories"),
+      DropdownMenuItem(child: Text("Wearables"), value: "Wearables"),
+      DropdownMenuItem(child: Text("Equipments"), value: "Equipments"),
     ];
     return menuItems;
   }
@@ -184,7 +183,7 @@ class _SellItemState extends State<SellItems> {
           ),
         ));
 
-        //used for field
+    //used for field
     final usedField = TextFormField(
         autofocus: false,
         cursorColor: Colors.pinkAccent,
@@ -308,12 +307,19 @@ class _SellItemState extends State<SellItems> {
                               content: Text('No image selected'),
                             ),
                           );
-                          return null;
                         }
-                        final path = results.files.single.path!;
-                        final fileName = results.files.single.name;
 
-                        storage.uploadFile(path, fileName).then((value)=>print('Done'));
+                        if (results != null) {
+                          String path = results.files.single.path!;
+                          String fileName = results.files.single.name;
+                          storage.uploadFile(path, fileName);
+                          imgEditingController.text =
+                              await storage.getURL(fileName);
+                        }
+
+                        // storage
+                        //     .uploadFile(path, fileName)
+                        //     .then((value) => print('Done'));
                       },
                       child: const Text("Upload Image"),
                     ),
@@ -360,6 +366,7 @@ class _SellItemState extends State<SellItems> {
     itemModel.condition = conditionEditingController.text;
     itemModel.used = usedEditingController.text;
     itemModel.price = priceEditingController.text;
+    itemModel.image = imgEditingController.text;
 
     await docItem.set(itemModel.toMap());
     Fluttertoast.showToast(msg: "Item added successfully :) ");
