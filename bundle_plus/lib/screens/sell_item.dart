@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../model/storage_service.dart';
+import '../model/user_model.dart';
 
 class SellItems extends StatefulWidget {
   const SellItems({Key? key}) : super(key: key);
@@ -18,6 +19,8 @@ class _SellItemState extends State<SellItems> {
   final _auth = FirebaseAuth.instance;
   final Storage storage = Storage();
   var results = null;
+  UserModel loggedInUser = UserModel();
+  User? user = FirebaseAuth.instance.currentUser;
 
   // string for displaying the error Message
   String? errorMessage;
@@ -48,6 +51,17 @@ class _SellItemState extends State<SellItems> {
   String selectedValue = "";
 
   @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+  }
   Widget build(BuildContext context) {
     //name field
 
@@ -355,8 +369,11 @@ class _SellItemState extends State<SellItems> {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     final docItem = FirebaseFirestore.instance.collection('items').doc();
 
+    User? user = FirebaseAuth.instance.currentUser;
     ItemModel itemModel = ItemModel();
+
     // writing all the values
+    itemModel.uid = loggedInUser.uid;
     itemModel.iid = docItem.id;
     itemModel.name = nameEditingController.text;
     itemModel.description = descriptionEditingController.text;

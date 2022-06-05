@@ -1,4 +1,5 @@
 class ItemModel {
+  String? uid;
   String? iid;
   String? name;
   String? description;
@@ -9,7 +10,8 @@ class ItemModel {
   String? used;
 
   ItemModel(
-      {this.iid,
+      {this.uid,
+      this.iid,
       this.name,
       this.description,
       this.category,
@@ -21,6 +23,7 @@ class ItemModel {
   // get data from server
   factory ItemModel.fromMap(map) {
     return ItemModel(
+      uid: map['uid'],
       iid: map['iid'],
       name: map['name'],
       description: map['description'],
@@ -35,6 +38,7 @@ class ItemModel {
   // send data to server
   Map<String, dynamic> toMap() {
     return {
+      'uid': uid,
       'iid': iid,
       'name': name,
       'description': description,
