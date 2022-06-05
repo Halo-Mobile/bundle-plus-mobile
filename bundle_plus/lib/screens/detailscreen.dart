@@ -1,3 +1,4 @@
+import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:flutter/material.dart';
 
 import 'home.dart';
@@ -59,8 +60,21 @@ class _DetailScreenState extends State<DetailScreen> {
             color: Colors.pinkAccent,
           ),
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
+            Navigator.of(
+                    context)
+                .pushReplacement(
+              MaterialPageRoute(
+                builder: (ctx) =>
+                    ListProduct(
+                  name:
+                      "All Products",
+                  snapShot:
+                      mySnapShot,
+                ),
+              ),
+            );
+            // Navigator.push(context,
+            //     MaterialPageRoute(builder: (context) => const HomeScreen()));
           },
         ),
       ),

@@ -68,7 +68,7 @@ class ListProduct extends StatelessWidget {
                   height: 10,
                 ),
                 Container(
-                  height: 850,
+                  height: 650,
                   child: GridView.builder(
                     itemCount: snapShot.data.docs.length,
                     itemBuilder: (ctx, index) => GestureDetector(

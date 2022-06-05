@@ -16,13 +16,13 @@ class SingleProduct extends StatelessWidget {
     return Card(
       child: Container(
         height: 290,
-        width: 210,
+        width: 165,
         child: Column(
           children: <Widget>[
             Container(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Container(
-                height: 190,
+                height: 120,
                 width: 170,
                 decoration: BoxDecoration(
                   image: DecorationImage(

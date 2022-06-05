@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildCategoryProduct(String icon, String name, AsyncSnapshot path) {
     int icon2 = int.parse(icon);
     return CircleAvatar(
-      maxRadius: 40,
+      maxRadius: 35,
       backgroundColor: Colors.pinkAccent,
       child: IconButton(
         icon: Icon(IconData(icon2, fontFamily: 'MaterialIcons'),
