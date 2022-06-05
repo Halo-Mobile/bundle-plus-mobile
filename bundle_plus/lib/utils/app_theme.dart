@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   // TextStyle
+  // for scaffold title
   static const TextStyle headline1 = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w300,
-    fontSize: 36,
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
   );
+
+  //for h2
   static const TextStyle headline2 = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w400,
-    fontSize: 30,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
   );
   static const TextStyle headline3 = TextStyle(
     fontFamily: 'Roboto',
@@ -23,8 +24,6 @@ class AppTheme {
     fontSize: 16,
   );
   static const TextStyle bodyText1 = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w300,
     fontSize: 16,
   );
   static const TextStyle bodyText2 = TextStyle(

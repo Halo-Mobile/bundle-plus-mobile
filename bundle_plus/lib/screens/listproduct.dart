@@ -1,5 +1,5 @@
 import 'package:bundle_plus/screens/home.dart';
-import 'package:bundle_plus/widgets/singleproduct.dart';
+import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:flutter/material.dart';
 
 import 'detailscreen.dart';
@@ -76,6 +76,7 @@ class ListProduct extends StatelessWidget {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (ctx) => DetailScreen(
+                                iid: snapShot.data.docs[index]["name"],
                                 image: "${snapShot.data.docs[index]["image"]}",
                                 name: snapShot.data.docs[index]["name"],
                                 price: snapShot.data.docs[index]["price"],

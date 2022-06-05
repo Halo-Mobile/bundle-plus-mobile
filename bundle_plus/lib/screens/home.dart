@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
-import 'package:bundle_plus/widgets/singleproduct.dart';
+import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

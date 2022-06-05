@@ -1,9 +1,11 @@
+import 'package:bundle_plus/screens/checkout.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:flutter/material.dart';
 
 import 'home.dart';
 
 class DetailScreen extends StatefulWidget {
+  final String? iid;
   final String? image;
   final String? name;
   final String? price;
@@ -11,7 +13,8 @@ class DetailScreen extends StatefulWidget {
   final String? condition;
   final String? used;
   DetailScreen(
-      {this.image,
+      {this.iid,
+      this.image,
       this.name,
       this.price,
       this.description,
@@ -60,16 +63,11 @@ class _DetailScreenState extends State<DetailScreen> {
             color: Colors.pinkAccent,
           ),
           onPressed: () {
-            Navigator.of(
-                    context)
-                .pushReplacement(
+            Navigator.of(context).pushReplacement(
               MaterialPageRoute(
-                builder: (ctx) =>
-                    ListProduct(
-                  name:
-                      "All Products",
-                  snapShot:
-                      mySnapShot,
+                builder: (ctx) => ListProduct(
+                  name: "All Products",
+                  snapShot: mySnapShot,
                 ),
               ),
             );
@@ -230,7 +228,18 @@ class _DetailScreenState extends State<DetailScreen> {
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (ctx) => CheckoutScreen(
+                                  iid: widget.iid,
+                                  image: widget.image,
+                                  price: widget.price,
+                                  name: widget.name,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
