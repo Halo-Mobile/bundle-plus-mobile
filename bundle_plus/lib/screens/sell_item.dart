@@ -16,6 +16,8 @@ class SellItems extends StatefulWidget {
 
 class _SellItemState extends State<SellItems> {
   final _auth = FirebaseAuth.instance;
+  final Storage storage = Storage();
+  var results = null;
 
   // string for displaying the error Message
   String? errorMessage;
@@ -47,7 +49,6 @@ class _SellItemState extends State<SellItems> {
 
   @override
   Widget build(BuildContext context) {
-    final Storage storage = Storage();
     //name field
 
     final nameField = TextFormField(
@@ -295,7 +296,7 @@ class _SellItemState extends State<SellItems> {
                   children: <Widget>[
                     ElevatedButton(
                       onPressed: () async {
-                        final results = await FilePicker.platform.pickFiles(
+                        results = await FilePicker.platform.pickFiles(
                           allowMultiple: false,
                           type: FileType.custom,
                           allowedExtensions: ['jpg', 'png', 'jfif'],
@@ -313,8 +314,6 @@ class _SellItemState extends State<SellItems> {
                           String path = results.files.single.path!;
                           String fileName = results.files.single.name;
                           storage.uploadFile(path, fileName);
-                          imgEditingController.text =
-                              await storage.getURL(fileName);
                         }
 
                         // storage
@@ -357,7 +356,6 @@ class _SellItemState extends State<SellItems> {
     final docItem = FirebaseFirestore.instance.collection('items').doc();
 
     ItemModel itemModel = ItemModel();
-
     // writing all the values
     itemModel.iid = docItem.id;
     itemModel.name = nameEditingController.text;
@@ -366,7 +364,7 @@ class _SellItemState extends State<SellItems> {
     itemModel.condition = conditionEditingController.text;
     itemModel.used = usedEditingController.text;
     itemModel.price = priceEditingController.text;
-    itemModel.image = imgEditingController.text;
+    itemModel.image = await storage.getURL(results.files.single.name);
 
     await docItem.set(itemModel.toMap());
     Fluttertoast.showToast(msg: "Item added successfully :) ");
