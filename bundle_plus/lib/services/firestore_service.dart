@@ -14,7 +14,7 @@ class FirestoreService {
   final CollectionReference _orders =
       FirebaseFirestore.instance.collection('orders');
 
-  Future<void> createOrder(String name) async {
+  Future<void> createOrder(String name, String itemID) async {
     final Order _order = Order();
 
     //initializing the property of Order Model
@@ -24,6 +24,7 @@ class FirestoreService {
     _order.date = DateFormat.yMMMd().format(DateTime.now());
     _order.time = DateFormat('hh:mm:ss').format(DateTime.now());
     _order.uid = _authService.currentUser.uid;
+    _order.iid = itemID;
 
     // storing the value to Firestore
     await _orders.add(_order.toMap());

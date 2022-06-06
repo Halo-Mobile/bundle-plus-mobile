@@ -1,5 +1,6 @@
 class Order {
   String? uid;
+  String? iid;
   String? name;
   String? status;
   String? paymentMethod;
@@ -8,6 +9,7 @@ class Order {
 
   Order({
     this.uid,
+    this.iid,
     this.name,
     this.status,
     this.paymentMethod,
@@ -19,6 +21,7 @@ class Order {
   factory Order.fromMap(map) {
     return Order(
       uid: map['uid'],
+      iid: map['iid'],
       name: map['name'],
       status: map['status'],
       paymentMethod: map['paymentMethod'],
@@ -31,6 +34,7 @@ class Order {
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
+      'iid': iid,
       'name': name,
       'status': status,
       'paymentMethod': paymentMethod,
