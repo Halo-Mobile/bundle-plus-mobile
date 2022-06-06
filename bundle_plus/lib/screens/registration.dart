@@ -1,5 +1,6 @@
 import 'package:bundle_plus/model/user_profile.dart';
 import 'package:bundle_plus/screens/registration_verify_view.dart';
+import 'package:bundle_plus/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/user_model.dart';
 import 'home.dart';
@@ -28,6 +29,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final emailEditingController = new TextEditingController();
   final passwordEditingController = new TextEditingController();
   final confirmPasswordEditingController = new TextEditingController();
+
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -212,8 +215,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: MaterialButton(
           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            signUp(emailEditingController.text, passwordEditingController.text);
+          onPressed: () async {
+            // SIGN UP FUNCTION REFACTORED refer services>auth_services.dart
+            if (_formKey.currentState!.validate()) {
+              await _authService.signUp(
+                  firstNameEditingController.text,
+                  secondNameEditingController.text,
+                  emailEditingController.text,
+                  passwordEditingController.text);
+              Fluttertoast.showToast(msg: "Account created successfully :) ");
+
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()));
+            }
           },
           child: const Text(
             "Sign Up",

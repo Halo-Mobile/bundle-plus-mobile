@@ -1,6 +1,6 @@
 import 'package:bundle_plus/screens/base_view.dart';
 import 'package:bundle_plus/screens/profilepage.dart';
-import 'package:bundle_plus/screens/widgets/sidebar%20copy.dart';
+import 'package:bundle_plus/screens/widgets/sidebar_admin.dart';
 import 'package:bundle_plus/screens/widgets/sidebar.dart';
 import 'package:bundle_plus/viewmodel/admin_home_viewmodel.dart';
 import 'package:flutter/material.dart';

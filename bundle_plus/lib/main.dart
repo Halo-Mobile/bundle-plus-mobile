@@ -2,6 +2,7 @@ import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:one_context/one_context.dart';
 
 import '../screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      builder: OneContext().builder,
       title: 'Login',
       theme: ThemeData(
         primarySwatch: Colors.pink,
