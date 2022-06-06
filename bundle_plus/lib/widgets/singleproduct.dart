@@ -15,7 +15,7 @@ class SingleProduct extends StatelessWidget {
     // String? price2 = price.toStringAsFixed(2);
     return Card(
       child: Container(
-        height: 290,
+        height: 220,
         width: 165,
         child: Column(
           children: <Widget>[

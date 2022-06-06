@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:bundle_plus/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,7 @@ import '../model/item_model.dart';
 import 'login.dart';
 import 'package:bundle_plus/screens/profilepage.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:bundle_plus/screens/order.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,6 +28,7 @@ ItemModel featured2 = ItemModel();
 ItemModel new1 = ItemModel();
 ItemModel new2 = ItemModel();
 var mySnapShot;
+var snapShotList;
 var books;
 var electronics;
 var foods;
@@ -74,6 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool homeColor = true;
   bool sellColor = false;
+  bool selllistColor = false;
+  bool orderColor = false;
 
   @override
   Widget build(BuildContext context) {
@@ -111,6 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   homeColor = true;
                   sellColor = false;
+                  selllistColor = false;
+                  orderColor = false;
                 });
                 Navigator.push(
                   context,
@@ -131,11 +138,70 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   homeColor = false;
                   sellColor = true;
+                  selllistColor = false;
+                  orderColor = false;
                 });
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => const SellItems(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              selected: selllistColor,
+              leading: Icon(Icons.add_business_rounded),
+              title: Text(
+                'My Items',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  homeColor = false;
+                  sellColor = false;
+                  selllistColor = true;
+                  orderColor = false;
+                });
+                 Navigator.of(
+                        context)
+                    .pushReplacement(
+                  MaterialPageRoute(
+                    builder: (ctx) =>
+                        SellListScreen(
+                      name:
+                          "My Products",
+                      snapShot:
+                          snapShotList,
+                    ),
+                  ),
+                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => SellListScreen(),
+                //   ),
+                // );
+              },
+            ),
+            ListTile(
+              selected: orderColor,
+              leading: Icon(Icons.account_balance_wallet_rounded),
+              title: Text(
+                'My Orders',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              onTap: () {
+                setState(() {
+                  homeColor = false;
+                  sellColor = false;
+                  selllistColor = false;
+                  orderColor = true;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => OrderScreen(),
                   ),
                 );
               },
@@ -337,6 +403,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (snapshot6.connectionState ==
                                   ConnectionState.waiting) {}
                               equipments = snapshot6;
+
+                              return FutureBuilder(
+                            future: FirebaseFirestore.instance
+                                .collection("items")
+                                .where("uid", isEqualTo: "${loggedInUser.uid}")
+                                .get(),
+                            builder: (context, AsyncSnapshot snapshot7) {
+                              if (snapshot6.connectionState ==
+                                  ConnectionState.waiting) {}
+                              snapShotList = snapshot7;
 
                               return Container(
                                 height: double.infinity,
@@ -698,15 +774,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       color: Colors.pinkAccent,
                                                       fontWeight:
                                                           FontWeight.bold),
-                                                ),
-                                              )
-                                            ],
-                                          ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
+                                  );
+                                },
                               );
                             },
                           );
