@@ -26,6 +26,8 @@ class FirestoreService {
     _order.uid = _authService.currentUser.uid;
     _order.iid = itemID;
 
+    print(itemID);
+
     // storing the value to Firestore
     await _orders.add(_order.toMap());
   }
