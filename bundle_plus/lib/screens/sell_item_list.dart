@@ -1,6 +1,6 @@
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/sell_item_detail.dart';
-import 'package:bundle_plus/widgets/singleproduct.dart';
+import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:flutter/material.dart';
 
 import 'detailscreen.dart';
