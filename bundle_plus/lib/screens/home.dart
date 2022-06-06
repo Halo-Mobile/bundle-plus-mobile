@@ -30,6 +30,7 @@ ItemModel new1 = ItemModel();
 ItemModel new2 = ItemModel();
 var mySnapShot;
 var snapShotList;
+var snapShotOrder;
 var books;
 var electronics;
 var foods;
@@ -196,6 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mySnapShot = snapshot;
           featured1 = ItemModel(
             iid: snapshot.data.docs[2]["iid"],
+            uid: snapshot.data.docs[2]["uid"],
             image: snapshot.data.docs[2]["image"],
             name: snapshot.data.docs[2]["name"],
             price: snapshot.data.docs[2]["price"],
@@ -206,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
           featured2 = ItemModel(
               iid: snapshot.data.docs[3]["iid"],
+              uid: snapshot.data.docs[3]["uid"],
               image: snapshot.data.docs[3]["image"],
               name: snapshot.data.docs[3]["name"],
               price: snapshot.data.docs[3]["price"],
@@ -216,6 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Query query = snapshot.child("childname").orderByKey().limitToLast(1);
           new1 = ItemModel(
               iid: snapshot.data.docs[0]["iid"],
+              uid: snapshot.data.docs[0]["uid"],
               image: snapshot.data.docs[0]["image"],
               name: snapshot.data.docs[0]["name"],
               price: snapshot.data.docs[0]["price"],
@@ -225,6 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
               used: snapshot.data.docs[0]["used"]);
           new2 = ItemModel(
               iid: snapshot.data.docs[1]["iid"],
+              uid: snapshot.data.docs[1]["uid"],
               image: snapshot.data.docs[1]["image"],
               name: snapshot.data.docs[1]["name"],
               price: snapshot.data.docs[1]["price"],
@@ -290,6 +295,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (snapshot6.connectionState ==
                                       ConnectionState.waiting) {}
                                   snapShotList = snapshot7;
+
+                                  return FutureBuilder(
+                                    future: FirebaseFirestore.instance
+                                        .collection("orders")
+                                        .where("uid",
+                                            isEqualTo: "${loggedInUser.uid}")
+                                        .get(),
+                                    builder: (context, AsyncSnapshot snapshot8) {
+                                      if (snapshot6.connectionState ==
+                                          ConnectionState.waiting) {}
+                                      snapShotOrder = snapshot8;
 
                                   return Container(
                                     height: double.infinity,
@@ -463,6 +479,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               DetailScreen(
                                                                         iid: featured1
                                                                             .iid,
+                                                                        uid: featured1
+                                                                            .uid,
                                                                         image:
                                                                             "${featured1.image}",
                                                                         price: featured1
@@ -498,6 +516,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               DetailScreen(
                                                                         iid: featured2
                                                                             .iid,
+                                                                        uid: featured2
+                                                                            .uid,
                                                                         image:
                                                                             "${featured2.image}",
                                                                         price: featured2
@@ -583,6 +603,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 DetailScreen(
                                                                           iid: new1
                                                                               .iid,
+                                                                          uid: new1
+                                                                              .uid,
                                                                           image:
                                                                               "${new1.image}",
                                                                           price:
@@ -618,6 +640,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 DetailScreen(
                                                                           iid: new2
                                                                               .iid,
+                                                                          uid: new2
+                                                                              .uid,
                                                                           image:
                                                                               "${new2.image}",
                                                                           price:
@@ -689,6 +713,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               );
             },
+          );
+          },
           );
         },
       ),

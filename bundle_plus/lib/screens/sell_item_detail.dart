@@ -206,7 +206,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         height: 20,
                       ),
                       Text(
-                        "Seller Name",
+                        "Buyer Name",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -234,7 +234,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         height: 20,
                       ),
                       Text(
-                        "Purchased Date",
+                        "Purchased Date & Time",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -262,7 +262,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         height: 20,
                       ),
                       Text(
-                        "Order Status",
+                        "Payment Method",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -286,21 +286,49 @@ class _SellItemDetailState extends State<SellItemDetail> {
                           ],
                         ),
                       ),
-                      // Container(
-                      //   height: 60,
-                      //   width: double.infinity,
-                      //   child: ElevatedButton(
-                      //     child: Text("Buy Now"),
-                      //     style: ElevatedButton.styleFrom(
-                      //       primary: Colors.pinkAccent,
-                      //       onPrimary: Colors.white,
-                      //       shape: RoundedRectangleBorder(
-                      //         borderRadius: BorderRadius.circular(15.0),
-                      //       ),
-                      //     ),
-                      //     onPressed: () {},
-                      //   ),
-                      // ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Order Status",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          // color: Colors.grey,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        height: 70,
+                        child: Wrap(
+                          children: <Widget>[
+                            Text(
+                              "${widget.used}",
+                              //change to order status
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 60,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          child: Text("Update Order"),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.pinkAccent,
+                            onPrimary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
                     ],
                   ),
                 )

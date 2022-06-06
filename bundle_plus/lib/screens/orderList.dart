@@ -78,22 +78,22 @@ class OrderListScreen extends StatelessWidget {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (ctx) => OrderScreen(
-                                image: "${snapShot.data.docs[index]["image"]}",
-                                name: snapShot.data.docs[index]["name"],
-                                price: snapShot.data.docs[index]["price"],
-                                description: snapShot.data.docs[index]
-                                    ["description"],
-                                condition: snapShot.data.docs[index]
-                                    ["condition"],
-                                used: snapShot.data.docs[index]["used"]),
+                                // image: "${snapShot.data.docs[index]["image"]}",
+                                name: snapShot.data.docs[index]["name"]),
+                                // price: snapShot.data.docs[index]["price"],
+                                // description: snapShot.data.docs[index]
+                                    // ["description"],
+                                // condition: snapShot.data.docs[index]
+                                    // ["condition"],
+                                // used: snapShot.data.docs[index]["used"]),
                           ),
                         );
                       },
-                      child: SingleProduct(
-                        name: snapShot.data.docs[index]["name"],
-                        price: snapShot.data.docs[index]["price"],
-                        image: snapShot.data.docs[index]["image"],
-                      ),
+                      // child: SingleProduct(
+                      //   name: snapShot.data.docs[index]["name"],
+                      //   price: snapShot.data.docs[index]["price"],
+                      //   image: snapShot.data.docs[index]["image"],
+                      // ),
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,

@@ -6,6 +6,7 @@ import 'home.dart';
 
 class DetailScreen extends StatefulWidget {
   final String? iid;
+  final String? uid;
   final String? image;
   final String? name;
   final String? price;
@@ -14,6 +15,7 @@ class DetailScreen extends StatefulWidget {
   final String? used;
   DetailScreen(
       {this.iid,
+      this.uid,
       this.image,
       this.name,
       this.price,
@@ -234,6 +236,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               MaterialPageRoute(
                                 builder: (ctx) => CheckoutScreen(
                                   iid: widget.iid,
+                                  uid: widget.uid,
                                   image: widget.image,
                                   price: widget.price,
                                   name: widget.name,

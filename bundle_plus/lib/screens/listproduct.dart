@@ -77,6 +77,7 @@ class ListProduct extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (ctx) => DetailScreen(
                                 iid: snapShot.data.docs[index]["iid"],
+                                uid: snapShot.data.docs[index]["uid"],
                                 image: "${snapShot.data.docs[index]["image"]}",
                                 name: snapShot.data.docs[index]["name"],
                                 price: snapShot.data.docs[index]["price"],

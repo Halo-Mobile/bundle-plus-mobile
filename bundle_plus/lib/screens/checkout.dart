@@ -12,11 +12,13 @@ import 'package:one_context/one_context.dart';
 
 class CheckoutScreen extends StatefulWidget {
   final String? iid;
+  final String? uid;
   final String? image;
   final String? name;
   final String? price;
   CheckoutScreen({
     this.iid,
+    this.uid,
     this.image,
     this.name,
     this.price,
@@ -185,6 +187,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ],
               ),
               const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  const Expanded(
+                    child: Padding(
+                      // TODO: Implement drop down menu
+                      padding: EdgeInsets.fromLTRB(15, 0, 0, 0),
+                      child: Text(
+                        'seller id',
+                        style: AppTheme.bodyText1,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                    child: Text(
+                      '${widget.uid}',
+                      style: AppTheme.bodyText1,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
                 height: 220,
               ),
               Align(
@@ -192,7 +218,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: ButtonWidget(
                   // button from screens>widgets
                   onPressed: () async {
-                    await _firestoreService.createOrder(widget.name.toString(), widget.iid.toString());
+                    await _firestoreService.createOrder(widget.name.toString(), widget.iid.toString(), widget.uid.toString());
                     if (OneContext.hasContext) {
                       // copy this to show dialog
                       await OneContext().showDialog(

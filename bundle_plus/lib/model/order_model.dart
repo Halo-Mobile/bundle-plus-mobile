@@ -1,6 +1,7 @@
 class Order {
   String? uid;
   String? iid;
+  String? sid; //seller id
   String? name;
   String? status;
   String? paymentMethod;
@@ -10,6 +11,7 @@ class Order {
   Order({
     this.uid,
     this.iid,
+    this.sid,
     this.name,
     this.status,
     this.paymentMethod,
@@ -22,6 +24,7 @@ class Order {
     return Order(
       uid: map['uid'],
       iid: map['iid'],
+      sid: map['sid'],      
       name: map['name'],
       status: map['status'],
       paymentMethod: map['paymentMethod'],
@@ -35,6 +38,7 @@ class Order {
     return {
       'uid': uid,
       'iid': iid,
+      'sid': sid,
       'name': name,
       'status': status,
       'paymentMethod': paymentMethod,

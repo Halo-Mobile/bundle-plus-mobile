@@ -215,10 +215,17 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                   widget.selllistColor = false;
                   widget.orderColor = true;
                 });
-                Navigator.push(
-                  context,
+                 Navigator.of(
+                        context)
+                    .pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => OrderScreen(),
+                    builder: (ctx) =>
+                        SellListScreen(
+                      name:
+                          "My Orders",
+                      snapShot:
+                          snapShotOrder,
+                    ),
                   ),
                 );
               },
