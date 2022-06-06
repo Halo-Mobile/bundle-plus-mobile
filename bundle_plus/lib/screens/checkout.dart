@@ -2,7 +2,7 @@ import 'package:bundle_plus/model/order_model.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/widgets/button_widget.dart';
 import 'package:bundle_plus/screens/widgets/item_card.dart';
-import 'package:bundle_plus/services/firebase_service.dart';
+import 'package:bundle_plus/services/auth_service.dart';
 import 'package:bundle_plus/services/firestore_service.dart';
 import 'package:bundle_plus/utils/app_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,9 +29,6 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  // initialize firebase_service.dart in services folder to fetch uid
-  final FirebaseService _firebaseService = FirebaseService();
-
   // initialize firestore_service.dart in services folder
   final FirestoreService _firestoreService = FirestoreService();
 
@@ -43,7 +40,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         centerTitle: true,
         title: const Text(
           "Checkout Page",
-          style: const TextStyle(
+          style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -174,13 +171,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     await _firestoreService.createOrder(widget.name.toString());
                     if (OneContext.hasContext) {
                       // copy this to show dialog
-                      OneContext().showDialog(
-                          // barrierDismissible: false,
+                      await OneContext().showDialog(
                           builder: (_) => AlertDialog(
-                                title: new Text("Order successfully created!"),
-                                content: new Text(
-                                    "Your order has been successfully created. You can view your order in Order History from the sidebar."),
-                              ));
+                                  title:
+                                      new Text("Order successfully created!"),
+                                  content: new Text(
+                                      "Your order has been successfully created. You can view your order in Order History from the sidebar."),
+                                  actions: <Widget>[
+                                    new TextButton(
+                                        child: new Text("OK"),
+                                        onPressed: () =>
+                                            OneContext().popDialog('ok')),
+                                  ]));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()));
                     }
                   },
                   textButton: "Create Order",

@@ -22,8 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final usernameController = TextEditingController();
   final _auth = FirebaseAuth.instance;
 
-  final AuthService _authService = AuthService();
-
   @override
   Widget build(BuildContext context) {
     final emailInput = TextFormField(
@@ -106,21 +104,10 @@ class _LoginScreenState extends State<LoginScreen> {
       child: MaterialButton(
         padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         minWidth: MediaQuery.of(context).size.width,
-        onPressed: () async {
-          // SIGN IN FUNCTION REFER TO services>auth_services.dart
-          if (_formKey.currentState!.validate()) {
-            if (emailController.text != "admin@bundleplus.com") {
-              await _authService.signIn(
-                  emailController.text, passwordController.text);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
-            } else {
-              await _authService.signIn(
-                  emailController.text, passwordController.text);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AdminHomeScreen()));
-            }
-          }
+        onPressed: () {
+          logIn(emailController.text, passwordController.text);
+          // Navigator.push(context,
+          //     MaterialPageRoute(builder: (context) => const HomeScreen()));
         },
         child: const Text(
           "Login",
@@ -220,5 +207,34 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  // TODO: improve admin checking logic for efficiency
+  void logIn(String email, String password) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await _auth
+            .signInWithEmailAndPassword(email: email, password: password)
+            .then((result) {
+          FirebaseFirestore.instance.collection("users").get().then((value) {
+            // print(doc["email"]);
+            if (email == "admin@bundleplus.com") {
+              Fluttertoast.showToast(msg: "Login Sucessful!");
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => AdminHomeScreen()));
+            } else {
+              print('non admin');
+              Fluttertoast.showToast(msg: "Login Sucessful!");
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+            }
+          });
+        });
+      } catch (e) {
+        // DONE : Proper Error Handling
+        print(e.toString());
+        Fluttertoast.showToast(msg: e.toString());
+      }
+    }
   }
 }

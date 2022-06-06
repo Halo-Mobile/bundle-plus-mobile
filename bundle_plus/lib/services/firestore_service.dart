@@ -1,13 +1,16 @@
-// database stuff
+// use this service for any firestore CRUD
 
 import 'package:bundle_plus/model/order_model.dart';
-import 'package:bundle_plus/services/firebase_service.dart';
+import 'package:bundle_plus/model/user_model.dart';
+import 'package:bundle_plus/model/user_profile.dart';
+import 'package:bundle_plus/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class FirestoreService {
-  final FirebaseService _firebaseService = FirebaseService();
+  final AuthService _authService = AuthService();
   final CollectionReference _orders =
       FirebaseFirestore.instance.collection('orders');
 
@@ -20,14 +23,9 @@ class FirestoreService {
     _order.status = "pending";
     _order.date = DateFormat.yMMMd().format(DateTime.now());
     _order.time = DateFormat('hh:mm:ss').format(DateTime.now());
-    _order.uid = _firebaseService.currentUser.uid;
+    _order.uid = _authService.currentUser.uid;
 
     // storing the value to Firestore
     await _orders.add(_order.toMap());
-
-    print('order created');
-    print(_firebaseService.currentUser.uid);
-    print(DateFormat('hh:mm:ss').format(DateTime.now()));
-    print(DateFormat.yMMMd().format(DateTime.now()));
   }
 }

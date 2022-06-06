@@ -63,6 +63,7 @@ class _DetailScreenState extends State<DetailScreen> {
             color: Colors.pinkAccent,
           ),
           onPressed: () {
+            // KIV: Need to consider if the user was from home instead
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (ctx) => ListProduct(

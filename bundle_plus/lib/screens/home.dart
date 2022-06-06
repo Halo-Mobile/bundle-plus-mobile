@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:bundle_plus/screens/widgets/sidebar.dart';
 import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,78 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       key: _key,
       endDrawerEnableOpenDragGesture: false,
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            // const DrawerHeader(
-            //   decoration: BoxDecoration(
-            //     color: Colors.pinkAccent,
-            //   ),
-            //   child: Text('Bundle+'),
-            // ),
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
-              ),
-              accountName:
-                  Text("${loggedInUser.firstName} ${loggedInUser.secondName}"),
-              accountEmail: Text("${loggedInUser.email}"),
-            ),
-            ListTile(
-              selected: homeColor,
-              enabled: true,
-              leading: Icon(Icons.home),
-              title: Text(
-                'Home',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  homeColor = true;
-                  sellColor = false;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              selected: sellColor,
-              leading: Icon(Icons.sell),
-              title: Text(
-                'Sell Item',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  homeColor = false;
-                  sellColor = true;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SellItems(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout_outlined),
-              title: Text(
-                'Log Out',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                logout(context);
-              },
-            ),
-          ],
-        ),
+      drawer: SidebarDrawer(
+        // Drawer transformed to reusable widget in widgets>sidebar.dart. Why? so we can reuse it and it looks nicer to the eye :)
+        firstName: loggedInUser.firstName,
+        secondName: loggedInUser.secondName,
+        email: loggedInUser.email,
+        onPressed: () {
+          logout(context);
+        },
       ),
       appBar: AppBar(
         title: const Text(

@@ -1,4 +1,4 @@
-import 'package:bundle_plus/services/firebase_service.dart';
+import 'package:bundle_plus/services/auth_service.dart';
 import 'package:bundle_plus/viewmodel/admin_home_viewmodel.dart';
 import 'package:bundle_plus/viewmodel/registration_verify_viewmodel.dart';
 import 'package:get_it/get_it.dart';
@@ -12,7 +12,7 @@ Future<void> setUpLocator() async {
   // locator.registerSingleton<LocalStorageService>(
   //   await LocalStorageService.getInstance(),
   // );
-  locator.registerSingleton<FirebaseService>(FirebaseService());
+  // locator.registerSingleton<FirebaseService>(FirebaseService());
   // locator.registerSingleton<ApiService>(ApiService());
 
   // // Viewmodel
