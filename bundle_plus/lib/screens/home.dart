@@ -281,375 +281,393 @@ class _HomeScreenState extends State<HomeScreen> {
                               equipments = snapshot6;
 
                               return FutureBuilder(
-                            future: FirebaseFirestore.instance
-                                .collection("items")
-                                .where("uid", isEqualTo: "${loggedInUser.uid}")
-                                .get(),
-                            builder: (context, AsyncSnapshot snapshot7) {
-                              if (snapshot6.connectionState ==
-                                  ConnectionState.waiting) {}
-                              snapShotList = snapshot7;
+                                future: FirebaseFirestore.instance
+                                    .collection("items")
+                                    .where("uid",
+                                        isEqualTo: "${loggedInUser.uid}")
+                                    .get(),
+                                builder: (context, AsyncSnapshot snapshot7) {
+                                  if (snapshot6.connectionState ==
+                                      ConnectionState.waiting) {}
+                                  snapShotList = snapshot7;
 
-                              return Container(
-                                height: double.infinity,
-                                width: double.infinity,
-                                margin: EdgeInsets.symmetric(horizontal: 20),
-                                child: ListView(
-                                  children: [
-                                    Column(
-                                      children: <Widget>[
-                                        Container(
-                                          // height: 120,
-                                          width: double.infinity,
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: <Widget>[
-                                              Column(
+                                  return Container(
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    child: ListView(
+                                      children: [
+                                        Column(
+                                          children: <Widget>[
+                                            Container(
+                                              // height: 120,
+                                              width: double.infinity,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: <Widget>[
                                                   Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
                                                     children: <Widget>[
-                                                      Container(
-                                                        height: 240,
-                                                        child: Carousel(
-                                                          autoplay: true,
-                                                          showIndicator: false,
-                                                          images: [
-                                                            NetworkImage(
-                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Facer.jfif?alt=media&token=bd5ae6c9-f58c-4a29-b86c-759bb7cecd79'),
-                                                            NetworkImage(
-                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fipx.jpg?alt=media&token=39ca6020-bb26-472f-8fbb-3cb4c299ebd4'),
-                                                            NetworkImage(
-                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fwindbreaker.jpg?alt=media&token=2288d3c6-765b-4d4e-9ddd-b55ba79341dd'),
-                                                            NetworkImage(
-                                                                'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fsidemirror.jpg?alt=media&token=e539f588-2ab6-4759-9ece-fa20d1489721'),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 50,
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: <Widget>[
-                                                            Text(
-                                                              "Categories",
-                                                              style: TextStyle(
-                                                                  fontSize: 17,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                      Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[
+                                                          Container(
+                                                            height: 240,
+                                                            child: Carousel(
+                                                              autoplay: true,
+                                                              showIndicator:
+                                                                  false,
+                                                              images: [
+                                                                NetworkImage(
+                                                                    'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Facer.jfif?alt=media&token=bd5ae6c9-f58c-4a29-b86c-759bb7cecd79'),
+                                                                NetworkImage(
+                                                                    'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fipx.jpg?alt=media&token=39ca6020-bb26-472f-8fbb-3cb4c299ebd4'),
+                                                                NetworkImage(
+                                                                    'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fwindbreaker.jpg?alt=media&token=2288d3c6-765b-4d4e-9ddd-b55ba79341dd'),
+                                                                NetworkImage(
+                                                                    'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Fsidemirror.jpg?alt=media&token=e539f588-2ab6-4759-9ece-fa20d1489721'),
+                                                              ],
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        height: 60,
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: <Widget>[
-                                                            GestureDetector(
-                                                                child:
-                                                                    _buildCategoryProduct(
+                                                          ),
+                                                          Container(
+                                                            height: 50,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: <
+                                                                  Widget>[
+                                                                Text(
+                                                                  "Categories",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          17,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Container(
+                                                            height: 60,
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: <
+                                                                  Widget>[
+                                                                GestureDetector(
+                                                                    child: _buildCategoryProduct(
                                                                         "0xe3dd",
                                                                         "Books",
                                                                         books)),
-                                                            GestureDetector(
-                                                              child: _buildCategoryProduct(
-                                                                  "0xe367",
-                                                                  "Electronics",
-                                                                  electronics),
-                                                            ),
-                                                            GestureDetector(
-                                                              child:
-                                                                  _buildCategoryProduct(
+                                                                GestureDetector(
+                                                                  child: _buildCategoryProduct(
+                                                                      "0xe367",
+                                                                      "Electronics",
+                                                                      electronics),
+                                                                ),
+                                                                GestureDetector(
+                                                                  child: _buildCategoryProduct(
                                                                       "0xe25a",
                                                                       "Foods",
                                                                       foods),
-                                                            ),
-                                                            GestureDetector(
-                                                              child:
-                                                                  _buildCategoryProduct(
+                                                                ),
+                                                                GestureDetector(
+                                                                  child: _buildCategoryProduct(
                                                                       "0xf02a4",
                                                                       "Wearables",
                                                                       wears),
-                                                            ),
-                                                            GestureDetector(
-                                                              child: _buildCategoryProduct(
-                                                                  "0xe5f3",
-                                                                  "Equipments",
-                                                                  equipments),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 20,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: <Widget>[
-                                                          Text(
-                                                            "Featured",
-                                                            style: TextStyle(
-                                                                fontSize: 17,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pushReplacement(
-                                                                MaterialPageRoute(
-                                                                  builder: (ctx) =>
-                                                                      ListProduct(
-                                                                    name:
-                                                                        "All Products",
-                                                                    snapShot:
-                                                                        mySnapShot,
-                                                                  ),
                                                                 ),
-                                                              );
-                                                            },
-                                                            child: Text(
-                                                              "View all",
-                                                              style: TextStyle(
-                                                                  fontSize: 17,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                GestureDetector(
+                                                                  child: _buildCategoryProduct(
+                                                                      "0xe5f3",
+                                                                      "Equipments",
+                                                                      equipments),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          )
-                                                        ],
-                                                      ),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: <Widget>[
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pushReplacement(
-                                                                MaterialPageRoute(
-                                                                  builder: (ctx) =>
-                                                                      DetailScreen(
-                                                                    image:
-                                                                        "${featured1.image}",
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: <Widget>[
+                                                              Text(
+                                                                "Featured",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        17,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pushReplacement(
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (ctx) =>
+                                                                              ListProduct(
+                                                                        name:
+                                                                            "All Products",
+                                                                        snapShot:
+                                                                            mySnapShot,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child: Text(
+                                                                  "View all",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          17,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: <Widget>[
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pushReplacement(
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (ctx) =>
+                                                                              DetailScreen(
+                                                                        iid: featured1
+                                                                            .iid,
+                                                                        image:
+                                                                            "${featured1.image}",
+                                                                        price: featured1
+                                                                            .price,
+                                                                        name: featured1
+                                                                            .name,
+                                                                        description:
+                                                                            featured1.description,
+                                                                        condition:
+                                                                            featured1.condition,
+                                                                        used: featured1
+                                                                            .used,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child: SingleProduct(
+                                                                    image: featured1
+                                                                        .image,
                                                                     price: featured1
                                                                         .price,
                                                                     name: featured1
-                                                                        .name,
-                                                                    description:
-                                                                        featured1
-                                                                            .description,
-                                                                    condition:
-                                                                        featured1
-                                                                            .condition,
-                                                                    used: featured1
-                                                                        .used,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: SingleProduct(
-                                                                image: featured1
-                                                                    .image,
-                                                                price: featured1
-                                                                    .price,
-                                                                name: featured1
-                                                                    .name),
-                                                          ),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pushReplacement(
-                                                                MaterialPageRoute(
-                                                                  builder: (ctx) =>
-                                                                      DetailScreen(
-                                                                    image:
-                                                                        "${featured2.image}",
+                                                                        .name),
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pushReplacement(
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (ctx) =>
+                                                                              DetailScreen(
+                                                                        iid: featured2
+                                                                            .iid,
+                                                                        image:
+                                                                            "${featured2.image}",
+                                                                        price: featured2
+                                                                            .price,
+                                                                        name: featured2
+                                                                            .name,
+                                                                        description:
+                                                                            featured2.description,
+                                                                        condition:
+                                                                            featured2.condition,
+                                                                        used: featured2
+                                                                            .used,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                                child: SingleProduct(
+                                                                    image: featured2
+                                                                        .image,
                                                                     price: featured2
                                                                         .price,
                                                                     name: featured2
-                                                                        .name,
-                                                                    description:
-                                                                        featured2
-                                                                            .description,
-                                                                    condition:
-                                                                        featured2
-                                                                            .condition,
-                                                                    used: featured2
-                                                                        .used,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: SingleProduct(
-                                                                image: featured2
-                                                                    .image,
-                                                                price: featured2
-                                                                    .price,
-                                                                name: featured2
-                                                                    .name),
+                                                                        .name),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ],
                                                       ),
                                                     ],
                                                   ),
-                                                ],
-                                              ),
-                                              Container(
-                                                height: 50,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: <Widget>[
-                                                    Row(
+                                                  Container(
+                                                    height: 50,
+                                                    child: Column(
                                                       mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: <Widget>[
-                                                        Text(
-                                                          "New Arrival",
-                                                          style: TextStyle(
-                                                              fontSize: 17,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: <Widget>[
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                          MainAxisAlignment.end,
                                                       children: <Widget>[
                                                         Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
                                                           children: <Widget>[
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pushReplacement(
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (ctx) =>
-                                                                            DetailScreen(
-                                                                      image:
-                                                                          "${new1.image}",
-                                                                      price: new1
-                                                                          .price,
-                                                                      name: new1
-                                                                          .name,
-                                                                      description:
-                                                                          new1.description,
-                                                                      condition:
-                                                                          new1.condition,
-                                                                      used: new1
-                                                                          .used,
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              },
-                                                              child: SingleProduct(
-                                                                  image: new1
-                                                                      .image,
-                                                                  price: new1
-                                                                      .price,
-                                                                  name: new1
-                                                                      .name),
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pushReplacement(
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (ctx) =>
-                                                                            DetailScreen(
-                                                                      image:
-                                                                          "${new2.image}",
-                                                                      price: new2
-                                                                          .price,
-                                                                      name: new2
-                                                                          .name,
-                                                                      description:
-                                                                          new2.description,
-                                                                      condition:
-                                                                          new2.condition,
-                                                                      used: new2
-                                                                          .used,
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              },
-                                                              child: SingleProduct(
-                                                                  image: new2
-                                                                      .image,
-                                                                  price: new2
-                                                                      .price,
-                                                                  name: new2
-                                                                      .name),
+                                                            Text(
+                                                              "New Arrival",
+                                                              style: TextStyle(
+                                                                  fontSize: 17,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
                                                             ),
                                                           ],
                                                         ),
                                                       ],
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              Divider(color: Colors.pinkAccent),
-                                              Container(
-                                                padding:
-                                                    EdgeInsets.only(top: 18),
-                                                height: 60,
-                                                width: double.infinity,
-                                                child: Text(
-                                                  '© Copyright 2022 Bundle+, Inc',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color: Colors.pinkAccent,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: <Widget>[
+                                                            Row(
+                                                              children: <
+                                                                  Widget>[
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pushReplacement(
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (ctx) =>
+                                                                                DetailScreen(
+                                                                          iid: new1
+                                                                              .iid,
+                                                                          image:
+                                                                              "${new1.image}",
+                                                                          price:
+                                                                              new1.price,
+                                                                          name:
+                                                                              new1.name,
+                                                                          description:
+                                                                              new1.description,
+                                                                          condition:
+                                                                              new1.condition,
+                                                                          used:
+                                                                              new1.used,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child: SingleProduct(
+                                                                      image: new1
+                                                                          .image,
+                                                                      price: new1
+                                                                          .price,
+                                                                      name: new1
+                                                                          .name),
+                                                                ),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pushReplacement(
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (ctx) =>
+                                                                                DetailScreen(
+                                                                          iid: new2
+                                                                              .iid,
+                                                                          image:
+                                                                              "${new2.image}",
+                                                                          price:
+                                                                              new2.price,
+                                                                          name:
+                                                                              new2.name,
+                                                                          description:
+                                                                              new2.description,
+                                                                          condition:
+                                                                              new2.condition,
+                                                                          used:
+                                                                              new2.used,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child: SingleProduct(
+                                                                      image: new2
+                                                                          .image,
+                                                                      price: new2
+                                                                          .price,
+                                                                      name: new2
+                                                                          .name),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  Divider(
+                                                      color: Colors.pinkAccent),
+                                                  Container(
+                                                    padding: EdgeInsets.only(
+                                                        top: 18),
+                                                    height: 60,
+                                                    width: double.infinity,
+                                                    child: Text(
+                                                      '© Copyright 2022 Bundle+, Inc',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.pinkAccent,
+                                                          fontWeight:
+                                                              FontWeight.bold),
                                                     ),
                                                   )
                                                 ],
