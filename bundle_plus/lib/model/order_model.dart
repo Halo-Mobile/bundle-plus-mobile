@@ -1,4 +1,5 @@
 class Order {
+  String? oid;
   String? uid;
   String? iid;
   String? sid; //seller id
@@ -9,6 +10,7 @@ class Order {
   String? date;
 
   Order({
+    this.oid,
     this.uid,
     this.iid,
     this.sid,
@@ -22,6 +24,7 @@ class Order {
   // get data from server
   factory Order.fromMap(map) {
     return Order(
+      oid: map['oid'],
       uid: map['uid'],
       iid: map['iid'],
       sid: map['sid'],      
@@ -36,6 +39,7 @@ class Order {
   // send data to server
   Map<String, dynamic> toMap() {
     return {
+      'oid': oid,
       'uid': uid,
       'iid': iid,
       'sid': sid,

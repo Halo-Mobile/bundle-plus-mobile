@@ -10,13 +10,18 @@ class OrderScreen extends StatefulWidget {
   final String? description;
   final String? condition;
   final String? used;
+  final String? paymentMethod;
+  final String? date;
   OrderScreen(
       {this.image,
       this.name,
       this.price,
       this.description,
       this.condition,
-      this.used});
+      this.used,
+      this.paymentMethod,
+      this.date
+      });
   @override
   State<OrderScreen> createState() => _OrderScreenState();
 }

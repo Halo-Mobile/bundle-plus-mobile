@@ -1,7 +1,9 @@
+import 'package:bundle_plus/model/item_model.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/order.dart';
 import 'package:bundle_plus/screens/sell_item_detail.dart';
 import 'package:bundle_plus/screens/widgets/singleproduct.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'detailscreen.dart';
@@ -9,7 +11,9 @@ import 'detailscreen.dart';
 class OrderListScreen extends StatelessWidget {
   final String name;
   final AsyncSnapshot snapShot;
-  OrderListScreen({required this.name, required this.snapShot});
+  final AsyncSnapshot snapShotItem;
+  OrderListScreen({required this.name, required this.snapShot, required this.snapShotItem});
+  ItemModel itm = ItemModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,21 +83,22 @@ class OrderListScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (ctx) => OrderScreen(
                                 // image: "${snapShot.data.docs[index]["image"]}",
+                                // image: getImage("${snapShot.data.docs[index]["iid"]}"),
                                 name: snapShot.data.docs[index]["name"]),
                                 // price: snapShot.data.docs[index]["price"],
                                 // description: snapShot.data.docs[index]
-                                    // ["description"],
+                                //     ["description"],
                                 // condition: snapShot.data.docs[index]
-                                    // ["condition"],
+                                //     ["condition"],
                                 // used: snapShot.data.docs[index]["used"]),
                           ),
                         );
                       },
-                      // child: SingleProduct(
-                      //   name: snapShot.data.docs[index]["name"],
-                      //   price: snapShot.data.docs[index]["price"],
-                      //   image: snapShot.data.docs[index]["image"],
-                      // ),
+                      child: SingleProduct(
+                        name: snapShotItem.data.docs[index]["name"],
+                        price: snapShotItem.data.docs[index]["price"],
+                        image: snapShotItem.data.docs[index]["image"],
+                      ),
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -109,4 +114,14 @@ class OrderListScreen extends StatelessWidget {
       ),
     );
   }
+
+  // getImage(String itemID) async{
+  //   await FirebaseFirestore.instance
+  //         .collection("items")
+  //         .where("iid", isEqualTo: itemID)
+  //         .get()
+  //         .then((value){
+  //           this.itm = ItemModel.fromMap(value);
+  //         });
+  // }
 }

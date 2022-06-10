@@ -1,27 +1,77 @@
+import 'package:bundle_plus/model/order_model.dart';
+import 'package:bundle_plus/model/user_model.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:bundle_plus/screens/updateOrder.dart';
+import 'package:bundle_plus/screens/update_order.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'home.dart';
 
 class SellItemDetail extends StatefulWidget {
+  final String? oid;
+  final String? iid;
   final String? image;
   final String? name;
   final String? price;
   final String? description;
   final String? condition;
   final String? used;
+  final String? uid;
+  final String? date;
+  final String? time;
+  final String? paymentMethod;
+  final String? status;
+  // Future<Order> order;
   SellItemDetail(
-      {this.image,
+      {
+      this.oid,
+      this.iid,
+      this.image,
       this.name,
       this.price,
       this.description,
       this.condition,
-      this.used});
+      this.used,
+      this.uid,
+      this.date,
+      this.time,
+      this.paymentMethod,
+      this.status,
+      // required this.order
+      });
   @override
   State<SellItemDetail> createState() => _SellItemDetailState();
 }
 
 class _SellItemDetailState extends State<SellItemDetail> {
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+  Order _order = new Order();
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+
+    FirebaseFirestore.instance
+        .collection("orders")
+        .doc(widget.oid)
+        .get()
+        .then((value) {
+      this._order = Order.fromMap(value.data());
+      setState(() {});
+    });
+  }
+
   Widget _buildSizeProduct({required String name}) {
     return Container(
       height: 60,
@@ -221,7 +271,8 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "${widget.used}",
+                              // "${widget.uid}",
+                              "${_order.uid}",
                               // change this into seller name
                               style: TextStyle(
                                 fontSize: 16,
@@ -249,7 +300,8 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "${widget.used}",
+                              // "${widget.date}, ${widget.time}",
+                              "${_order.date}, ${_order.time}",
                               //change to purchase date
                               style: TextStyle(
                                 fontSize: 16,
@@ -277,7 +329,8 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "${widget.used}",
+                              // "${widget.paymentMethod}",
+                              "${_order.paymentMethod}",
                               //change to order status
                               style: TextStyle(
                                 fontSize: 16,
@@ -305,7 +358,8 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         child: Wrap(
                           children: <Widget>[
                             Text(
-                              "${widget.used}",
+                              // "${widget.status}",
+                              "${_order.status}",
                               //change to order status
                               style: TextStyle(
                                 fontSize: 16,
@@ -318,7 +372,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         height: 60,
                         width: double.infinity,
                         child: ElevatedButton(
-                          child: Text("Update Order"),
+                          child: Text("Update Order Status"),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.pinkAccent,
                             onPrimary: Colors.white,
@@ -326,7 +380,20 @@ class _SellItemDetailState extends State<SellItemDetail> {
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => UpdateOrderr(
+                                oid: _order.oid,
+                                iid: _order.iid,
+                                uid: _order.uid,
+                                sid: loggedInUser.toString(),
+                                name: _order.name,
+                                status: _order.status,
+                                paymentMethod: _order.paymentMethod,
+                                time: _order.time,
+                                date: _order.date,
+                              )));
+                          },
                         ),
                       ),
                     ],

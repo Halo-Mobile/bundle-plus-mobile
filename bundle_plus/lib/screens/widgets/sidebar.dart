@@ -6,6 +6,7 @@
 
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/screens/order.dart';
+import 'package:bundle_plus/screens/orderList.dart';
 import 'package:bundle_plus/screens/sell_item.dart';
 import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:flutter/material.dart';
@@ -196,6 +197,10 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                           "My Products",
                       snapShot:
                           snapShotList,
+                      snapShotOrder: 
+                        snapShotListId,
+                      // ord:
+                          // OrderItm,
                     ),
                   ),
                 );
@@ -220,11 +225,13 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                     .pushReplacement(
                   MaterialPageRoute(
                     builder: (ctx) =>
-                        SellListScreen(
+                        OrderListScreen(
                       name:
                           "My Orders",
                       snapShot:
                           snapShotOrder,
+                      snapShotItem:
+                          snapShotOrderID,
                     ),
                   ),
                 );

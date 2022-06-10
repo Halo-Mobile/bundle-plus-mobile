@@ -8,6 +8,7 @@ import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../model/order_model.dart';
 import '../model/user_model.dart';
 import '../model/user_profile.dart';
 import 'package:bundle_plus/screens/sell_item.dart';
@@ -28,9 +29,13 @@ ItemModel featured1 = ItemModel();
 ItemModel featured2 = ItemModel();
 ItemModel new1 = ItemModel();
 ItemModel new2 = ItemModel();
+Order OrderItm = Order();
+int? count;
 var mySnapShot;
 var snapShotList;
+var snapShotListId;
 var snapShotOrder;
+var snapShotOrderID;
 var books;
 var electronics;
 var foods;
@@ -292,9 +297,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         isEqualTo: "${loggedInUser.uid}")
                                     .get(),
                                 builder: (context, AsyncSnapshot snapshot7) {
-                                  if (snapshot6.connectionState ==
+                                  if (snapshot7.connectionState ==
                                       ConnectionState.waiting) {}
                                   snapShotList = snapshot7;
+
+                              return FutureBuilder(
+                                future: FirebaseFirestore.instance
+                                    .collection("orders")
+                                    .where("sid",
+                                        isEqualTo: "${loggedInUser.uid}")
+                                    .get(),
+                                builder: (context, AsyncSnapshot snapshot8) {
+                                  if (snapshot8.connectionState ==
+                                      ConnectionState.waiting) {}
+                                  snapShotListId = snapshot8;
 
                                   return FutureBuilder(
                                     future: FirebaseFirestore.instance
@@ -302,10 +318,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         .where("uid",
                                             isEqualTo: "${loggedInUser.uid}")
                                         .get(),
-                                    builder: (context, AsyncSnapshot snapshot8) {
-                                      if (snapshot6.connectionState ==
+                                    builder: (context, AsyncSnapshot snapshot9) {
+                                      if (snapshot9.connectionState ==
                                           ConnectionState.waiting) {}
-                                      snapShotOrder = snapshot8;
+                                          snapShotOrder = snapshot9;
 
                                   return Container(
                                     height: double.infinity,
@@ -716,6 +732,10 @@ class _HomeScreenState extends State<HomeScreen> {
           );
           },
           );
+          },
+          );
+          // },
+          // );
         },
       ),
     );
