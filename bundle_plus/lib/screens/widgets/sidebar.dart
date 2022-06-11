@@ -5,6 +5,7 @@
 // )
 
 import 'package:bundle_plus/screens/home.dart';
+import 'package:bundle_plus/screens/my_orders.dart';
 import 'package:bundle_plus/screens/order.dart';
 import 'package:bundle_plus/screens/orderList.dart';
 import 'package:bundle_plus/screens/sell_item.dart';
@@ -37,22 +38,22 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       // child: ListView(
-        // padding: EdgeInsets.zero,
-        // children: <Widget>[
-        //   // const DrawerHeader(
-        //   //   decoration: BoxDecoration(
-        //   //     color: Colors.pinkAccent,
-        //   //   ),
-        //   //   child: Text('Bundle+'),
-        //   // ),
-        //   UserAccountsDrawerHeader(
-        //     currentAccountPicture: const CircleAvatar(
-        //       backgroundImage: NetworkImage(
-        //           "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
-        //     ),
-        //     accountName: Text("${widget.firstName} ${widget.secondName}"),
-        //     accountEmail: Text("${widget.email}"),
-        //   ),
+      // padding: EdgeInsets.zero,
+      // children: <Widget>[
+      //   // const DrawerHeader(
+      //   //   decoration: BoxDecoration(
+      //   //     color: Colors.pinkAccent,
+      //   //   ),
+      //   //   child: Text('Bundle+'),
+      //   // ),
+      //   UserAccountsDrawerHeader(
+      //     currentAccountPicture: const CircleAvatar(
+      //       backgroundImage: NetworkImage(
+      //           "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
+      //     ),
+      //     accountName: Text("${widget.firstName} ${widget.secondName}"),
+      //     accountEmail: Text("${widget.email}"),
+      //   ),
       //     ListTile(
       //       selected: widget.homeColor,
       //       enabled: true,
@@ -94,150 +95,150 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
       //         );
       //       },
       //     ),
-          // ListTile(
-          //   leading: const Icon(Icons.logout_outlined),
-          //   title: const Text(
-          //     'Log Out',
-          //     style: TextStyle(fontWeight: FontWeight.bold),
-          //   ),
-          //   onTap: widget.onPressed,
-          // ),
+      // ListTile(
+      //   leading: const Icon(Icons.logout_outlined),
+      //   title: const Text(
+      //     'Log Out',
+      //     style: TextStyle(fontWeight: FontWeight.bold),
+      //   ),
+      //   onTap: widget.onPressed,
+      // ),
       //   ],
       // ),
       child: ListView(
-          // children: <Widget>[
-            // const DrawerHeader(
-            //   decoration: BoxDecoration(
-            //     color: Colors.pinkAccent,
-            //   ),
-            //   child: Text('Bundle+'),
-            // ),
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              // const DrawerHeader(
-              //   decoration: BoxDecoration(
-              //     color: Colors.pinkAccent,
-              //   ),
-              //   child: Text('Bundle+'),
-              // ),
-              UserAccountsDrawerHeader(
-                currentAccountPicture: const CircleAvatar(
-                  backgroundImage: NetworkImage(
-                      "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
+        // children: <Widget>[
+        // const DrawerHeader(
+        //   decoration: BoxDecoration(
+        //     color: Colors.pinkAccent,
+        //   ),
+        //   child: Text('Bundle+'),
+        // ),
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          // const DrawerHeader(
+          //   decoration: BoxDecoration(
+          //     color: Colors.pinkAccent,
+          //   ),
+          //   child: Text('Bundle+'),
+          // ),
+          UserAccountsDrawerHeader(
+            currentAccountPicture: const CircleAvatar(
+              backgroundImage: NetworkImage(
+                  "https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/profiles%2Favatar.png?alt=media&token=48fce17e-7708-44ab-b1fc-3bd6d389c0d9"),
+            ),
+            accountName: Text("${widget.firstName} ${widget.secondName}"),
+            accountEmail: Text("${widget.email}"),
+          ),
+          ListTile(
+            selected: widget.homeColor,
+            enabled: true,
+            leading: Icon(Icons.home),
+            title: Text(
+              'Home',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              setState(() {
+                widget.homeColor = true;
+                widget.sellColor = false;
+                widget.selllistColor = false;
+                widget.orderColor = false;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomeScreen(),
                 ),
-                accountName: Text("${widget.firstName} ${widget.secondName}"),
-                accountEmail: Text("${widget.email}"),
-              ),
-            ListTile(
-              selected: widget.homeColor,
-              enabled: true,
-              leading: Icon(Icons.home),
-              title: Text(
-                'Home',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  widget.homeColor = true;
-                  widget.sellColor = false;
-                  widget.selllistColor = false;
-                  widget.orderColor = false;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const HomeScreen(),
-                  ),
-                );
-              },
+              );
+            },
+          ),
+          ListTile(
+            selected: widget.sellColor,
+            leading: Icon(Icons.sell),
+            title: Text(
+              'Sell Item',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            ListTile(
-              selected: widget.sellColor,
-              leading: Icon(Icons.sell),
-              title: Text(
-                'Sell Item',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  widget.homeColor = false;
-                  widget.sellColor = true;
-                  widget.selllistColor = false;
-                  widget.orderColor = false;
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SellItems(),
-                  ),
-                );
-              },
+            onTap: () {
+              setState(() {
+                widget.homeColor = false;
+                widget.sellColor = true;
+                widget.selllistColor = false;
+                widget.orderColor = false;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SellItems(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            selected: widget.selllistColor,
+            leading: Icon(Icons.add_business_rounded),
+            title: Text(
+              'My Items',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            ListTile(
-              selected: widget.selllistColor,
-              leading: Icon(Icons.add_business_rounded),
-              title: Text(
-                'My Items',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  widget.homeColor = false;
-                  widget.sellColor = false;
-                  widget.selllistColor = true;
-                  widget.orderColor = false;
-                });
-                 Navigator.of(
-                        context)
-                    .pushReplacement(
-                  MaterialPageRoute(
-                    builder: (ctx) =>
-                        SellListScreen(
-                      name:
-                          "My Products",
-                      snapShot:
-                          snapShotList,
-                      snapShotOrder: 
-                        snapShotListId,
-                      // ord:
-                          // OrderItm,
-                    ),
+            onTap: () {
+              setState(() {
+                widget.homeColor = false;
+                widget.sellColor = false;
+                widget.selllistColor = true;
+                widget.orderColor = false;
+              });
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (ctx) => SellListScreen(
+                    name: "My Products",
+                    snapShot: snapShotList,
+                    snapShotOrder: snapShotListId,
+                    // ord:
+                    // OrderItm,
                   ),
-                );
-              },
+                ),
+              );
+            },
+          ),
+          ListTile(
+            selected: widget.orderColor,
+            leading: Icon(Icons.account_balance_wallet_rounded),
+            title: Text(
+              'My Orders',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            ListTile(
-              selected: widget.orderColor,
-              leading: Icon(Icons.account_balance_wallet_rounded),
-              title: Text(
-                'My Orders',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              onTap: () {
-                setState(() {
-                  widget.homeColor = false;
-                  widget.sellColor = false;
-                  widget.selllistColor = false;
-                  widget.orderColor = true;
-                });
-                 Navigator.of(
-                        context)
-                    .pushReplacement(
-                  MaterialPageRoute(
-                    builder: (ctx) =>
-                        OrderListScreen(
-                      name:
-                          "My Orders",
-                      snapShot:
-                          snapShotOrder,
-                      snapShotItem:
-                          snapShotOrderID,
-                    ),
-                  ),
-                );
-              },
-            ),
-            ListTile(
+            onTap: () {
+              setState(() {
+                widget.homeColor = false;
+                widget.sellColor = false;
+                widget.selllistColor = false;
+                widget.orderColor = true;
+              });
+              //  Navigator.of(
+              //         context)
+              //     .pushReplacement(
+              //   MaterialPageRoute(
+              //     builder: (ctx) =>
+              //         OrderListScreen(
+              //       name:
+              //           "My Orders",
+              //       snapShot:
+              //           snapShotOrder,
+              //       snapShotItem:
+              //           snapShotOrderID,
+              //     ),
+              //   ),
+              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const OrderHistory(),
+                ),
+              );
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.logout_outlined),
             title: const Text(
               'Log Out',
@@ -245,7 +246,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
             ),
             onTap: widget.onPressed,
           ),
-          ],
+        ],
         // ),
       ),
     );

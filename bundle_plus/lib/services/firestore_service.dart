@@ -13,9 +13,18 @@ class FirestoreService {
   final AuthService _authService = AuthService();
   final CollectionReference _orders =
       FirebaseFirestore.instance.collection('orders');
+  final CollectionReference _items =
+      FirebaseFirestore.instance.collection('item');
+  // final DocumentReference orders_doc_ref = _orders.do
+
+  CollectionReference get orders => _orders;
 
   Future<void> createOrder(String name, String itemID, String sellerID) async {
     final Order _order = Order();
+
+    // orders.get().then((value) => value.docs.forEach((element) {
+    //       print(element.id);
+    //     }));
 
     //initializing the property of Order Model
     _order.name = name;
@@ -24,12 +33,26 @@ class FirestoreService {
     _order.date = DateFormat.yMMMd().format(DateTime.now());
     _order.time = DateFormat('hh:mm:ss').format(DateTime.now());
     _order.uid = _authService.currentUser.uid;
+    // _order.oid = orders.doc().id;
     _order.iid = itemID;
     _order.sid = sellerID;
 
     print(itemID);
+    print(orders.doc('aYj9So1AEIgMibu6DnZs'));
+    print(orders.doc().toString());
 
     // storing the value to Firestore
     await _orders.add(_order.toMap());
   }
+
+  // TODO : Update Model instead of direct delete using firestore
+  Future<void> deleteOrder(String id) async {
+    await _orders.doc(id).delete();
+  }
+
+  Future<void> updateOrderStatus(String id, String newOrderStatus) async {
+    await _orders.doc(id).update({"status": newOrderStatus});
+  }
+
+  Future<void> getItem(String id) async {}
 }
