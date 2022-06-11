@@ -62,6 +62,7 @@ class _SellItemState extends State<SellItems> {
       setState(() {});
     });
   }
+
   Widget build(BuildContext context) {
     //name field
 
@@ -381,7 +382,7 @@ class _SellItemState extends State<SellItems> {
     itemModel.condition = conditionEditingController.text;
     itemModel.used = usedEditingController.text;
     itemModel.price = priceEditingController.text;
-    itemModel.image = await storage.getURL(results.files.single.name);
+    // itemModel.image = await storage.getURL(results.files.single.name);
 
     await docItem.set(itemModel.toMap());
     Fluttertoast.showToast(msg: "Item added successfully :) ");

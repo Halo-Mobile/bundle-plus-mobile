@@ -19,32 +19,42 @@ class FirestoreService {
 
   CollectionReference get orders => _orders;
 
-  Future<void> createOrder(String name, String itemID, String sellerID) async {
-    final Order _order = Order();
-    // final docItem = FirebaseFirestore.instance.collection('orders').doc();
-
-    // orders.get().then((value) => value.docs.forEach((element) {
-    //       print(element.id);
-    //     }));
-
-    //initializing the property of Order Model
-    _order.name = name;
-    _order.paymentMethod = "COD";
-    _order.status = "pending";
-    _order.date = DateFormat.yMMMd().format(DateTime.now());
-    _order.time = DateFormat('hh:mm:ss').format(DateTime.now());
-    _order.uid = _authService.currentUser.uid;
-    // _order.oid = orders.doc().id;
-    _order.iid = itemID;
-    _order.sid = sellerID;
-
-    print(itemID);
-    print(orders.doc('aYj9So1AEIgMibu6DnZs'));
-    print(orders.doc().toString());
-
+  Future<void> createOrder(Order order) async {
+    var docRef = _orders.doc();
+    order.oid = docRef.id; // NOTE: setting the order id
     // storing the value to Firestore
-    await _orders.add(_order.toMap());
+    await docRef.set(order
+        .toMap()); // NOTE: Somehow the order id will be same when using .set instead of .add
+    // https://stackoverflow.com/questions/47474522/firestore-difference-between-set-and-add
   }
+
+  // bad practice
+  // Future<void> createOrder(String name, String itemID, String sellerID) async {
+  //   final Order _order = Order();
+  //   // final docItem = FirebaseFirestore.instance.collection('orders').doc();
+
+  //   // orders.get().then((value) => value.docs.forEach((element) {
+  //   //       print(element.id);
+  //   //     }));
+
+  //   //initializing the property of Order Model
+  //   _order.name = name;
+  //   _order.paymentMethod = "COD";
+  //   _order.status = "pending";
+  //   _order.date = DateFormat.yMMMd().format(DateTime.now());
+  //   _order.time = DateFormat('hh:mm:ss').format(DateTime.now());
+  //   _order.uid = _authService.currentUser.uid;
+  //   // _order.oid = orders.doc().id;
+  //   _order.iid = itemID;
+  //   _order.sid = sellerID;
+
+  //   print(itemID);
+  //   print(orders.doc('aYj9So1AEIgMibu6DnZs'));
+  //   print(orders.doc().toString());
+
+  //   // storing the value to Firestore
+  //   await _orders.add(_order.toMap());
+  // }
 
   // TODO : Update Model instead of direct delete using firestore
   Future<void> deleteOrder(String id) async {

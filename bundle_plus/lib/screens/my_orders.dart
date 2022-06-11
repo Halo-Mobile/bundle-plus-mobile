@@ -27,9 +27,6 @@ class _OrderHistoryState extends State<OrderHistory> {
   @override
   Widget build(BuildContext context) {
     String searchKey = _authService.currentUser.uid;
-    Stream streamQuery;
-    var snapshot = _firestoreService.orders
-        .where('uid', isEqualTo: _authService.currentUser.uid);
     return Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('My Orders')),
@@ -43,7 +40,8 @@ class _OrderHistoryState extends State<OrderHistory> {
 
               List<Order> orders = streamSnapshot.data!.docs
                   .map((doc) => Order(
-                        // oid: doc['oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
+                        oid: doc[
+                            'oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
                         uid: doc['uid'],
                         iid: doc['iid'],
                         sid: doc['sid'],
@@ -137,10 +135,9 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
-                                                              streamSnapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  .id,
+                                                              orders[index]
+                                                                  .oid
+                                                                  .toString(),
                                                               "Delivered");
                                                       await OneContext()
                                                           .showDialog(

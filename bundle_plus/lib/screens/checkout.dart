@@ -33,6 +33,7 @@ class CheckoutScreen extends StatefulWidget {
 class _CheckoutScreenState extends State<CheckoutScreen> {
   // initialize firestore_service.dart in services folder
   final FirestoreService _firestoreService = FirestoreService();
+  final AuthService _authService = AuthService();
 
   // print(widget.)
   @override
@@ -218,7 +219,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: ButtonWidget(
                   // button from screens>widgets
                   onPressed: () async {
-                    await _firestoreService.createOrder(widget.name.toString(), widget.iid.toString(), widget.uid.toString());
+                    // await _firestoreService.createOrder(widget.name.toString(), widget.iid.toString(), widget.uid.toString());
+                    await _firestoreService.createOrder(Order(
+                        name: widget.name.toString(),
+                        paymentMethod: "COD",
+                        status: "Pending",
+                        date: DateFormat.yMMMd().format(DateTime.now()),
+                        time: DateFormat('hh:mm:ss').format(DateTime.now()),
+                        uid: _authService.currentUser.uid,
+                        iid: widget.iid.toString(),
+                        sid: widget.uid
+                            .toString() // NOTE: why uid? uid = user id, check back
+                        // oid: _firestoreService  // NOTE : differnt from the real id
+                        //     .getOrderId()
+                        // .toString()
+                        ));
+                    // await _firestoreService.getOrderId();
                     if (OneContext.hasContext) {
                       // copy this to show dialog
                       await OneContext().showDialog(
