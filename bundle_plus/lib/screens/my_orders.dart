@@ -38,18 +38,51 @@ class _OrderHistoryState extends State<OrderHistory> {
               // 1. First, store data from firebase to a local list
               // MIGHT_DO: Would be nice to sort this based on date time
 
+              // List<Order> orders = streamSnapshot.data!.docs
+              //     .map((doc) => Order(
+              //           oid: doc[
+              //               'oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
+              //           uid: doc['uid'],
+              //           iid: doc['iid'],
+              //           sid: doc['sid'],
+              //           name: doc['name'],
+              //           status: doc['status'],
+              //           paymentMethod: doc['paymentMethod'],
+              //           time: doc['time'],
+              //           date: doc['date'],
+              //         ))
+              //     .toList();
+
               List<Order> orders = streamSnapshot.data!.docs
                   .map((doc) => Order(
-                        oid: doc[
-                            'oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
-                        uid: doc['uid'],
-                        iid: doc['iid'],
-                        sid: doc['sid'],
-                        name: doc['name'],
-                        status: doc['status'],
-                        paymentMethod: doc['paymentMethod'],
-                        time: doc['time'],
-                        date: doc['date'],
+                        oid: doc.data().toString().contains('oid')
+                            ? doc.get('oid')
+                            : '',
+                        uid: doc.data().toString().contains('uid')
+                            ? doc.get('uid')
+                            : '',
+                        iid: doc.data().toString().contains('iid')
+                            ? doc.get('iid')
+                            : '',
+                        sid: doc.data().toString().contains('sid')
+                            ? doc.get('sid')
+                            : '',
+                        name: doc.data().toString().contains('name')
+                            ? doc.get('name')
+                            : '',
+                        paymentMethod:
+                            doc.data().toString().contains('paymentMethod')
+                                ? doc.get('paymentMethod')
+                                : '',
+                        date: doc.data().toString().contains('date')
+                            ? doc.get('date')
+                            : '',
+                        time: doc.data().toString().contains('time')
+                            ? doc.get('time')
+                            : '',
+                        status: doc.data().toString().contains('status')
+                            ? doc.get('status')
+                            : '',
                       ))
                   .toList();
 
@@ -57,6 +90,13 @@ class _OrderHistoryState extends State<OrderHistory> {
               orders = orders
                   .where((element) => element.uid?.contains(searchKey) ?? false)
                   .toList();
+
+              // DEBUG : to see whether the query is working
+              for (var element in orders) {
+                print("Elements printed here belongs to user: " +
+                    _authService.currentUser.email.toString());
+                print(element.oid);
+              }
 
               // orders = orders.w
               return ListView.builder(
@@ -102,10 +142,9 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
-                                                              streamSnapshot
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  .id,
+                                                              orders[index]
+                                                                  .oid
+                                                                  .toString(),
                                                               "Cancel");
                                                       await OneContext()
                                                           .showDialog(
@@ -172,7 +211,7 @@ class _OrderHistoryState extends State<OrderHistory> {
 
                                   // print(streamSnapshot.data!.docs[index].id);
                                   await _firestoreService.deleteOrder(
-                                      streamSnapshot.data!.docs[index].id);
+                                      orders[index].oid.toString());
 
                                   if (OneContext.hasContext) {
                                     // copy this to show dialog
