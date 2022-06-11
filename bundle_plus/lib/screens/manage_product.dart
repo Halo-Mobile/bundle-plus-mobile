@@ -113,7 +113,9 @@ class _ManageProductState extends State<ManageProduct> {
                           "\nTime Created: " +
                           orders[index].time.toString() +
                           "\nStatus: " +
-                          orders[index].status.toString()),
+                          orders[index].status.toString() +
+                          "\nuid: " +
+                          orders[index].uid.toString()),
                       trailing: SizedBox(
                         width: 100,
                         child: Row(
