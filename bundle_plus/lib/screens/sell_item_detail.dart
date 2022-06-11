@@ -1,8 +1,10 @@
 import 'package:bundle_plus/model/order_model.dart';
 import 'package:bundle_plus/model/user_model.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:bundle_plus/screens/updateOrder.dart';
 import 'package:bundle_plus/screens/update_order.dart';
+import 'package:bundle_plus/screens/widgets/sidebar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,12 +20,6 @@ class SellItemDetail extends StatefulWidget {
   final String? description;
   final String? condition;
   final String? used;
-  final String? uid;
-  final String? date;
-  final String? time;
-  final String? paymentMethod;
-  final String? status;
-  // Future<Order> order;
   SellItemDetail(
       {
       this.oid,
@@ -34,11 +30,6 @@ class SellItemDetail extends StatefulWidget {
       this.description,
       this.condition,
       this.used,
-      this.uid,
-      this.date,
-      this.time,
-      this.paymentMethod,
-      this.status,
       // required this.order
       });
   @override
@@ -48,7 +39,6 @@ class SellItemDetail extends StatefulWidget {
 class _SellItemDetailState extends State<SellItemDetail> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-  Order _order = new Order();
 
   @override
   void initState() {
@@ -59,15 +49,6 @@ class _SellItemDetailState extends State<SellItemDetail> {
         .get()
         .then((value) {
       this.loggedInUser = UserModel.fromMap(value.data());
-      setState(() {});
-    });
-
-    FirebaseFirestore.instance
-        .collection("orders")
-        .doc(widget.oid)
-        .get()
-        .then((value) {
-      this._order = Order.fromMap(value.data());
       setState(() {});
     });
   }
@@ -253,126 +234,13 @@ class _SellItemDetailState extends State<SellItemDetail> {
                         ),
                       ),
                       SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Buyer Name",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          // color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        // height: 70,
-                        child: Wrap(
-                          children: <Widget>[
-                            Text(
-                              // "${widget.uid}",
-                              "${_order.uid}",
-                              // change this into seller name
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Purchased Date & Time",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          // color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        // height: 70,
-                        child: Wrap(
-                          children: <Widget>[
-                            Text(
-                              // "${widget.date}, ${widget.time}",
-                              "${_order.date}, ${_order.time}",
-                              //change to purchase date
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Payment Method",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          // color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        // height: 70,
-                        child: Wrap(
-                          children: <Widget>[
-                            Text(
-                              // "${widget.paymentMethod}",
-                              "${_order.paymentMethod}",
-                              //change to order status
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "Order Status",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          // color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        height: 70,
-                        child: Wrap(
-                          children: <Widget>[
-                            Text(
-                              // "${widget.status}",
-                              "${_order.status}",
-                              //change to order status
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
+                        height: 25,
                       ),
                       Container(
                         height: 60,
                         width: double.infinity,
                         child: ElevatedButton(
-                          child: Text("Update Order Status"),
+                          child: Text("Update Product"),
                           style: ElevatedButton.styleFrom(
                             primary: Colors.pinkAccent,
                             onPrimary: Colors.white,
@@ -381,18 +249,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => UpdateOrderr(
-                                oid: _order.oid,
-                                iid: _order.iid,
-                                uid: _order.uid,
-                                sid: loggedInUser.toString(),
-                                name: _order.name,
-                                status: _order.status,
-                                paymentMethod: _order.paymentMethod,
-                                time: _order.time,
-                                date: _order.date,
-                              )));
+                            
                           },
                         ),
                       ),

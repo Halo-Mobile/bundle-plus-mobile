@@ -10,9 +10,9 @@ import 'detailscreen.dart';
 class SellListScreen extends StatelessWidget {
   final String name;
   final AsyncSnapshot snapShot;
-  final AsyncSnapshot snapShotOrder;
+ 
   // final Order ord;
-  SellListScreen({required this.name, required this.snapShot, required this.snapShotOrder});
+  SellListScreen({required this.name, required this.snapShot});
   // SellListScreen({required this.name, required this.snapShot, required this.ord});
   var snapShotDetail;
   String? _uid;
@@ -89,7 +89,6 @@ class SellListScreen extends StatelessWidget {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (ctx) => SellItemDetail(
-                                oid: "${snapShotOrder.data.docs[index]["oid"]}",
                                 iid: "${snapShot.data.docs[index]["iid"]}",
                                 image: "${snapShot.data.docs[index]["image"]}",
                                 name: snapShot.data.docs[index]["name"],
@@ -99,18 +98,6 @@ class SellListScreen extends StatelessWidget {
                                 condition: snapShot.data.docs[index]
                                     ["condition"],
                                 used: snapShot.data.docs[index]["used"],
-                                // uid: checkUid(index),
-                                // // date: snapShotOrder.data.docs[index]["date"],
-                                // // time: snapShotOrder.data.docs[index]["time"],
-                                // // paymentMethod: snapShotOrder.data.docs[index]["paymentMethod"],
-                                // // status: snapShotOrder.data.docs[index]["status"],
-                                // // uid: ord.uid,
-                                // date: checkDate(index),
-                                // time: checkTime(index),
-                                // paymentMethod: checkPayment(index),
-                                // status: checkStatus(index),
-                                //TODO change into usermodel and fix for no buyer
-                                //order: getModel("${snapShot.data.docs[index]["iid"]}"),
                                 ),
                           ),
                         );
@@ -144,45 +131,5 @@ class SellListScreen extends StatelessWidget {
              this.orderModel = Order.fromMap(value);
           });
     return orderModel;
-  }
-
-  String checkUid(int index){
-    if ((snapShotOrder.data.docs[index]["uid"]) != null) {
-      return snapShotOrder.data.docs[index]["uid"];
-    }else{
-      return "None";
-    }
-  }
-
-  String checkDate(int index){
-    if ((snapShotOrder.data.docs[index]["date"]) != null) {
-      return snapShotOrder.data.docs[index]["date"];
-    }else{
-      return "None";
-    }
-  }
-
-  String checkTime(int index){
-    if ((snapShotOrder.data.docs[index]["time"]) != null) {
-      return snapShotOrder.data.docs[index]["time"];
-    }else{
-      return "None";
-    }
-  }
-
-  String checkPayment(int index){
-    if ((snapShotOrder.data.docs[index]["paymentMethod"]) != null) {
-      return snapShotOrder.data.docs[index]["paymentMethod"];
-    }else{
-      return "None";
-    }
-  }
-
-  String checkStatus(int index){
-    if ((snapShotOrder.data.docs[index]["status"]) != null) {
-      return snapShotOrder.data.docs[index]["status"];
-    }else{
-      return "None";
-    }
   }
 }

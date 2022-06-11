@@ -9,14 +9,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 
-class OrderHistory extends StatefulWidget {
-  const OrderHistory({Key? key}) : super(key: key);
+class ManageProduct extends StatefulWidget {
+  const ManageProduct({Key? key}) : super(key: key);
 
   @override
-  State<OrderHistory> createState() => _OrderHistoryState();
+  State<ManageProduct> createState() => _ManageProductState();
 }
 
-class _OrderHistoryState extends State<OrderHistory> {
+class _ManageProductState extends State<ManageProduct> {
   // declaration of CollectionReference
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
@@ -31,8 +31,9 @@ class _OrderHistoryState extends State<OrderHistory> {
     var snapshot = _firestoreService.orders
         .where('uid', isEqualTo: _authService.currentUser.uid);
     return Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Center(child: Text('My Orders')),
+          title: const Center(child: Text('Manage Products')),
         ),
         body: StreamBuilder(
           stream: _firestoreService.orders.snapshots(),
@@ -57,7 +58,7 @@ class _OrderHistoryState extends State<OrderHistory> {
 
               // 2. Query the list of orders
               orders = orders
-                  .where((element) => element.uid?.contains(searchKey) ?? false)
+                  .where((element) => element.sid?.contains(searchKey) ?? false)
                   .toList();
 
               // orders = orders.w
@@ -99,8 +100,8 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                   height: 20,
                                                 ),
                                                 ListTile(
-                                                    leading: Icon(Icons.cancel),
-                                                    title: Text('Cancel Order'),
+                                                    leading: Icon(Icons.file_copy_rounded),
+                                                    title: Text('Preparing Order'),
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
@@ -108,7 +109,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                                   .data!
                                                                   .docs[index+1]
                                                                   .id,
-                                                              "Cancel");
+                                                              "Preparing Order");
                                                       await OneContext()
                                                           .showDialog(
                                                               builder: (_) =>
@@ -117,10 +118,10 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                                           orders[index]
                                                                               .name
                                                                               .toString() +
-                                                                          " cancelled!"),
+                                                                          " Preparing Order!"),
                                                                       content:
                                                                           const Text(
-                                                                              "You have cancelled your order"),
+                                                                              "Order is currently being prepared by the seller"),
                                                                       actions: <
                                                                           Widget>[
                                                                         TextButton(
@@ -131,9 +132,9 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                     }),
                                                 ListTile(
                                                     leading:
-                                                        Icon(Icons.thumb_up),
+                                                        Icon(Icons.delivery_dining),
                                                     title:
-                                                        Text('Order Received'),
+                                                        Text('Order Delivered'),
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
@@ -150,10 +151,10 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                                           orders[index]
                                                                               .name
                                                                               .toString() +
-                                                                          " successfully received!"),
+                                                                          " successfully delivered!"),
                                                                       content:
                                                                           const Text(
-                                                                              "Your order has been successfully received."),
+                                                                              "Your order has been successfully delivered."),
                                                                       actions: <
                                                                           Widget>[
                                                                         TextButton(

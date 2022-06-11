@@ -94,11 +94,11 @@ class OrderListScreen extends StatelessWidget {
                           ),
                         );
                       },
-                      child: SingleProduct(
-                        name: snapShotItem.data.docs[index]["name"],
-                        price: snapShotItem.data.docs[index]["price"],
-                        image: snapShotItem.data.docs[index]["image"],
-                      ),
+                      // child: SingleProduct(
+                      //   name: snapShotItem.data.docs[index]["name"],
+                      //   price: snapShotItem.data.docs[index]["price"],
+                      //   image: snapShotItem.data.docs[index]["image"],
+                      // ),
                     ),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,

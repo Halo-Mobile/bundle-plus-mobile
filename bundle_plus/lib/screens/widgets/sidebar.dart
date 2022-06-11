@@ -5,6 +5,7 @@
 // )
 
 import 'package:bundle_plus/screens/home.dart';
+import 'package:bundle_plus/screens/manage_product.dart';
 import 'package:bundle_plus/screens/my_orders.dart';
 import 'package:bundle_plus/screens/order.dart';
 import 'package:bundle_plus/screens/orderList.dart';
@@ -17,6 +18,7 @@ class SidebarDrawer extends StatefulWidget {
   bool sellColor = false;
   bool selllistColor = false;
   bool orderColor = false;
+  bool manageProdColor = false;
   String? firstName;
   String? secondName;
   String? email;
@@ -143,6 +145,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                 widget.sellColor = false;
                 widget.selllistColor = false;
                 widget.orderColor = false;
+                widget.manageProdColor = false;
               });
               Navigator.push(
                 context,
@@ -165,6 +168,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                 widget.sellColor = true;
                 widget.selllistColor = false;
                 widget.orderColor = false;
+                widget.manageProdColor = false;
               });
               Navigator.push(
                 context,
@@ -178,7 +182,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
             selected: widget.selllistColor,
             leading: Icon(Icons.add_business_rounded),
             title: Text(
-              'My Items',
+              'My Products',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             onTap: () {
@@ -187,13 +191,14 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                 widget.sellColor = false;
                 widget.selllistColor = true;
                 widget.orderColor = false;
+                widget.manageProdColor = false;
               });
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (ctx) => SellListScreen(
                     name: "My Products",
                     snapShot: snapShotList,
-                    snapShotOrder: snapShotListId,
+                    // snapShotOrder: snapShotListId,
                     // ord:
                     // OrderItm,
                   ),
@@ -214,6 +219,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                 widget.sellColor = false;
                 widget.selllistColor = false;
                 widget.orderColor = true;
+                widget.manageProdColor = false;
               });
               //  Navigator.of(
               //         context)
@@ -234,6 +240,44 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const OrderHistory(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            selected: widget.manageProdColor,
+            leading: Icon(Icons.manage_history),
+            title: Text(
+              'Manage Products',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+             onTap: () {
+              setState(() {
+                widget.homeColor = false;
+                widget.sellColor = false;
+                widget.selllistColor = false;
+                widget.orderColor = false;
+                widget.manageProdColor = true;
+              });
+              //  Navigator.of(
+              //         context)
+              //     .pushReplacement(
+              //   MaterialPageRoute(
+              //     builder: (ctx) =>
+              //         OrderListScreen(
+              //       name:
+              //           "My Orders",
+              //       snapShot:
+              //           snapShotOrder,
+              //       snapShotItem:
+              //           snapShotOrderID,
+              //     ),
+              //   ),
+              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ManageProduct(),
                 ),
               );
             },

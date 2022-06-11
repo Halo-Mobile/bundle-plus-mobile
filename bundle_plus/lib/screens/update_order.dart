@@ -122,7 +122,6 @@ class _UpdateOrderrState extends State<UpdateOrderr>{
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     Order updateOrder = new Order();
-    String id = '1gcLRaoCI2rTWJqIjb8b';
 
     updateOrder.oid = widget.oid;
     updateOrder.iid = widget.iid;
@@ -139,7 +138,7 @@ class _UpdateOrderrState extends State<UpdateOrderr>{
         // .where("uid", isEqualTo: widget.uid)
         // .where("iid", isEqualTo: widget.iid)
         // .where("sid", isEqualTo: widget.sid)
-        .doc(id)
+        .doc(widget.oid)
         .update(updateOrder.toMap());
     // DatabaseReference ref = FirebaseDatabase.instance.ref("orders/")
     Fluttertoast.showToast(msg: "Order updated successfully :) ");

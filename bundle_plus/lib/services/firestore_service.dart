@@ -21,6 +21,7 @@ class FirestoreService {
 
   Future<void> createOrder(String name, String itemID, String sellerID) async {
     final Order _order = Order();
+    // final docItem = FirebaseFirestore.instance.collection('orders').doc();
 
     // orders.get().then((value) => value.docs.forEach((element) {
     //       print(element.id);
