@@ -106,7 +106,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                           .updateOrderStatus(
                                                               streamSnapshot
                                                                   .data!
-                                                                  .docs[index+1]
+                                                                  .docs[index]
                                                                   .id,
                                                               "Cancel");
                                                       await OneContext()
@@ -139,7 +139,7 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                           .updateOrderStatus(
                                                               streamSnapshot
                                                                   .data!
-                                                                  .docs[index+1]
+                                                                  .docs[index]
                                                                   .id,
                                                               "Delivered");
                                                       await OneContext()
