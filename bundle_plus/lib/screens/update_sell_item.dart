@@ -8,17 +8,39 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../model/storage_service.dart';
 import '../model/user_model.dart';
 
-class SellItems extends StatefulWidget {
-  const SellItems({Key? key}) : super(key: key);
+class UpdateSellItems extends StatefulWidget {
+  final String? oid;
+  final String? iid;
+  final String? image;
+  final String? name;
+  final String? price;
+  final String? description;
+  final String? condition;
+  final String? used;
+  final String? category;
+  UpdateSellItems(
+    this.oid,
+    this.iid,
+    this.image,
+    this.name,
+    this.price,
+    this.description,
+    this.condition,
+    this.used,
+    this.category,
+    // required this.order
+  );
 
   @override
-  _SellItemState createState() => _SellItemState();
+  State<UpdateSellItems> createState() => _UpdateSellItemsState();
 }
 
-class _SellItemState extends State<SellItems> {
+class _UpdateSellItemsState extends State<UpdateSellItems> {
+  bool _isEditingText = false;
   final _auth = FirebaseAuth.instance;
   final Storage storage = Storage();
   var results = null;
+  late bool upload = false;
   UserModel loggedInUser = UserModel();
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -48,8 +70,6 @@ class _SellItemState extends State<SellItems> {
     return menuItems;
   }
 
-  String selectedValue = "";
-
   @override
   void initState() {
     super.initState();
@@ -65,7 +85,7 @@ class _SellItemState extends State<SellItems> {
 
   Widget build(BuildContext context) {
     //name field
-
+    String selectedValue = "${widget.category}";
     final nameField = TextFormField(
         autofocus: false,
         cursorColor: Colors.pinkAccent,
@@ -87,7 +107,7 @@ class _SellItemState extends State<SellItems> {
             color: Colors.pinkAccent,
           ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Name",
+          labelText: "${widget.name}",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -119,7 +139,7 @@ class _SellItemState extends State<SellItems> {
             color: Colors.pinkAccent,
           ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Description",
+          labelText: "${widget.description}",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -189,7 +209,8 @@ class _SellItemState extends State<SellItems> {
             color: Colors.pinkAccent,
           ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Condition (per 10)",
+          // labelText: "Condition (per 10)",
+          labelText: "${widget.condition}",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -221,7 +242,7 @@ class _SellItemState extends State<SellItems> {
             color: Colors.pinkAccent,
           ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Used period",
+          labelText: "${widget.used}",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -253,7 +274,7 @@ class _SellItemState extends State<SellItems> {
             color: Colors.pinkAccent,
           ),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Price",
+          labelText: "${widget.price}",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -275,7 +296,7 @@ class _SellItemState extends State<SellItems> {
             postDetailsToFirestore();
           },
           child: const Text(
-            "Add Item",
+            "Update Item",
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
@@ -294,14 +315,6 @@ class _SellItemState extends State<SellItems> {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
           },
-        ),
-        centerTitle: true,
-        title: Text(
-          "Sell Item",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
         ),
         backgroundColor: Colors.white,
       ),
@@ -325,19 +338,12 @@ class _SellItemState extends State<SellItems> {
                           allowedExtensions: ['jpg', 'png', 'jfif'],
                         );
 
-                        if (results == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('No image selected'),
-                            ),
-                          );
-                        }
-
-                        if (results != null) {
-                          String path = results.files.single.path!;
-                          String fileName = results.files.single.name;
-                          storage.uploadFile(path, fileName);
-                        }
+                        String path = results.files.single.path!;
+                        String fileName = results.files.single.name;
+                        storage.uploadFile(path, fileName);
+                        upload = true;
+                        // imgEditingController.text =
+                        //     await storage.getURL(results.files.single.name);
 
                         // storage
                         //     .uploadFile(path, fileName)
@@ -376,24 +382,46 @@ class _SellItemState extends State<SellItems> {
     // sedning these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    final docItem = FirebaseFirestore.instance.collection('items').doc();
+    final docItem =
+        FirebaseFirestore.instance.collection('items').doc("${widget.iid}");
 
-    User? user = FirebaseAuth.instance.currentUser;
     ItemModel itemModel = ItemModel();
 
     // writing all the values
     itemModel.uid = loggedInUser.uid;
     itemModel.iid = docItem.id;
-    itemModel.name = nameEditingController.text;
-    itemModel.description = descriptionEditingController.text;
-    itemModel.category = categoryEditingController.text;
-    itemModel.condition = conditionEditingController.text;
-    itemModel.used = usedEditingController.text;
-    itemModel.price = priceEditingController.text;
-    itemModel.image = await storage.getURL(results.files.single.name);
+    if (nameEditingController.text != "")
+      itemModel.name = nameEditingController.text;
+    else
+      itemModel.name = "${widget.name}";
+    if (descriptionEditingController.text != "")
+      itemModel.description = descriptionEditingController.text;
+    else
+      itemModel.description = "${widget.description}";
+    if (categoryEditingController.text != "")
+      itemModel.category = categoryEditingController.text;
+    else
+      itemModel.category = "${widget.category}";
+    if (conditionEditingController.text != "")
+      itemModel.condition = conditionEditingController.text;
+    else
+      itemModel.condition = "${widget.condition}";
+    if (usedEditingController.text != "")
+      itemModel.used = usedEditingController.text;
+    else
+      itemModel.used = "${widget.used}";
+    if (priceEditingController.text != "")
+      itemModel.price = priceEditingController.text;
+    else
+      itemModel.price = "${widget.price}";
+    if (upload == true) {
+      itemModel.image = await storage.getURL(results.files.single.name);
+    } else {
+      itemModel.image = "${widget.image}";
+    }
 
-    await docItem.set(itemModel.toMap());
-    Fluttertoast.showToast(msg: "Item added successfully :) ");
+    await docItem.update(itemModel.toMap());
+    Fluttertoast.showToast(msg: "Item updated successfully :) ");
 
     Navigator.pushAndRemoveUntil(
         (context),

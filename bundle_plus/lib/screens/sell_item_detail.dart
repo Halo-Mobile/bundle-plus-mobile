@@ -6,6 +6,7 @@ import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:bundle_plus/screens/updateOrder.dart';
 import 'package:bundle_plus/screens/update_order.dart';
+import 'package:bundle_plus/screens/update_sell_item.dart';
 import 'package:bundle_plus/screens/widgets/sidebar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +23,7 @@ class SellItemDetail extends StatefulWidget {
   final String? description;
   final String? condition;
   final String? used;
+  final String? category;
   SellItemDetail({
     this.oid,
     this.iid,
@@ -31,6 +33,7 @@ class SellItemDetail extends StatefulWidget {
     this.description,
     this.condition,
     this.used,
+    this.category,
     // required this.order
   });
   @override
@@ -79,7 +82,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "Order Detail",
+          "My Product",
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -261,7 +264,23 @@ class _SellItemDetailState extends State<SellItemDetail> {
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (ctx) => UpdateSellItems(
+                                  widget.oid,
+                                  widget.iid,
+                                  widget.image,
+                                  widget.name,
+                                  widget.price,
+                                  widget.description,
+                                  widget.condition,
+                                  widget.used,
+                                  widget.category,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],

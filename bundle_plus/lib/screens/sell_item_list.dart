@@ -10,7 +10,7 @@ import 'detailscreen.dart';
 class SellListScreen extends StatelessWidget {
   final String name;
   final AsyncSnapshot snapShot;
- 
+
   // final Order ord;
   SellListScreen({required this.name, required this.snapShot});
   // SellListScreen({required this.name, required this.snapShot, required this.ord});
@@ -89,16 +89,16 @@ class SellListScreen extends StatelessWidget {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
                             builder: (ctx) => SellItemDetail(
-                                iid: "${snapShot.data.docs[index]["iid"]}",
-                                image: "${snapShot.data.docs[index]["image"]}",
-                                name: snapShot.data.docs[index]["name"],
-                                price: snapShot.data.docs[index]["price"],
-                                description: snapShot.data.docs[index]
-                                    ["description"],
-                                condition: snapShot.data.docs[index]
-                                    ["condition"],
-                                used: snapShot.data.docs[index]["used"],
-                                ),
+                              iid: "${snapShot.data.docs[index]["iid"]}",
+                              image: "${snapShot.data.docs[index]["image"]}",
+                              name: snapShot.data.docs[index]["name"],
+                              price: snapShot.data.docs[index]["price"],
+                              description: snapShot.data.docs[index]
+                                  ["description"],
+                              condition: snapShot.data.docs[index]["condition"],
+                              used: snapShot.data.docs[index]["used"],
+                              category: snapShot.data.docs[index]["category"],
+                            ),
                           ),
                         );
                       },
@@ -122,14 +122,15 @@ class SellListScreen extends StatelessWidget {
       ),
     );
   }
-  Future<Order> getModel(String itemID) async{
+
+  Future<Order> getModel(String itemID) async {
     await FirebaseFirestore.instance
-          .collection("orders")
-          .where("iid", isEqualTo: itemID)
-          .get()
-          .then((value){
-             this.orderModel = Order.fromMap(value);
-          });
+        .collection("orders")
+        .where("iid", isEqualTo: itemID)
+        .get()
+        .then((value) {
+      this.orderModel = Order.fromMap(value);
+    });
     return orderModel;
   }
 }
