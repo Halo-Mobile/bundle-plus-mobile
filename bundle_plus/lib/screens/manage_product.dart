@@ -27,13 +27,9 @@ class _ManageProductState extends State<ManageProduct> {
   @override
   Widget build(BuildContext context) {
     String searchKey = _authService.currentUser.uid;
-    Stream streamQuery;
-    var snapshot = _firestoreService.orders
-        .where('uid', isEqualTo: _authService.currentUser.uid);
     return Scaffold(
-        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Center(child: Text('Manage Products')),
+          title: const Center(child: Text('Manage Order')),
         ),
         body: StreamBuilder(
           stream: _firestoreService.orders.snapshots(),
@@ -42,17 +38,51 @@ class _ManageProductState extends State<ManageProduct> {
               // 1. First, store data from firebase to a local list
               // MIGHT_DO: Would be nice to sort this based on date time
 
+              // List<Order> orders = streamSnapshot.data!.docs
+              //     .map((doc) => Order(
+              //           oid: doc[
+              //               'oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
+              //           uid: doc['uid'],
+              //           iid: doc['iid'],
+              //           sid: doc['sid'],
+              //           name: doc['name'],
+              //           status: doc['status'],
+              //           paymentMethod: doc['paymentMethod'],
+              //           time: doc['time'],
+              //           date: doc['date'],
+              //         ))
+              //     .toList();
+
               List<Order> orders = streamSnapshot.data!.docs
                   .map((doc) => Order(
-                        // oid: doc['oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
-                        uid: doc['uid'],
-                        iid: doc['iid'],
-                        sid: doc['sid'],
-                        name: doc['name'],
-                        status: doc['status'],
-                        paymentMethod: doc['paymentMethod'],
-                        time: doc['time'],
-                        date: doc['date'],
+                        oid: doc.data().toString().contains('oid')
+                            ? doc.get('oid')
+                            : '',
+                        uid: doc.data().toString().contains('uid')
+                            ? doc.get('uid')
+                            : '',
+                        iid: doc.data().toString().contains('iid')
+                            ? doc.get('iid')
+                            : '',
+                        sid: doc.data().toString().contains('sid')
+                            ? doc.get('sid')
+                            : '',
+                        name: doc.data().toString().contains('name')
+                            ? doc.get('name')
+                            : '',
+                        paymentMethod:
+                            doc.data().toString().contains('paymentMethod')
+                                ? doc.get('paymentMethod')
+                                : '',
+                        date: doc.data().toString().contains('date')
+                            ? doc.get('date')
+                            : '',
+                        time: doc.data().toString().contains('time')
+                            ? doc.get('time')
+                            : '',
+                        status: doc.data().toString().contains('status')
+                            ? doc.get('status')
+                            : '',
                       ))
                   .toList();
 
@@ -60,6 +90,13 @@ class _ManageProductState extends State<ManageProduct> {
               orders = orders
                   .where((element) => element.sid?.contains(searchKey) ?? false)
                   .toList();
+
+              // DEBUG : to see whether the query is working
+              for (var element in orders) {
+                print("Elements printed here belongs to user: " +
+                    _authService.currentUser.email.toString());
+                print(element.oid);
+              }
 
               // orders = orders.w
               return ListView.builder(
@@ -100,15 +137,14 @@ class _ManageProductState extends State<ManageProduct> {
                                                   height: 20,
                                                 ),
                                                 ListTile(
-                                                    leading: Icon(Icons.file_copy_rounded),
+                                                    leading: Icon(Icons.cancel),
                                                     title: Text('Preparing Order'),
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
-                                                              streamSnapshot
-                                                                  .data!
-                                                                  .docs[index+1]
-                                                                  .id,
+                                                              orders[index]
+                                                                  .oid
+                                                                  .toString(),
                                                               "Preparing Order");
                                                       await OneContext()
                                                           .showDialog(
@@ -118,10 +154,10 @@ class _ManageProductState extends State<ManageProduct> {
                                                                           orders[index]
                                                                               .name
                                                                               .toString() +
-                                                                          " Preparing Order!"),
+                                                                          " is being prepared!"),
                                                                       content:
                                                                           const Text(
-                                                                              "Order is currently being prepared by the seller"),
+                                                                              "Order item is being prepared"),
                                                                       actions: <
                                                                           Widget>[
                                                                         TextButton(
@@ -132,17 +168,16 @@ class _ManageProductState extends State<ManageProduct> {
                                                     }),
                                                 ListTile(
                                                     leading:
-                                                        Icon(Icons.delivery_dining),
+                                                        Icon(Icons.thumb_up),
                                                     title:
-                                                        Text('Order Delivered'),
+                                                        Text('Delivering Order'),
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
-                                                              streamSnapshot
-                                                                  .data!
-                                                                  .docs[index+1]
-                                                                  .id,
-                                                              "Delivered");
+                                                              orders[index]
+                                                                  .oid
+                                                                  .toString(),
+                                                              "Delivering Order");
                                                       await OneContext()
                                                           .showDialog(
                                                               builder: (_) =>
@@ -151,10 +186,10 @@ class _ManageProductState extends State<ManageProduct> {
                                                                           orders[index]
                                                                               .name
                                                                               .toString() +
-                                                                          " successfully delivered!"),
+                                                                          " is being delivered!"),
                                                                       content:
                                                                           const Text(
-                                                                              "Your order has been successfully delivered."),
+                                                                              "Your order is being delivered."),
                                                                       actions: <
                                                                           Widget>[
                                                                         TextButton(
@@ -176,7 +211,7 @@ class _ManageProductState extends State<ManageProduct> {
 
                                   // print(streamSnapshot.data!.docs[index].id);
                                   await _firestoreService.deleteOrder(
-                                      streamSnapshot.data!.docs[index].id);
+                                      orders[index].oid.toString());
 
                                   if (OneContext.hasContext) {
                                     // copy this to show dialog
