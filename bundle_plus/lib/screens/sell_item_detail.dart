@@ -1,4 +1,6 @@
+import 'package:bundle_plus/model/item_model.dart';
 import 'package:bundle_plus/model/order_model.dart';
+import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/model/user_model.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:bundle_plus/screens/sell_item_list.dart';
@@ -20,18 +22,17 @@ class SellItemDetail extends StatefulWidget {
   final String? description;
   final String? condition;
   final String? used;
-  SellItemDetail(
-      {
-      this.oid,
-      this.iid,
-      this.image,
-      this.name,
-      this.price,
-      this.description,
-      this.condition,
-      this.used,
-      // required this.order
-      });
+  SellItemDetail({
+    this.oid,
+    this.iid,
+    this.image,
+    this.name,
+    this.price,
+    this.description,
+    this.condition,
+    this.used,
+    // required this.order
+  });
   @override
   State<SellItemDetail> createState() => _SellItemDetailState();
 }
@@ -39,6 +40,7 @@ class SellItemDetail extends StatefulWidget {
 class _SellItemDetailState extends State<SellItemDetail> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+  ItemModel itemModel = ItemModel();
 
   @override
   void initState() {
@@ -95,6 +97,17 @@ class _SellItemDetailState extends State<SellItemDetail> {
                 MaterialPageRoute(builder: (context) => const HomeScreen()));
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.close,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              _showMyDialog();
+            },
+          )
+        ],
       ),
       body: Container(
         child: ListView(
@@ -248,9 +261,7 @@ class _SellItemDetailState extends State<SellItemDetail> {
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                           ),
-                          onPressed: () {
-                            
-                          },
+                          onPressed: () {},
                         ),
                       ),
                     ],
@@ -261,6 +272,51 @@ class _SellItemDetailState extends State<SellItemDetail> {
           ],
         ),
       ),
+    );
+  }
+
+  deleteItem(BuildContext context) async {
+    itemModel.iid = widget.iid;
+    final docItem =
+        FirebaseFirestore.instance.collection('items').doc("${itemModel.iid}");
+    await docItem.delete();
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete Item'),
+          content: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text(
+                    'If you delete your item, you will no longer be able to see this item again.\n'),
+                Text('Would you like to proceed to delete your item?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Confirm'),
+              onPressed: () {
+                print('Confirmed');
+                deleteItem(context);
+              },
+            ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

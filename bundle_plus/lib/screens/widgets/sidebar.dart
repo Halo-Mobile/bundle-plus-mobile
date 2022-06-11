@@ -246,7 +246,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
           ),
           ListTile(
             selected: widget.manageProdColor,
-            leading: Icon(Icons.manage_history),
+            leading: Icon(Icons.manage_accounts),
             title: Text(
               'Manage Products',
               style: TextStyle(fontWeight: FontWeight.bold),
