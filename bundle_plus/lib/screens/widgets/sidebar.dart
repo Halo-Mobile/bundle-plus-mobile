@@ -248,7 +248,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
             selected: widget.manageProdColor,
             leading: Icon(Icons.manage_accounts),
             title: Text(
-              'Manage Products',
+              'Manage Order',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
              onTap: () {
