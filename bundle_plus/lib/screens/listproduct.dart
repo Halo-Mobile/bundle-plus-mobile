@@ -1,4 +1,5 @@
 import 'package:bundle_plus/screens/home.dart';
+import 'package:bundle_plus/screens/search_page.dart';
 import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,12 @@ class ListProduct extends StatelessWidget {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search, color: Colors.pinkAccent),
-            onPressed: () {},
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: SearchPage(),
+              );
+            },
           ),
           IconButton(
             icon: Icon(

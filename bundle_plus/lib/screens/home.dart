@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
+import 'package:bundle_plus/screens/search_page.dart';
 import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:bundle_plus/screens/widgets/sidebar.dart';
 import 'package:bundle_plus/screens/widgets/singleproduct.dart';
@@ -14,6 +15,7 @@ import '../model/user_profile.dart';
 import 'package:bundle_plus/screens/sell_item.dart';
 import '../model/item_model.dart';
 import 'login.dart';
+import 'search_page.dart';
 import 'package:bundle_plus/screens/profilepage.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:bundle_plus/screens/order.dart';
@@ -120,7 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.search, color: Colors.pinkAccent),
-              onPressed: () {}),
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: SearchPage(),
+                );
+              }),
           IconButton(
               icon:
                   Icon(Icons.account_circle_outlined, color: Colors.pinkAccent),
