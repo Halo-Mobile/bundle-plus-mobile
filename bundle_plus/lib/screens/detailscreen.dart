@@ -1,6 +1,14 @@
+// import 'dart:html';
+
+import 'dart:io';
+
 import 'package:bundle_plus/screens/checkout.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:social_share/social_share.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 import 'home.dart';
 
@@ -78,6 +86,31 @@ class _DetailScreenState extends State<DetailScreen> {
             //     MaterialPageRoute(builder: (context) => const HomeScreen()));
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.share,
+              color: Colors.black,
+            ),
+            onPressed: () async {
+                    // SocialShare.shareTelegram(
+                    //   "Check out this item! \n ${widget.image}",
+                    // ).then((data) {
+                    //   print(data);
+                    // });
+                    final urlImage = '${widget.image}';
+                    final url = Uri.parse(urlImage);
+                    final response = await http.get(url);
+                    final bytes = response.bodyBytes;
+
+                    final temp = await getTemporaryDirectory();
+                    final path = '${temp.path}/image.jpg';
+                    File(path).writeAsBytesSync(bytes);
+
+                    await Share.shareFiles([path], text: 'Check out this item! \nName: ${widget.name} \nPrice: ${widget.price} \nDescription: ${widget.description}');
+                  },
+          )
+        ],
       ),
       body: Container(
         child: ListView(
