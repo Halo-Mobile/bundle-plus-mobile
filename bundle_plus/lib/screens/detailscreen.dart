@@ -107,7 +107,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     final path = '${temp.path}/image.jpg';
                     File(path).writeAsBytesSync(bytes);
 
-                    await Share.shareFiles([path], text: 'Check out this item! \nName: ${widget.name} \nPrice: ${widget.price} \nDescription: ${widget.description}');
+                    await Share.shareFiles([path], text: 'Check out this item! \nName: ${widget.name} \nPrice: ${widget.price} \nDescription: ${widget.description} \nLink: https://bundleplus.page.link/product');
                   },
           )
         ],
