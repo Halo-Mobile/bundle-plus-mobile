@@ -40,17 +40,8 @@ class _OrderHistoryState extends State<OrderHistory> {
   Future<void> _initRetrieve() async {
     Future<List<Order>> _futureOrderList =
         _firestoreService.retrieveOrderFuture();
-    orders = await _futureOrderList;
-    completedOrders = orders
-        .where((element) =>
-            element.uid?.contains(_authService.currentUser.uid) ?? false)
-        .where((element) => element.status?.contains("Delivered") ?? false)
-        .toList();
-    pendingOrders = orders
-        .where((element) =>
-            element.uid?.contains(_authService.currentUser.uid) ?? false)
-        .where((element) => element.status?.contains("Pending") ?? false)
-        .toList();
+    // orders = await _futureOrderList;
+
     // print("_initRetrieve " + deliveredCount.toString());
     setState(() {});
   }
@@ -66,15 +57,63 @@ class _OrderHistoryState extends State<OrderHistory> {
         body: StreamBuilder(
           stream: _firestoreService.orders.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            print(streamSnapshot);
             if (streamSnapshot.hasData) {
               // 2. Query the list of orders
 
               // DEBUG : to see whether the query is working
-              for (var element in orders) {
-                print("Elements printed here belongs to user: " +
-                    _authService.currentUser.email.toString());
-                print(element.date);
-              }
+              // for (var element in orders) {
+              //   print("Elements printed here belongs to user: " +
+              //       _authService.currentUser.email.toString());
+              //   print(element.date);
+              // }
+              List<Order> orders = streamSnapshot.data!.docs
+                  .map((doc) => Order(
+                        oid: doc.data().toString().contains('oid')
+                            ? doc.get('oid')
+                            : '',
+                        uid: doc.data().toString().contains('uid')
+                            ? doc.get('uid')
+                            : '',
+                        iid: doc.data().toString().contains('iid')
+                            ? doc.get('iid')
+                            : '',
+                        sid: doc.data().toString().contains('sid')
+                            ? doc.get('sid')
+                            : '',
+                        name: doc.data().toString().contains('name')
+                            ? doc.get('name')
+                            : '',
+                        paymentMethod:
+                            doc.data().toString().contains('paymentMethod')
+                                ? doc.get('paymentMethod')
+                                : '',
+                        date: doc.data().toString().contains('date')
+                            ? doc.get('date')
+                            : '',
+                        time: doc.data().toString().contains('time')
+                            ? doc.get('time')
+                            : '',
+                        status: doc.data().toString().contains('status')
+                            ? doc.get('status')
+                            : '',
+                      ))
+                  .toList();
+
+              completedOrders = orders
+                  .where((element) =>
+                      element.uid?.contains(_authService.currentUser.uid) ??
+                      false)
+                  .where((element) =>
+                      element.status?.contains("Delivered") ?? false)
+                  .toList();
+              pendingOrders = orders
+                  .where((element) =>
+                      element.uid?.contains(_authService.currentUser.uid) ??
+                      false)
+                  .where(
+                      (element) => element.status?.contains("Pending") ?? false)
+                  .toList();
 
               // orders = orders.w
               return Column(
@@ -136,16 +175,16 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                               title: Text(
                                                                   'Cancel Order'),
                                                               onTap: () async {
-                                                                await _firestoreService
-                                                                    .updateOrderStatus(
-                                                                        orders[index]
-                                                                            .oid
-                                                                            .toString(),
-                                                                        "Cancel");
+                                                                await _firestoreService.updateOrderStatus(
+                                                                    pendingOrders[
+                                                                            index]
+                                                                        .oid
+                                                                        .toString(),
+                                                                    "Cancel");
                                                                 await OneContext()
                                                                     .showDialog(
                                                                         builder: (_) =>
-                                                                            AlertDialog(title: Text("Order " + orders[index].name.toString() + " cancelled!"), content: const Text("You have cancelled your order"), actions: <Widget>[
+                                                                            AlertDialog(title: Text("Order " + pendingOrders[index].name.toString() + " cancelled!"), content: const Text("You have cancelled your order"), actions: <Widget>[
                                                                               TextButton(child: const Text("OK"), onPressed: () => OneContext().popDialog('ok')),
                                                                             ]));
                                                               }),
@@ -156,14 +195,15 @@ class _OrderHistoryState extends State<OrderHistory> {
                                                                   'Order Received'),
                                                               onTap: () async {
                                                                 await _firestoreService.updateOrderStatus(
-                                                                    orders[index]
+                                                                    pendingOrders[
+                                                                            index]
                                                                         .oid
                                                                         .toString(),
                                                                     "Delivered");
                                                                 await OneContext()
                                                                     .showDialog(
                                                                         builder: (_) =>
-                                                                            AlertDialog(title: Text("Order " + orders[index].name.toString() + " successfully received!"), content: const Text("Your order has been successfully received."), actions: <Widget>[
+                                                                            AlertDialog(title: Text("Order " + pendingOrders[index].name.toString() + " successfully received!"), content: const Text("Your order has been successfully received."), actions: <Widget>[
                                                                               TextButton(child: const Text("OK"), onPressed: () => OneContext().popDialog('ok')),
                                                                             ]));
                                                               }),
@@ -180,14 +220,16 @@ class _OrderHistoryState extends State<OrderHistory> {
 
                                         // print(streamSnapshot.data!.docs[index].id);
                                         await _firestoreService.deleteOrder(
-                                            orders[index].oid.toString());
+                                            pendingOrders[index]
+                                                .oid
+                                                .toString());
 
                                         if (OneContext.hasContext) {
                                           // copy this to show dialog
                                           await OneContext().showDialog(
                                               builder: (_) => AlertDialog(
                                                       title: Text("Order " +
-                                                          orders[index]
+                                                          pendingOrders[index]
                                                               .name
                                                               .toString() +
                                                           " successfully deleted!"),
