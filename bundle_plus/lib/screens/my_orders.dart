@@ -21,9 +21,41 @@ class _OrderHistoryState extends State<OrderHistory> {
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
   final TextEditingController _orderStatusController = TextEditingController();
+  List<Order> orders = [];
+  List<Order> completedOrders = [];
+  List<Order> pendingOrders = [];
   // final Query<Object?> _orders = _firestoreService.orders
   //     .where('uid', isEqualTo: _authService.currentUser.uid);
 
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+
+    // _convertToList();
+    _initRetrieve();
+  }
+
+  Future<void> _initRetrieve() async {
+    Future<List<Order>> _futureOrderList =
+        _firestoreService.retrieveOrderFuture();
+    orders = await _futureOrderList;
+    completedOrders = orders
+        .where((element) =>
+            element.uid?.contains(_authService.currentUser.uid) ?? false)
+        .where((element) => element.status?.contains("Delivered") ?? false)
+        .toList();
+    pendingOrders = orders
+        .where((element) =>
+            element.uid?.contains(_authService.currentUser.uid) ?? false)
+        .where((element) => element.status?.contains("Pending") ?? false)
+        .toList();
+    // print("_initRetrieve " + deliveredCount.toString());
+    setState(() {});
+  }
+
+// TODO: cleanup code
   @override
   Widget build(BuildContext context) {
     String searchKey = _authService.currentUser.uid;
@@ -35,61 +67,7 @@ class _OrderHistoryState extends State<OrderHistory> {
           stream: _firestoreService.orders.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
             if (streamSnapshot.hasData) {
-              // 1. First, store data from firebase to a local list
-              // MIGHT_DO: Would be nice to sort this based on date time
-
-              // List<Order> orders = streamSnapshot.data!.docs
-              //     .map((doc) => Order(
-              //           oid: doc[
-              //               'oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
-              //           uid: doc['uid'],
-              //           iid: doc['iid'],
-              //           sid: doc['sid'],
-              //           name: doc['name'],
-              //           status: doc['status'],
-              //           paymentMethod: doc['paymentMethod'],
-              //           time: doc['time'],
-              //           date: doc['date'],
-              //         ))
-              //     .toList();
-
-              List<Order> orders = streamSnapshot.data!.docs
-                  .map((doc) => Order(
-                        oid: doc.data().toString().contains('oid')
-                            ? doc.get('oid')
-                            : '',
-                        uid: doc.data().toString().contains('uid')
-                            ? doc.get('uid')
-                            : '',
-                        iid: doc.data().toString().contains('iid')
-                            ? doc.get('iid')
-                            : '',
-                        sid: doc.data().toString().contains('sid')
-                            ? doc.get('sid')
-                            : '',
-                        name: doc.data().toString().contains('name')
-                            ? doc.get('name')
-                            : '',
-                        paymentMethod:
-                            doc.data().toString().contains('paymentMethod')
-                                ? doc.get('paymentMethod')
-                                : '',
-                        date: doc.data().toString().contains('date')
-                            ? doc.get('date')
-                            : '',
-                        time: doc.data().toString().contains('time')
-                            ? doc.get('time')
-                            : '',
-                        status: doc.data().toString().contains('status')
-                            ? doc.get('status')
-                            : '',
-                      ))
-                  .toList();
-
               // 2. Query the list of orders
-              orders = orders
-                  .where((element) => element.uid?.contains(searchKey) ?? false)
-                  .toList();
 
               // DEBUG : to see whether the query is working
               for (var element in orders) {
@@ -99,146 +77,170 @@ class _OrderHistoryState extends State<OrderHistory> {
               }
 
               // orders = orders.w
-              return ListView.builder(
-                itemCount: orders.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    margin: const EdgeInsets.all(10),
-                    child: ListTile(
-                      // 3. Display  it
-                      // MIGHT_DO: Add image to display
-                      title: Text(orders[index].name.toString()),
-                      subtitle: Text("Date Created: " +
-                          orders[index].date.toString() +
-                          "\nTime Created: " +
-                          orders[index].time.toString() +
-                          "\nStatus: " +
-                          orders[index].status.toString()),
-                      trailing: SizedBox(
-                        width: 100,
-                        child: Row(
-                          children: [
-                            IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () async {
-                                  OneContext().showModalBottomSheet<String>(
-                                      builder: (context) => Container(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Text(
-                                                  'Change Order Status',
-                                                  style: AppTheme.headline2,
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                ListTile(
-                                                    leading: Icon(Icons.cancel),
-                                                    title: Text('Cancel Order'),
-                                                    onTap: () async {
-                                                      await _firestoreService
-                                                          .updateOrderStatus(
-                                                              orders[index]
-                                                                  .oid
-                                                                  .toString(),
-                                                              "Cancel");
-                                                      await OneContext()
-                                                          .showDialog(
-                                                              builder: (_) =>
-                                                                  AlertDialog(
-                                                                      title: Text("Order " +
-                                                                          orders[index]
-                                                                              .name
-                                                                              .toString() +
-                                                                          " cancelled!"),
-                                                                      content:
-                                                                          const Text(
-                                                                              "You have cancelled your order"),
-                                                                      actions: <
-                                                                          Widget>[
-                                                                        TextButton(
-                                                                            child:
-                                                                                const Text("OK"),
-                                                                            onPressed: () => OneContext().popDialog('ok')),
-                                                                      ]));
-                                                    }),
-                                                ListTile(
-                                                    leading:
-                                                        Icon(Icons.thumb_up),
-                                                    title:
-                                                        Text('Order Received'),
-                                                    onTap: () async {
-                                                      await _firestoreService
-                                                          .updateOrderStatus(
-                                                              orders[index]
-                                                                  .oid
-                                                                  .toString(),
-                                                              "Delivered");
-                                                      await OneContext()
-                                                          .showDialog(
-                                                              builder: (_) =>
-                                                                  AlertDialog(
-                                                                      title: Text("Order " +
-                                                                          orders[index]
-                                                                              .name
-                                                                              .toString() +
-                                                                          " successfully received!"),
-                                                                      content:
-                                                                          const Text(
-                                                                              "Your order has been successfully received."),
-                                                                      actions: <
-                                                                          Widget>[
-                                                                        TextButton(
-                                                                            child:
-                                                                                const Text("OK"),
-                                                                            onPressed: () => OneContext().popDialog('ok')),
-                                                                      ]));
-                                                    }),
-                                                SizedBox(height: 45)
-                                              ],
-                                            ),
-                                          ));
-                                }),
-                            IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () async {
-                                  // NOTE: Not a cancel function
-                                  // TODO : Add another confirmation dialog before deleting.
+              return Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Pending Orders',
+                    style: AppTheme.headline2,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: pendingOrders.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: const EdgeInsets.all(10),
+                          child: ListTile(
+                            // 3. Display  it
+                            // MIGHT_DO: Add image to display
+                            title: Text(pendingOrders[index].name.toString()),
+                            subtitle: Text("Date Created: " +
+                                pendingOrders[index].date.toString() +
+                                "\nTime Created: " +
+                                pendingOrders[index].time.toString() +
+                                "\nStatus: " +
+                                pendingOrders[index].status.toString()),
+                            trailing: SizedBox(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () async {
+                                        OneContext()
+                                            .showModalBottomSheet<String>(
+                                                builder: (context) => Container(
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Text(
+                                                            'Change Order Status',
+                                                            style: AppTheme
+                                                                .headline2,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          ListTile(
+                                                              leading: Icon(
+                                                                  Icons.cancel),
+                                                              title: Text(
+                                                                  'Cancel Order'),
+                                                              onTap: () async {
+                                                                await _firestoreService
+                                                                    .updateOrderStatus(
+                                                                        orders[index]
+                                                                            .oid
+                                                                            .toString(),
+                                                                        "Cancel");
+                                                                await OneContext()
+                                                                    .showDialog(
+                                                                        builder: (_) =>
+                                                                            AlertDialog(title: Text("Order " + orders[index].name.toString() + " cancelled!"), content: const Text("You have cancelled your order"), actions: <Widget>[
+                                                                              TextButton(child: const Text("OK"), onPressed: () => OneContext().popDialog('ok')),
+                                                                            ]));
+                                                              }),
+                                                          ListTile(
+                                                              leading: Icon(Icons
+                                                                  .thumb_up),
+                                                              title: Text(
+                                                                  'Order Received'),
+                                                              onTap: () async {
+                                                                await _firestoreService.updateOrderStatus(
+                                                                    orders[index]
+                                                                        .oid
+                                                                        .toString(),
+                                                                    "Delivered");
+                                                                await OneContext()
+                                                                    .showDialog(
+                                                                        builder: (_) =>
+                                                                            AlertDialog(title: Text("Order " + orders[index].name.toString() + " successfully received!"), content: const Text("Your order has been successfully received."), actions: <Widget>[
+                                                                              TextButton(child: const Text("OK"), onPressed: () => OneContext().popDialog('ok')),
+                                                                            ]));
+                                                              }),
+                                                          SizedBox(height: 45)
+                                                        ],
+                                                      ),
+                                                    ));
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () async {
+                                        // NOTE: Not a cancel function
+                                        // TODO : Add another confirmation dialog before deleting.
 
-                                  // print(streamSnapshot.data!.docs[index].id);
-                                  await _firestoreService.deleteOrder(
-                                      orders[index].oid.toString());
+                                        // print(streamSnapshot.data!.docs[index].id);
+                                        await _firestoreService.deleteOrder(
+                                            orders[index].oid.toString());
 
-                                  if (OneContext.hasContext) {
-                                    // copy this to show dialog
-                                    await OneContext().showDialog(
-                                        builder: (_) => AlertDialog(
-                                                title: Text("Order " +
-                                                    orders[index]
-                                                        .name
-                                                        .toString() +
-                                                    " successfully deleted!"),
-                                                content: const Text(
-                                                    "Your order has been successfully deleted."),
-                                                actions: <Widget>[
-                                                  TextButton(
-                                                      child: const Text("OK"),
-                                                      onPressed: () =>
-                                                          OneContext()
-                                                              .popDialog('ok')),
-                                                ]));
-                                  }
-                                }),
-                          ],
-                        ),
-                      ),
+                                        if (OneContext.hasContext) {
+                                          // copy this to show dialog
+                                          await OneContext().showDialog(
+                                              builder: (_) => AlertDialog(
+                                                      title: Text("Order " +
+                                                          orders[index]
+                                                              .name
+                                                              .toString() +
+                                                          " successfully deleted!"),
+                                                      content: const Text(
+                                                          "Your order has been successfully deleted."),
+                                                      actions: <Widget>[
+                                                        TextButton(
+                                                            child: const Text(
+                                                                "OK"),
+                                                            onPressed: () =>
+                                                                OneContext()
+                                                                    .popDialog(
+                                                                        'ok')),
+                                                      ]));
+                                        }
+                                      }),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'Completed Orders',
+                    style: AppTheme.headline2,
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: completedOrders.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          margin: const EdgeInsets.all(10),
+                          child: ListTile(
+                            // 3. Display  it
+                            // MIGHT_DO: Add image to display
+                            title: Text(completedOrders[index].name.toString()),
+                            subtitle: Text("Date Created: " +
+                                completedOrders[index].date.toString() +
+                                "\nTime Created: " +
+                                completedOrders[index].time.toString() +
+                                "\nStatus: " +
+                                completedOrders[index].status.toString()),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             }
 
