@@ -3,9 +3,11 @@
 
 import 'package:bundle_plus/model/item_model.dart';
 import 'package:bundle_plus/model/order_model.dart';
+import 'package:bundle_plus/model/revenue_series.dart';
 import 'package:bundle_plus/screens/widgets/alt_item_card.dart';
 import 'package:bundle_plus/screens/widgets/imagegrid.dart';
 import 'package:bundle_plus/screens/widgets/item_card.dart';
+import 'package:bundle_plus/screens/widgets/revenue_chart.dart';
 import 'package:bundle_plus/services/auth_service.dart';
 import 'package:bundle_plus/services/dashboard_service.dart';
 import 'package:bundle_plus/services/firestore_service.dart';
@@ -13,6 +15,7 @@ import 'package:bundle_plus/utils/app_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 class SalesReport extends StatefulWidget {
   const SalesReport({Key? key}) : super(key: key);
@@ -29,6 +32,7 @@ class _SalesReportState extends State<SalesReport> {
   final TextEditingController _orderStatusController = TextEditingController();
   List<Order> orders = [];
   List<ItemModel> itemList = [];
+  List<RevenueSeries> data = [];
   int pendingCount = 0;
   int deliveredCount = 0;
   double totalRevenue = 0.0;
@@ -55,6 +59,10 @@ class _SalesReportState extends State<SalesReport> {
 
     Future<double> _futureTotalRevenue = _dashboardService.getTotalRevenue();
     totalRevenue = await _futureTotalRevenue;
+
+    Future<List<RevenueSeries>> _futureSeriesList =
+        _dashboardService.initializeData();
+    data = await _futureSeriesList;
     // print("_initRetrieve " + deliveredCount.toString());
     setState(() {});
   }
@@ -88,6 +96,27 @@ class _SalesReportState extends State<SalesReport> {
                 children: <Widget>[
                   // Expanded(
                   //   child:
+                  Container(
+                    height: 400,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(9.0),
+                        child: Column(
+                          children: <Widget>[
+                            Text(
+                              "Total revenue by Category",
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            Expanded(
+                              child: RevenueChart(
+                                data: data,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -133,7 +162,6 @@ class _SalesReportState extends State<SalesReport> {
                     ],
                   ),
 
-                  Text('data'),
                   // Expanded(
                   //   child: ListView.builder(
                   //     itemCount: orders.length,
