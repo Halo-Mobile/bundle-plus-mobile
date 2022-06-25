@@ -1,6 +1,7 @@
 // Reference: https://www.youtube.com/watch?v=n1PM9XcYD5s = CRUD
 // Reference2: https://stackoverflow.com/questions/50870652/flutter-firebase-basic-query-or-basic-search-code = Query from local list
 
+import 'package:bundle_plus/model/item_model.dart';
 import 'package:bundle_plus/model/order_model.dart';
 import 'package:bundle_plus/screens/widgets/alt_item_card.dart';
 import 'package:bundle_plus/screens/widgets/imagegrid.dart';
@@ -24,12 +25,41 @@ class _SalesReportState extends State<SalesReport> {
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
   final TextEditingController _orderStatusController = TextEditingController();
+  List<Order> orders = [];
+  List<ItemModel> itemList = [];
+
   // final Query<Object?> _orders = _firestoreService.orders
   //     .where('uid', isEqualTo: _authService.currentUser.uid);
 
   @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+
+    _convertToList();
+  }
+
+  Future<void> _convertToList() async {
+    print('init test');
+    Future<List<Order>> _futureOrder = _firestoreService.retrieveOrderFuture();
+    orders = await _futureOrder;
+    print(orders[0].name);
+    Future<List<ItemModel>> _futureItem =
+        _firestoreService.retrieveItemFuture();
+    itemList = await _futureItem;
+    print(itemList[0].price);
+    setState(() {}); // NOTE : will wait for the async to finish
+  }
+
+  @override
   Widget build(BuildContext context) {
     String searchKey = _authService.currentUser.uid;
+    int pendingCount = 0;
+    int deliveredCount = 0;
+    double totalRevenue = 0.0;
+    List<Order> orders_delivered = [];
+    List<Order> orders_pending = [];
     return Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('Sales Report')),
@@ -37,111 +67,88 @@ class _SalesReportState extends State<SalesReport> {
         body: StreamBuilder(
           stream: _firestoreService.orders.snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-            if (streamSnapshot.hasData) {
-              // 1. First, store data from firebase to a local list
-              // MIGHT_DO: Would be nice to sort this based on date time
+            // NOTE: avoid twice https://stackoverflow.com/questions/57562407/flutter-streambuilder-called-twice-when-initialized
+            if (streamSnapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (streamSnapshot.hasError) {
+              return Center(child: Text(streamSnapshot.error.toString()));
+            } else if (streamSnapshot.connectionState ==
+                ConnectionState.active) {
+              //place your code here. It will prevent double data call.
+              if (streamSnapshot.hasData && itemList != null) {
+                // 1. Pending orders
+                orders_pending = orders
+                    .where(
+                        (element) => element.sid?.contains(searchKey) ?? false)
+                    .where((element) =>
+                        element.status?.contains("Pending") ?? false)
+                    .toList();
 
-              // List<Order> orders = streamSnapshot.data!.docs
-              //     .map((doc) => Order(
-              //           oid: doc[
-              //               'oid'], // not found to get Order_id use this  streamSnapshot.data!.docs[index].id under itemBuilder
-              //           uid: doc['uid'],
-              //           iid: doc['iid'],
-              //           sid: doc['sid'],
-              //           name: doc['name'],
-              //           status: doc['status'],
-              //           paymentMethod: doc['paymentMethod'],
-              //           time: doc['time'],
-              //           date: doc['date'],
-              //         ))
-              //     .toList();
+                // 2. Delivered orders
+                orders_delivered = orders
+                    .where(
+                        (element) => element.sid?.contains(searchKey) ?? false)
+                    .where((element) =>
+                        element.status?.contains("Delivered") ?? false)
+                    .toList();
 
-              List<Order> orders = streamSnapshot.data!.docs
-                  .map((doc) => Order(
-                        oid: doc.data().toString().contains('oid')
-                            ? doc.get('oid')
-                            : '',
-                        uid: doc.data().toString().contains('uid')
-                            ? doc.get('uid')
-                            : '',
-                        iid: doc.data().toString().contains('iid')
-                            ? doc.get('iid')
-                            : '',
-                        sid: doc.data().toString().contains('sid')
-                            ? doc.get('sid')
-                            : '',
-                        name: doc.data().toString().contains('name')
-                            ? doc.get('name')
-                            : '',
-                        paymentMethod:
-                            doc.data().toString().contains('paymentMethod')
-                                ? doc.get('paymentMethod')
-                                : '',
-                        date: doc.data().toString().contains('date')
-                            ? doc.get('date')
-                            : '',
-                        time: doc.data().toString().contains('time')
-                            ? doc.get('time')
-                            : '',
-                        status: doc.data().toString().contains('status')
-                            ? doc.get('status')
-                            : '',
-                      ))
-                  .toList();
+                for (var element in orders_delivered) {
+                  print("Delivered orders: " + element.name.toString());
+                  deliveredCount += 1;
+                }
 
-              // 2. Query the list of orders
-              orders = orders
-                  .where((element) => element.sid?.contains(searchKey) ?? false)
-                  .where(
-                      (element) => element.status?.contains("Pending") ?? false)
-                  .toList();
+                // 3. Total Revenue
+                // List<ItemModel> delivered_items = itemList.where((element) => element.iid.contains(other))
+                List<ItemModel> delivered_items = [];
+                var itemDeliveredResults;
+                for (var i in orders_delivered) {
+                  print(i.name);
+                  delivered_items += itemList
+                      .where((element) =>
+                          element.iid?.contains(i.iid.toString()) ?? false)
+                      .toList();
+                  // delivered_items.add(tempList)
+                  print(delivered_items);
+                }
 
-              // DEBUG : to see whether the query is working
-              for (var element in orders) {
-                print("Elements printed here belongs to user: " +
-                    _authService.currentUser.email.toString());
-                print(element.name);
+                for (var i in delivered_items) {
+                  totalRevenue += double.parse(i.price.toString());
+                }
               }
 
               // orders = orders.w
               return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   // Expanded(
                   //   child:
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                    child: ItemCard2(
-                      title: 'Total Revenue',
-                      subtitle: 'RM 4.55',
-                      color: const Color(0xFFFFBF37),
-                      icon: Icons.attach_money,
-                    ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: ItemCard2(
+                            title: 'Total Revenue',
+                            subtitle: "RM " + totalRevenue.toString(),
+                            color: const Color(0xFFFFBF37),
+                            icon: Icons.attach_money,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   // Expanded(
                   // child:
                   Row(
                     // crossAxisCount: 2,
                     children: <Widget>[
-                      // Padding(
-                      //   padding: const EdgeInsets.all(0.0),
-                      //   child: ItemCard2(
-                      //     color: const Color(0xFFFFBF37),
-                      //     icon: Icons.add_shopping_cart,
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
-                      //   child: ItemCard2(
-                      //     color: const Color(0xFF00CECE),
-                      //     icon: Icons.device_hub,
-                      //   ),
-                      // ),
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(0.0),
                           child: ItemCard2(
-                            title: 'Total Revenue',
-                            subtitle: 'RM 4.55',
+                            title: 'Delivered Orders',
+                            subtitle: orders_delivered.length.toString(),
                             color: const Color(0xFFFB777A),
                             icon: Icons.check_circle,
                           ),
@@ -151,8 +158,8 @@ class _SalesReportState extends State<SalesReport> {
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                           child: ItemCard2(
-                            title: 'Total Revenue',
-                            subtitle: 'RM 4.55',
+                            title: 'Pending Orders',
+                            subtitle: orders_pending.length.toString(),
                             color: const Color(0xFFA5A5A5),
                             icon: Icons.warning,
                           ),
@@ -160,33 +167,7 @@ class _SalesReportState extends State<SalesReport> {
                       )
                     ],
                   ),
-                  // ),
-                  // Row(
-                  //   crossAxisAlignment: CrossAxisAlignment.center,
-                  //   children: [
-                  //     Expanded(
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(8.0),
-                  //         child: Image.network(
-                  //             'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Facer.jfif?alt=media&token=bd5ae6c9-f58c-4a29-b86c-759bb7cecd79'),
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Padding(
-                  //         padding: const EdgeInsets.all(8.0),
-                  //         child: Image.network(
-                  //             'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Facer.jfif?alt=media&token=bd5ae6c9-f58c-4a29-b86c-759bb7cecd79'),
-                  //       ),
-                  //     ),
-                  //     // Expanded(
-                  //     //   child: Image.network(
-                  //     //       'https://firebasestorage.googleapis.com/v0/b/bundleplus-91f36.appspot.com/o/items%2Facer.jfif?alt=media&token=bd5ae6c9-f58c-4a29-b86c-759bb7cecd79'),
-                  //     // ),
-                  //   ],
-                  // ),
-                  // SizedBox(
-                  //   height: 5,
-                  // ),
+
                   Text('data'),
                   Expanded(
                     child: ListView.builder(
@@ -209,124 +190,7 @@ class _SalesReportState extends State<SalesReport> {
                             trailing: SizedBox(
                               width: 100,
                               child: Row(
-                                children: [
-                                  // IconButton(
-                                  //     icon: const Icon(Icons.edit),
-                                  //     onPressed: () async {
-                                  //       OneContext().showModalBottomSheet<String>(
-                                  //           builder: (context) => Container(
-                                  //                 child: Column(
-                                  //                   mainAxisSize: MainAxisSize.min,
-                                  //                   children: <Widget>[
-                                  //                     SizedBox(
-                                  //                       height: 20,
-                                  //                     ),
-                                  //                     Text(
-                                  //                       'Change Order Status',
-                                  //                       style: AppTheme.headline2,
-                                  //                     ),
-                                  //                     SizedBox(
-                                  //                       height: 20,
-                                  //                     ),
-                                  //                     ListTile(
-                                  //                         leading: Icon(Icons.cancel),
-                                  //                         title: Text('Cancel Order'),
-                                  //                         onTap: () async {
-                                  //                           await _firestoreService
-                                  //                               .updateOrderStatus(
-                                  //                                   orders[index]
-                                  //                                       .oid
-                                  //                                       .toString(),
-                                  //                                   "Cancel");
-                                  //                           await OneContext()
-                                  //                               .showDialog(
-                                  //                                   builder: (_) =>
-                                  //                                       AlertDialog(
-                                  //                                           title: Text("Order " +
-                                  //                                               orders[index]
-                                  //                                                   .name
-                                  //                                                   .toString() +
-                                  //                                               " cancelled!"),
-                                  //                                           content:
-                                  //                                               const Text(
-                                  //                                                   "You have cancelled your order"),
-                                  //                                           actions: <
-                                  //                                               Widget>[
-                                  //                                             TextButton(
-                                  //                                                 child:
-                                  //                                                     const Text("OK"),
-                                  //                                                 onPressed: () => OneContext().popDialog('ok')),
-                                  //                                           ]));
-                                  //                         }),
-                                  //                     ListTile(
-                                  //                         leading:
-                                  //                             Icon(Icons.thumb_up),
-                                  //                         title:
-                                  //                             Text('Order Received'),
-                                  //                         onTap: () async {
-                                  //                           await _firestoreService
-                                  //                               .updateOrderStatus(
-                                  //                                   orders[index]
-                                  //                                       .oid
-                                  //                                       .toString(),
-                                  //                                   "Delivered");
-                                  //                           await OneContext()
-                                  //                               .showDialog(
-                                  //                                   builder: (_) =>
-                                  //                                       AlertDialog(
-                                  //                                           title: Text("Order " +
-                                  //                                               orders[index]
-                                  //                                                   .name
-                                  //                                                   .toString() +
-                                  //                                               " successfully received!"),
-                                  //                                           content:
-                                  //                                               const Text(
-                                  //                                                   "Your order has been successfully received."),
-                                  //                                           actions: <
-                                  //                                               Widget>[
-                                  //                                             TextButton(
-                                  //                                                 child:
-                                  //                                                     const Text("OK"),
-                                  //                                                 onPressed: () => OneContext().popDialog('ok')),
-                                  //                                           ]));
-                                  //                         }),
-                                  //                     SizedBox(height: 45)
-                                  //                   ],
-                                  //                 ),
-                                  //               ));
-                                  //     }),
-                                  // IconButton(
-                                  //     icon: const Icon(Icons.delete),
-                                  //     onPressed: () async {
-                                  //       // NOTE: Not a cancel function
-                                  //       // TODO : Add another confirmation dialog before deleting.
-
-                                  //       // print(streamSnapshot.data!.docs[index].id);
-                                  //       await _firestoreService.deleteOrder(
-                                  //           orders[index].oid.toString());
-
-                                  //       if (OneContext.hasContext) {
-                                  //         // copy this to show dialog
-                                  //         await OneContext().showDialog(
-                                  //             builder: (_) => AlertDialog(
-                                  //                     title: Text("Order " +
-                                  //                         orders[index]
-                                  //                             .name
-                                  //                             .toString() +
-                                  //                         " successfully deleted!"),
-                                  //                     content: const Text(
-                                  //                         "Your order has been successfully deleted."),
-                                  //                     actions: <Widget>[
-                                  //                       TextButton(
-                                  //                           child: const Text("OK"),
-                                  //                           onPressed: () =>
-                                  //                               OneContext()
-                                  //                                   .popDialog('ok')),
-                                  //                     ]));
-                                  //       }
-                                  //     }
-                                  // ),
-                                ],
+                                children: [],
                               ),
                             ),
                           ),

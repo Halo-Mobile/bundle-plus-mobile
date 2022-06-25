@@ -1,5 +1,6 @@
 // use this service for any firestore CRUD
 
+import 'package:bundle_plus/model/item_model.dart';
 import 'package:bundle_plus/model/order_model.dart';
 import 'package:bundle_plus/model/user_model.dart';
 import 'package:bundle_plus/model/user_profile.dart';
@@ -14,7 +15,7 @@ class FirestoreService {
   final CollectionReference _orders =
       FirebaseFirestore.instance.collection('orders');
   final CollectionReference _items =
-      FirebaseFirestore.instance.collection('item');
+      FirebaseFirestore.instance.collection('items');
   // final DocumentReference orders_doc_ref = _orders.do
 
   CollectionReference get orders => _orders;
@@ -26,6 +27,28 @@ class FirestoreService {
     await docRef.set(order
         .toMap()); // NOTE: Somehow the order id will be same when using .set instead of .add
     // https://stackoverflow.com/questions/47474522/firestore-difference-between-set-and-add
+  }
+
+  Future<List<Order>> retrieveOrderFuture() async {
+    final List<Order> orders = [];
+    final snapshot = await _orders.get().then((document) {
+      document.docs.forEach((element) {
+        orders.add(Order.fromMap(element));
+      });
+    });
+
+    return orders;
+  }
+
+  Future<List<ItemModel>> retrieveItemFuture() async {
+    final List<ItemModel> items = [];
+    final snapshot = await _items.get().then((document) {
+      document.docs.forEach((element) {
+        items.add(ItemModel.fromMap(element));
+      });
+    });
+
+    return items;
   }
 
   // bad practice
