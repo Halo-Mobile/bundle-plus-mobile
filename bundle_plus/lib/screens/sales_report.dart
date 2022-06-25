@@ -7,6 +7,7 @@ import 'package:bundle_plus/screens/widgets/alt_item_card.dart';
 import 'package:bundle_plus/screens/widgets/imagegrid.dart';
 import 'package:bundle_plus/screens/widgets/item_card.dart';
 import 'package:bundle_plus/services/auth_service.dart';
+import 'package:bundle_plus/services/dashboard_service.dart';
 import 'package:bundle_plus/services/firestore_service.dart';
 import 'package:bundle_plus/utils/app_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,12 +25,13 @@ class _SalesReportState extends State<SalesReport> {
   // declaration of CollectionReference
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
+  final DashboardService _dashboardService = DashboardService();
   final TextEditingController _orderStatusController = TextEditingController();
   List<Order> orders = [];
   List<ItemModel> itemList = [];
-
-  // final Query<Object?> _orders = _firestoreService.orders
-  //     .where('uid', isEqualTo: _authService.currentUser.uid);
+  int pendingCount = 0;
+  int deliveredCount = 0;
+  double totalRevenue = 0.0;
 
   @override
   void initState() {
@@ -37,29 +39,28 @@ class _SalesReportState extends State<SalesReport> {
 
     super.initState();
 
-    _convertToList();
+    // _convertToList();
+    _initRetrieve();
   }
 
-  Future<void> _convertToList() async {
-    print('init test');
-    Future<List<Order>> _futureOrder = _firestoreService.retrieveOrderFuture();
-    orders = await _futureOrder;
-    print(orders[0].name);
-    Future<List<ItemModel>> _futureItem =
-        _firestoreService.retrieveItemFuture();
-    itemList = await _futureItem;
-    print(itemList[0].price);
-    setState(() {}); // NOTE : will wait for the async to finish
+  Future<void> _initRetrieve() async {
+    // print('init test');
+    Future<int> _futurePendingCount = _dashboardService.getPendingCount();
+    pendingCount = await _futurePendingCount;
+    // print("_initRetrieve " + pendingCount.toString());
+
+    Future<int> _futureDeliveredCount = _dashboardService.getDeliveredCount();
+    deliveredCount = await _futureDeliveredCount;
+    // print("_initRetrieve " + deliveredCount.toString());
+
+    Future<double> _futureTotalRevenue = _dashboardService.getTotalRevenue();
+    totalRevenue = await _futureTotalRevenue;
+    // print("_initRetrieve " + deliveredCount.toString());
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    String searchKey = _authService.currentUser.uid;
-    int pendingCount = 0;
-    int deliveredCount = 0;
-    double totalRevenue = 0.0;
-    List<Order> orders_delivered = [];
-    List<Order> orders_pending = [];
     return Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('Sales Report')),
@@ -76,49 +77,13 @@ class _SalesReportState extends State<SalesReport> {
                 ConnectionState.active) {
               //place your code here. It will prevent double data call.
               if (streamSnapshot.hasData && itemList != null) {
-                // 1. Pending orders
-                orders_pending = orders
-                    .where(
-                        (element) => element.sid?.contains(searchKey) ?? false)
-                    .where((element) =>
-                        element.status?.contains("Pending") ?? false)
-                    .toList();
-
-                // 2. Delivered orders
-                orders_delivered = orders
-                    .where(
-                        (element) => element.sid?.contains(searchKey) ?? false)
-                    .where((element) =>
-                        element.status?.contains("Delivered") ?? false)
-                    .toList();
-
-                for (var element in orders_delivered) {
-                  print("Delivered orders: " + element.name.toString());
-                  deliveredCount += 1;
-                }
-
                 // 3. Total Revenue
                 // List<ItemModel> delivered_items = itemList.where((element) => element.iid.contains(other))
-                List<ItemModel> delivered_items = [];
-                var itemDeliveredResults;
-                for (var i in orders_delivered) {
-                  print(i.name);
-                  delivered_items += itemList
-                      .where((element) =>
-                          element.iid?.contains(i.iid.toString()) ?? false)
-                      .toList();
-                  // delivered_items.add(tempList)
-                  print(delivered_items);
-                }
-
-                for (var i in delivered_items) {
-                  totalRevenue += double.parse(i.price.toString());
-                }
               }
 
               // orders = orders.w
               return Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   // Expanded(
@@ -148,7 +113,7 @@ class _SalesReportState extends State<SalesReport> {
                           padding: const EdgeInsets.all(0.0),
                           child: ItemCard2(
                             title: 'Delivered Orders',
-                            subtitle: orders_delivered.length.toString(),
+                            subtitle: deliveredCount.toString(),
                             color: const Color(0xFFFB777A),
                             icon: Icons.check_circle,
                           ),
@@ -159,7 +124,7 @@ class _SalesReportState extends State<SalesReport> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
                           child: ItemCard2(
                             title: 'Pending Orders',
-                            subtitle: orders_pending.length.toString(),
+                            subtitle: pendingCount.toString(),
                             color: const Color(0xFFA5A5A5),
                             icon: Icons.warning,
                           ),
@@ -169,35 +134,35 @@ class _SalesReportState extends State<SalesReport> {
                   ),
 
                   Text('data'),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: orders.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          margin: const EdgeInsets.fromLTRB(7.0, 3, 7.0, 0),
-                          child: ListTile(
-                            // 3. Display  it
-                            // MIGHT_DO: Add image to display
-                            leading: FlutterLogo(),
-                            title: Text(orders[index].name.toString()),
-                            subtitle: Text(
-                                "Date Created: " + orders[index].date.toString()
-                                // "\nTime Created: " +
-                                // orders[index].time.toString() +
-                                // "\nStatus: " +
-                                // orders[index].status.toString()
-                                ),
-                            trailing: SizedBox(
-                              width: 100,
-                              child: Row(
-                                children: [],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
+                  // Expanded(
+                  //   child: ListView.builder(
+                  //     itemCount: orders.length,
+                  //     itemBuilder: (context, index) {
+                  //       return Card(
+                  //         margin: const EdgeInsets.fromLTRB(7.0, 3, 7.0, 0),
+                  //         child: ListTile(
+                  //           // 3. Display  it
+                  //           // MIGHT_DO: Add image to display
+                  //           leading: FlutterLogo(),
+                  //           title: Text(orders[index].name.toString()),
+                  //           subtitle: Text(
+                  //               "Date Created: " + orders[index].date.toString()
+                  //               // "\nTime Created: " +
+                  //               // orders[index].time.toString() +
+                  //               // "\nStatus: " +
+                  //               // orders[index].status.toString()
+                  //               ),
+                  //           trailing: SizedBox(
+                  //             width: 100,
+                  //             child: Row(
+                  //               children: [],
+                  //             ),
+                  //           ),
+                  //         ),
+                  //       );
+                  //     },
+                  //   ),
+                  // ),
                 ],
               );
             }
