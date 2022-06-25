@@ -92,11 +92,11 @@ class _ManageProductState extends State<ManageProduct> {
                   .toList();
 
               // DEBUG : to see whether the query is working
-              for (var element in orders) {
-                print("Elements printed here belongs to user: " +
-                    _authService.currentUser.email.toString());
-                print(element.oid);
-              }
+              // for (var element in orders) {
+              //   print("Elements printed here belongs to user: " +
+              //       _authService.currentUser.email.toString());
+              //   print(element.oid);
+              // }
 
               // orders = orders.w
               return ListView.builder(
@@ -140,7 +140,8 @@ class _ManageProductState extends State<ManageProduct> {
                                                 ),
                                                 ListTile(
                                                     leading: Icon(Icons.cancel),
-                                                    title: Text('Preparing Order'),
+                                                    title:
+                                                        Text('Preparing Order'),
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(
@@ -171,8 +172,8 @@ class _ManageProductState extends State<ManageProduct> {
                                                 ListTile(
                                                     leading:
                                                         Icon(Icons.thumb_up),
-                                                    title:
-                                                        Text('Delivering Order'),
+                                                    title: Text(
+                                                        'Delivering Order'),
                                                     onTap: () async {
                                                       await _firestoreService
                                                           .updateOrderStatus(

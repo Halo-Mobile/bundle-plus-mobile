@@ -95,7 +95,7 @@ class _OrderHistoryState extends State<OrderHistory> {
               for (var element in orders) {
                 print("Elements printed here belongs to user: " +
                     _authService.currentUser.email.toString());
-                print(element.oid);
+                print(element.date);
               }
 
               // orders = orders.w

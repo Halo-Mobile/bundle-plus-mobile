@@ -5,10 +5,11 @@
 // )
 
 import 'package:bundle_plus/screens/home.dart';
-import 'package:bundle_plus/screens/manage_product.dart';
+import 'package:bundle_plus/screens/my_products.dart';
 import 'package:bundle_plus/screens/my_orders.dart';
 import 'package:bundle_plus/screens/order.dart';
 import 'package:bundle_plus/screens/orderList.dart';
+import 'package:bundle_plus/screens/sales_report.dart';
 import 'package:bundle_plus/screens/sell_item.dart';
 import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class SidebarDrawer extends StatefulWidget {
   bool selllistColor = false;
   bool orderColor = false;
   bool manageProdColor = false;
+  bool salesReportColor = false;
   String? firstName;
   String? secondName;
   String? email;
@@ -156,6 +158,31 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
             },
           ),
           ListTile(
+            selected: widget.salesReportColor,
+            enabled: true,
+            leading: Icon(Icons.dashboard),
+            title: Text(
+              'Sales Report',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            onTap: () {
+              setState(() {
+                widget.homeColor = false;
+                widget.sellColor = false;
+                widget.selllistColor = false;
+                widget.orderColor = false;
+                widget.manageProdColor = false;
+                widget.salesReportColor = true;
+              });
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SalesReport(),
+                ),
+              );
+            },
+          ),
+          ListTile(
             selected: widget.sellColor,
             leading: Icon(Icons.sell),
             title: Text(
@@ -251,7 +278,7 @@ class _SidebarDrawerState extends State<SidebarDrawer> {
               'Manage Order',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-             onTap: () {
+            onTap: () {
               setState(() {
                 widget.homeColor = false;
                 widget.sellColor = false;

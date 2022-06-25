@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 
-class ItemCard extends StatelessWidget {
+class ItemCard2 extends StatelessWidget {
   final String? itemImage;
   final String? itemPrice;
   final String? itemName;
-  ItemCard({
+  ItemCard2({
     this.itemImage,
     this.itemName,
     this.itemPrice,
@@ -26,22 +26,12 @@ class ItemCard extends StatelessWidget {
         color: Colors.white,
         child: Row(
           children: [
-            Center(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Expanded(
-                  child: Image.network(itemImage.toString()),
-                  flex: 2,
-                ),
-              ),
-            ),
             Expanded(
               child: Container(
                 alignment: Alignment.topLeft,
                 child: Column(
                   children: [
                     Expanded(
-                      // flex: 5,
                       child: ListTile(
                         title: Text(itemName!),
                         subtitle: Text(itemPrice!),
@@ -53,13 +43,13 @@ class ItemCard extends StatelessWidget {
                   ],
                 ),
               ),
-              // flex: 2,
+              // flex: 4,
             ),
           ],
         ),
       ),
-      elevation: 8,
-      margin: EdgeInsets.all(5),
+      elevation: 1.0,
+      // margin: EdgeInsets.fromLTRB(20, 0, 0.0, 0),
     );
   }
 }
