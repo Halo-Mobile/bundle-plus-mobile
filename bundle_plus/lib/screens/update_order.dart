@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bundle_plus/screens/sell_item_list.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class UpdateOrderr extends StatefulWidget {
@@ -18,7 +17,6 @@ class UpdateOrderr extends StatefulWidget {
   final String? paymentMethod;
   final String? time;
   final String? date;
-  
 
   UpdateOrderr({
     this.oid,
@@ -33,16 +31,16 @@ class UpdateOrderr extends StatefulWidget {
   });
   // const UpdateOrderr({Key? key}) : super(key: key);
 
-   @override
+  @override
   _UpdateOrderrState createState() => _UpdateOrderrState();
 }
 
-class _UpdateOrderrState extends State<UpdateOrderr>{
- late String dropdownValue = 'Pending';
- UserModel loggedInUser = UserModel();
- User? user = FirebaseAuth.instance.currentUser;
+class _UpdateOrderrState extends State<UpdateOrderr> {
+  late String dropdownValue = 'Pending';
+  UserModel loggedInUser = UserModel();
+  User? user = FirebaseAuth.instance.currentUser;
 
- @override
+  @override
   void initState() {
     super.initState();
     FirebaseFirestore.instance
@@ -54,65 +52,69 @@ class _UpdateOrderrState extends State<UpdateOrderr>{
       setState(() {});
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      backgroundColor: Color(0xfff8f8f8),
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          "Update Order Status",
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+        backgroundColor: Color(0xfff8f8f8),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            "Update Order Status",
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: Colors.black,
+          backgroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+            },
           ),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
-          },
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.check,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                postDetailsToFirestore();
+              },
+            )
+          ],
         ),
-        actions: [
-          IconButton(icon: Icon(Icons.check, color: Colors.black,), onPressed: (){
-            postDetailsToFirestore();
-          },)
-        ],
-      ),
-      body: Center(
-        // width: double.infinity,
-        // padding: EdgeInsets.symmetric(horizontal: 20.0),
-        child: DropdownButton(
-          value: dropdownValue,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.pinkAccent),
-      underline: Container(
-        height: 2,
-        color: Colors.pinkAccent,
-      ),
-      onChanged: (String? newValue) async{
-        setState(() {
-          dropdownValue = newValue!;
-        });
-      },
-      items: <String>['Pending', 'Preparing Order', 'Delivered']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-        ),
-      )
-    );
+        body: Center(
+          // width: double.infinity,
+          // padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: DropdownButton(
+            value: dropdownValue,
+            icon: const Icon(Icons.arrow_downward),
+            elevation: 16,
+            style: const TextStyle(color: Colors.pinkAccent),
+            underline: Container(
+              height: 2,
+              color: Colors.pinkAccent,
+            ),
+            onChanged: (String? newValue) async {
+              setState(() {
+                dropdownValue = newValue!;
+              });
+            },
+            items: <String>['Pending', 'Preparing Order', 'Delivered']
+                .map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+        ));
   }
 
   postDetailsToFirestore() async {

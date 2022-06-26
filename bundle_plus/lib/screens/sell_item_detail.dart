@@ -3,8 +3,6 @@ import 'package:bundle_plus/model/order_model.dart';
 import 'package:bundle_plus/screens/home.dart';
 import 'package:bundle_plus/model/user_model.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
-import 'package:bundle_plus/screens/sell_item_list.dart';
-import 'package:bundle_plus/screens/updateOrder.dart';
 import 'package:bundle_plus/screens/update_order.dart';
 import 'package:bundle_plus/screens/update_sell_item.dart';
 import 'package:bundle_plus/screens/widgets/sidebar.dart';
