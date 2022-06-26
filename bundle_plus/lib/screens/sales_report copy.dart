@@ -5,7 +5,6 @@ import 'package:bundle_plus/model/item_model.dart';
 import 'package:bundle_plus/model/order_model.dart';
 import 'package:bundle_plus/model/revenue_series.dart';
 import 'package:bundle_plus/screens/widgets/alt_item_card.dart';
-import 'package:bundle_plus/screens/widgets/dashboard_cards.dart';
 import 'package:bundle_plus/screens/widgets/imagegrid.dart';
 import 'package:bundle_plus/screens/widgets/item_card.dart';
 import 'package:bundle_plus/screens/widgets/revenue_chart.dart';
@@ -17,7 +16,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:one_context/one_context.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class SalesReport extends StatefulWidget {
   const SalesReport({Key? key}) : super(key: key);
@@ -84,6 +82,10 @@ class _SalesReportState extends State<SalesReport> {
             } else if (streamSnapshot.connectionState ==
                 ConnectionState.active) {
               //place your code here. It will prevent double data call.
+              if (streamSnapshot.hasData && itemList != null) {
+                // 3. Total Revenue
+                // List<ItemModel> delivered_items = itemList.where((element) => element.iid.contains(other))
+              }
 
               // orders = orders.w
               return Column(
@@ -93,7 +95,7 @@ class _SalesReportState extends State<SalesReport> {
                   // Expanded(
                   //   child:
                   Container(
-                    height: 380,
+                    height: 400,
                     child: Card(
                       child: Padding(
                         padding: const EdgeInsets.all(9.0),
@@ -113,13 +115,50 @@ class _SalesReportState extends State<SalesReport> {
                       ),
                     ),
                   ),
-                  // NOTE: Staggered Grid View for dashboard
-                  Expanded(
-                      child: StaggeredPage(
-                    totalRevenue: totalRevenue,
-                    completedOrders: deliveredCount,
-                    pendingOrders: pendingCount,
-                  )),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: ItemCard2(
+                            title: 'Total Revenue',
+                            subtitle: "RM " + totalRevenue.toString(),
+                            color: const Color(0xFFFFBF37),
+                            icon: Icons.attach_money,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Expanded(
+                  // child:
+                  Row(
+                    // crossAxisCount: 2,
+                    children: <Widget>[
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: ItemCard2(
+                            title: 'Delivered Orders',
+                            subtitle: deliveredCount.toString(),
+                            color: const Color(0xFFFB777A),
+                            icon: Icons.check_circle,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 5, 0),
+                          child: ItemCard2(
+                            title: 'Pending Orders',
+                            subtitle: pendingCount.toString(),
+                            color: const Color(0xFFA5A5A5),
+                            icon: Icons.warning,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ],
               );
             }
