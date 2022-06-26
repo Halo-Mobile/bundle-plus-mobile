@@ -7,6 +7,7 @@ import 'package:bundle_plus/services/firestore_service.dart';
 import 'package:bundle_plus/utils/app_theme.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:one_context/one_context.dart';
 
@@ -34,6 +35,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   // initialize firestore_service.dart in services folder
   final FirestoreService _firestoreService = FirestoreService();
   final AuthService _authService = AuthService();
+
+
+  void sendNotification({String? title, String? body}) async{
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/logo');
+  
+    const InitializationSettings initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid);
+
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+
+    const AndroidNotificationChannel channel = AndroidNotificationChannel('high_channel', 'Hight importance notification', description: 'This channel is for important notification', importance: Importance.max);
+
+    flutterLocalNotificationsPlugin.show(0, title, body, NotificationDetails(android: AndroidNotificationDetails(channel.id, channel.name)));
+  }
+  
 
   // print(widget.)
   @override
@@ -219,6 +238,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 child: ButtonWidget(
                   // button from screens>widgets
                   onPressed: () async {
+                    //send notification
+                    sendNotification(title: "Bundle+", body: "The seller has been notified for the order");
+
                     // await _firestoreService.createOrder(widget.name.toString(), widget.iid.toString(), widget.uid.toString());
                     await _firestoreService.createOrder(Order(
                         name: widget.name.toString(),

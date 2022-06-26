@@ -8,7 +8,7 @@ class NotiApi {
       android: AndroidNotificationDetails(
         'channel id',
         'channel name',
-        'channel description',
+        // 'channel description',
         importance: Importance.max,
       ),
     );
