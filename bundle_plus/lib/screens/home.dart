@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:bundle_plus/screens/detailscreen.dart';
 import 'package:bundle_plus/screens/listproduct.dart';
 import 'package:bundle_plus/screens/search_page.dart';
-import 'package:bundle_plus/screens/sell_item_list.dart';
+import 'package:bundle_plus/screens/my_products.dart';
 import 'package:bundle_plus/screens/widgets/sidebar.dart';
 import 'package:bundle_plus/screens/widgets/singleproduct.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

@@ -5,13 +5,13 @@
 // )
 
 import 'package:bundle_plus/screens/home.dart';
-import 'package:bundle_plus/screens/my_products.dart';
+import 'package:bundle_plus/screens/manage_order.dart';
 import 'package:bundle_plus/screens/my_orders.dart';
 import 'package:bundle_plus/screens/order.dart';
 import 'package:bundle_plus/screens/orderList.dart';
 import 'package:bundle_plus/screens/sales_report.dart';
 import 'package:bundle_plus/screens/sell_item.dart';
-import 'package:bundle_plus/screens/sell_item_list.dart';
+import 'package:bundle_plus/screens/my_products.dart';
 import 'package:flutter/material.dart';
 
 class SidebarDrawer extends StatefulWidget {
